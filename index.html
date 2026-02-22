@@ -382,13 +382,61 @@
   .note-list-view.hidden { display: none; }
 
   /* WRONG Q */
-  .wrongq-card { background: var(--bg-2); border: 1px solid var(--border); border-left: 3px solid var(--red); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px; transition: all 0.2s; }
-  .wrongq-card:hover { border-color: rgba(255,77,109,0.5); }
-  .wrongq-card.mastered { border-left-color: var(--green); opacity: 0.6; }
-  .wrongq-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-  .wrongq-reason { margin-top: 8px; padding: 8px 12px; background: rgba(255,77,109,0.06); border-radius: var(--radius); font-size: 12px; color: var(--text-sec); border-left: 2px solid rgba(255,77,109,0.3); }
-  .wrongq-solution { margin-top: 8px; padding: 8px 12px; background: rgba(0,255,157,0.05); border-radius: var(--radius); font-size: 12px; color: var(--text-sec); border-left: 2px solid rgba(0,255,157,0.3); }
-  .wrongq-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .wrongq-card { background: var(--bg-2); border: 1px solid var(--border); border-left: 3px solid var(--red); border-radius: var(--radius-lg); padding: 18px; margin-bottom: 14px; transition: all 0.2s; }
+  .wrongq-card:hover { border-color: rgba(255,77,109,0.4); box-shadow: 0 4px 24px rgba(255,77,109,0.06); }
+  .wrongq-card.mastered { border-left-color: var(--green); opacity: 0.55; }
+  .wrongq-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .wrongq-question { font-size: 14px; line-height: 1.7; margin-bottom: 10px; color: var(--text-pri); }
+  .wrongq-img { width: 100%; max-height: 220px; object-fit: contain; border-radius: var(--radius); margin: 10px 0; border: 1px solid var(--border); background: var(--bg-3); cursor: pointer; }
+  .wrongq-reason { margin-top: 8px; padding: 10px 14px; background: rgba(255,77,109,0.06); border-radius: var(--radius); font-size: 12px; color: var(--text-sec); border-left: 2px solid rgba(255,77,109,0.35); }
+  .wrongq-solution { margin-top: 8px; padding: 10px 14px; background: rgba(0,255,157,0.05); border-radius: var(--radius); font-size: 12px; color: var(--text-sec); border-left: 2px solid rgba(0,255,157,0.35); }
+  .wrongq-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+
+  /* WRONG Q STATS */
+  .wq-stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+  .wq-stat { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; }
+  .wq-stat-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 6px; }
+  .wq-stat-value { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--accent); text-shadow: 0 0 12px var(--accent-dim); }
+
+  /* STAR RATING */
+  .star-row { display: flex; gap: 6px; align-items: center; }
+  .star { font-size: 18px; cursor: pointer; color: var(--text-dim); transition: color 0.15s, transform 0.15s; }
+  .star:hover, .star.active { color: var(--yellow); transform: scale(1.2); }
+
+  /* ERROR TYPE CHIPS */
+  .error-type-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .error-chip { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-family: var(--font-mono); letter-spacing: 1px; cursor: pointer; border: 1px solid var(--border); color: var(--text-sec); background: transparent; transition: all 0.15s; }
+  .error-chip:hover { border-color: var(--accent-dim); color: var(--accent); }
+  .error-chip.selected-careless { background: rgba(255,209,102,0.15); border-color: var(--yellow); color: var(--yellow); }
+  .error-chip.selected-concept  { background: rgba(255,77,109,0.15); border-color: var(--red); color: var(--red); }
+  .error-chip.selected-formula  { background: rgba(168,85,247,0.15); border-color: var(--purple); color: var(--purple); }
+  .error-chip.selected-calc     { background: rgba(0,229,255,0.15); border-color: var(--cyan); color: var(--cyan); }
+  .error-chip.selected-reading  { background: rgba(255,159,67,0.15); border-color: #ff9f43; color: #ff9f43; }
+  .error-chip.selected-other    { background: rgba(122,179,212,0.15); border-color: var(--text-sec); color: var(--text-sec); }
+
+  /* REVIEW COUNTDOWN */
+  .review-badge { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: 9px; padding: 2px 8px; border-radius: 10px; border: 1px solid; }
+  .review-due  { color: var(--red);    border-color: rgba(255,77,109,0.4);   background: rgba(255,77,109,0.08);   animation: glowPulse 2s infinite; }
+  .review-soon { color: var(--yellow); border-color: rgba(255,209,102,0.4);  background: rgba(255,209,102,0.08); }
+  .review-ok   { color: var(--green);  border-color: rgba(0,255,157,0.4);    background: rgba(0,255,157,0.08); }
+
+  /* INTERACTIVE HOVER BUTTON */
+  .ihb { position: relative; overflow: hidden; border-radius: 999px; border: 1px solid var(--border-bright); background: transparent; padding: 8px 20px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; cursor: pointer; color: var(--accent); text-transform: uppercase; white-space: nowrap; }
+  .ihb-text { display: inline-block; transition: transform 0.3s, opacity 0.3s; }
+  .ihb:hover .ihb-text { transform: translateX(40px); opacity: 0; }
+  .ihb-hover-content { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 6px; transform: translateX(-40px); opacity: 0; transition: transform 0.3s, opacity 0.3s; color: var(--bg-0); font-weight: 700; z-index: 2; font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+  .ihb:hover .ihb-hover-content { transform: translateX(0); opacity: 1; }
+  .ihb-bg { position: absolute; left: 20%; top: 40%; width: 8px; height: 8px; border-radius: 999px; background: var(--accent); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); z-index: 1; }
+  .ihb:hover .ihb-bg { left: 0; top: 0; width: 100%; height: 100%; border-radius: 0; }
+  .ihb-danger { border-color: rgba(255,77,109,0.4); color: var(--red); }
+  .ihb-danger .ihb-bg { background: var(--red); }
+  .ihb-green { border-color: rgba(0,255,157,0.4); color: var(--green); }
+  .ihb-green .ihb-bg { background: var(--green); }
+
+  /* IMAGE LIGHTBOX */
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 2000; align-items: center; justify-content: center; cursor: zoom-out; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: var(--radius); }
 
   /* SUBJECT ROW */
   .subject-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(0,180,255,0.06); }
@@ -594,19 +642,36 @@
     <!-- WRONG Q -->
     <div id="page-wrongq" class="page">
       <div class="page-header"><div class="page-title">錯題本</div><div class="page-tag">Wrong Answer Bank</div></div>
-      <div class="flex-gap mb-4">
-        <button class="btn btn-primary" onclick="openAddWrongQ()">+ 新增錯題</button>
-        <select class="form-select" style="width:140px;" id="wrongq-filter" onchange="renderWrongQ()">
+
+      <!-- Stats -->
+      <div class="wq-stats-grid" id="wq-stats"></div>
+
+      <!-- Filters -->
+      <div class="flex-gap mb-4" style="flex-wrap:wrap;">
+        <button class="ihb ihb-primary" onclick="openAddWrongQ()"><div class="ihb-bg"></div><span class="ihb-text">+ 新增錯題</span><div class="ihb-hover-content">+ 新增錯題 →</div></button>
+        <select class="form-select" style="width:130px;" id="wrongq-filter" onchange="renderWrongQ()">
           <option value="all">全部科目</option>
           <option value="physics">物理</option><option value="chem">化學</option><option value="bio">生物</option>
           <option value="math">數學</option><option value="geo">地理</option><option value="eng">英文</option><option value="chi">國文</option>
         </select>
-        <select class="form-select" style="width:140px;" id="wrongq-status-filter" onchange="renderWrongQ()">
-          <option value="all">全部狀態</option><option value="pending">待複習</option><option value="mastered">已掌握</option>
+        <select class="form-select" style="width:130px;" id="wrongq-type-filter" onchange="renderWrongQ()">
+          <option value="all">全部類型</option>
+          <option value="careless">粗心</option><option value="concept">觀念錯誤</option>
+          <option value="formula">公式記錯</option><option value="calc">小計算錯</option>
+          <option value="reading">題意看錯</option><option value="other">其他</option>
+        </select>
+        <select class="form-select" style="width:130px;" id="wrongq-difficulty-filter" onchange="renderWrongQ()">
+          <option value="all">全部難度</option>
+          <option value="1">★ 1星</option><option value="2">★★ 2星</option><option value="3">★★★ 3星</option>
+          <option value="4">★★★★ 4星</option><option value="5">★★★★★ 5星</option>
+        </select>
+        <select class="form-select" style="width:130px;" id="wrongq-status-filter" onchange="renderWrongQ()">
+          <option value="all">全部狀態</option><option value="pending">待複習</option><option value="due">今日到期</option><option value="mastered">已掌握</option>
         </select>
       </div>
+
       <div id="wrongq-list"></div>
-      <div class="empty-state" id="wrongq-empty" style="display:none;"><div class="empty-icon">⚠</div><div class="empty-text">No wrong answers logged</div></div>
+      <div class="empty-state" id="wrongq-empty" style="display:none;"><div class="empty-icon">⚠</div><div class="empty-text">No wrong answers logged — great job!</div></div>
     </div>
 
     <!-- EXAMS -->
@@ -676,9 +741,10 @@
 </div>
 
 <div class="modal-overlay" id="modal-wrongq">
-  <div class="modal">
+  <div class="modal" style="width:600px;">
     <div class="modal-title">Log Wrong Answer</div>
     <button class="modal-close" onclick="closeModal('modal-wrongq')">✕</button>
+
     <div class="grid-2">
       <div class="form-group">
         <label class="form-label">科目</label>
@@ -695,10 +761,65 @@
         </select>
       </div>
     </div>
-    <div class="form-group"><label class="form-label">題目描述</label><textarea class="form-textarea" id="wq-question-input" placeholder="簡述題目內容或題號..." style="min-height:60px;"></textarea></div>
-    <div class="form-group"><label class="form-label">❌ 錯誤原因</label><textarea class="form-textarea" id="wq-reason-input" placeholder="我為什麼答錯？"></textarea></div>
-    <div class="form-group"><label class="form-label">✅ 正確解法/觀念</label><textarea class="form-textarea" id="wq-solution-input" placeholder="正確的解題思路是..."></textarea></div>
-    <div class="flex-gap"><button class="btn btn-primary" onclick="addWrongQ()">Save</button><button class="btn btn-ghost" onclick="closeModal('modal-wrongq')">Cancel</button></div>
+
+    <div class="form-group">
+      <label class="form-label">章節（選填）</label>
+      <input class="form-input" id="wq-chapter-input" placeholder="e.g. CH3">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">錯誤類型</label>
+      <div class="error-type-row" id="wq-error-type-row">
+        <div class="error-chip" data-type="careless" onclick="selectErrorType('careless')">😵 粗心</div>
+        <div class="error-chip" data-type="concept"  onclick="selectErrorType('concept')">🧠 觀念錯誤</div>
+        <div class="error-chip" data-type="formula"  onclick="selectErrorType('formula')">📐 公式記錯</div>
+        <div class="error-chip" data-type="calc"     onclick="selectErrorType('calc')">🔢 小計算錯</div>
+        <div class="error-chip" data-type="reading"  onclick="selectErrorType('reading')">📖 題意看錯</div>
+        <div class="error-chip" data-type="other"    onclick="selectErrorType('other')">❓ 其他</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">難度</label>
+      <div class="star-row" id="wq-star-row">
+        <span class="star" data-star="1" onclick="selectStar(1)">★</span>
+        <span class="star" data-star="2" onclick="selectStar(2)">★</span>
+        <span class="star" data-star="3" onclick="selectStar(3)">★</span>
+        <span class="star" data-star="4" onclick="selectStar(4)">★</span>
+        <span class="star" data-star="5" onclick="selectStar(5)">★</span>
+        <span style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-left:8px;" id="wq-star-label">未選擇</span>
+      </div>
+    </div>
+
+    <div class="form-group"><label class="form-label">題目描述</label><textarea class="form-textarea" id="wq-question-input" placeholder="簡述題目內容或貼上題號..."></textarea></div>
+
+    <div class="form-group">
+      <label class="form-label">題目照片（可選）</label>
+      <label class="btn btn-ghost btn-sm" style="display:inline-block;cursor:pointer;border-radius:999px;">
+        📷 上傳照片
+        <input type="file" accept="image/*" onchange="handleWQImage(this)">
+      </label>
+      <div id="wq-img-preview" style="margin-top:8px;"></div>
+    </div>
+
+    <div class="form-group"><label class="form-label">❌ 錯誤原因</label><textarea class="form-textarea" id="wq-reason-input" placeholder="我為什麼答錯？粗心、觀念不清、公式記錯..."></textarea></div>
+    <div class="form-group"><label class="form-label">✅ 正確解法 / 觀念</label><textarea class="form-textarea" id="wq-solution-input" placeholder="正確的解題思路是..."></textarea></div>
+
+    <div class="form-group">
+      <label class="form-label">下次複習日期</label>
+      <input class="form-input" type="date" id="wq-review-date-input">
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+        <button class="btn btn-ghost btn-sm" style="border-radius:999px;" onclick="setReviewDate(1)">明天</button>
+        <button class="btn btn-ghost btn-sm" style="border-radius:999px;" onclick="setReviewDate(3)">3天後</button>
+        <button class="btn btn-ghost btn-sm" style="border-radius:999px;" onclick="setReviewDate(7)">1週後</button>
+        <button class="btn btn-ghost btn-sm" style="border-radius:999px;" onclick="setReviewDate(14)">2週後</button>
+      </div>
+    </div>
+
+    <div class="flex-gap" style="margin-top:4px;">
+      <button class="ihb ihb-primary" onclick="addWrongQ()"><div class="ihb-bg"></div><span class="ihb-text">Save</span><div class="ihb-hover-content">Save →</div></button>
+      <button class="ihb" onclick="closeModal('modal-wrongq')"><div class="ihb-bg"></div><span class="ihb-text">Cancel</span><div class="ihb-hover-content">Cancel →</div></button>
+    </div>
   </div>
 </div>
 
@@ -716,6 +837,11 @@
     <div class="form-group"><label class="form-label">章節名稱</label><input class="form-input" id="ch-name-input" placeholder="e.g. CH3 牛頓運動定律" onkeydown="if(event.key==='Enter')addChapter()"></div>
     <div class="flex-gap"><button class="btn btn-primary" onclick="addChapter()">Add</button><button class="btn btn-ghost" onclick="closeModal('modal-chapter')">Cancel</button></div>
   </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('open')">
+  <img id="lightbox-img" src="" alt="">
 </div>
 
 <!-- FIREBASE SDK -->
@@ -1204,51 +1330,213 @@ window.deleteCurrentNote = async () => {
 // ══════════════════════════════════════
 // WRONG Q
 // ══════════════════════════════════════
+let wqSelectedErrorType = '';
+let wqSelectedStars = 0;
+let wqCurrentImg = null;
+
+const ERROR_TYPES = {
+  careless: { label: '😵 粗心',    color: 'var(--yellow)' },
+  concept:  { label: '🧠 觀念錯誤', color: 'var(--red)' },
+  formula:  { label: '📐 公式記錯', color: 'var(--purple)' },
+  calc:     { label: '🔢 小計算錯', color: 'var(--cyan)' },
+  reading:  { label: '📖 題意看錯', color: '#ff9f43' },
+  other:    { label: '❓ 其他',     color: 'var(--text-sec)' },
+};
+
+window.selectErrorType = (type) => {
+  wqSelectedErrorType = type;
+  document.querySelectorAll('.error-chip').forEach(c => {
+    c.className = 'error-chip';
+    if (c.dataset.type === type) c.classList.add('selected-' + type);
+  });
+};
+
+window.selectStar = (n) => {
+  wqSelectedStars = n;
+  const labels = ['', '簡單', '普通', '中等', '困難', '地獄'];
+  document.querySelectorAll('.star').forEach((s, i) => {
+    s.classList.toggle('active', i < n);
+  });
+  document.getElementById('wq-star-label').textContent = labels[n] || '未選擇';
+};
+
+window.setReviewDate = (days) => {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  document.getElementById('wq-review-date-input').value = d.toISOString().slice(0,10);
+};
+
+window.handleWQImage = (input) => {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    wqCurrentImg = e.target.result;
+    document.getElementById('wq-img-preview').innerHTML = `<img src="${wqCurrentImg}" style="max-width:100%;max-height:140px;border-radius:4px;border:1px solid var(--border);">`;
+  };
+  reader.readAsDataURL(file);
+};
+
+window.openLightbox = (src) => {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+};
+
 window.addWrongQ = async () => {
   const question = document.getElementById('wq-question-input').value.trim();
-  if (!question) return;
+  if (!question) { alert('請填入題目描述'); return; }
   await fbAdd('wrongq', {
-    subject: document.getElementById('wq-subject-input').value,
-    source: document.getElementById('wq-source-input').value,
+    subject:    document.getElementById('wq-subject-input').value,
+    source:     document.getElementById('wq-source-input').value,
+    chapter:    document.getElementById('wq-chapter-input').value.trim(),
+    errorType:  wqSelectedErrorType,
+    difficulty: wqSelectedStars,
     question,
-    reason: document.getElementById('wq-reason-input').value.trim(),
-    solution: document.getElementById('wq-solution-input').value.trim(),
-    mastered: false,
-    date: new Date().toISOString(),
+    image:      wqCurrentImg || null,
+    reason:     document.getElementById('wq-reason-input').value.trim(),
+    solution:   document.getElementById('wq-solution-input').value.trim(),
+    reviewDate: document.getElementById('wq-review-date-input').value || null,
+    mastered:   false,
+    attempts:   0,
+    date:       new Date().toISOString(),
   });
+  // reset
+  wqSelectedErrorType = ''; wqSelectedStars = 0; wqCurrentImg = null;
+  document.querySelectorAll('.error-chip').forEach(c => c.className = 'error-chip');
+  document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+  document.getElementById('wq-star-label').textContent = '未選擇';
+  document.getElementById('wq-img-preview').innerHTML = '';
+  ['wq-question-input','wq-reason-input','wq-solution-input','wq-chapter-input','wq-review-date-input'].forEach(id => document.getElementById(id).value = '');
+
   closeModal('modal-wrongq');
   const snap = await getDocs(query(col('wrongq'), orderBy('date','desc')));
   wrongQs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   renderWrongQ(); updateDashboardStats();
 };
 
+window.openAddWrongQ = () => {
+  wqSelectedErrorType = ''; wqSelectedStars = 0; wqCurrentImg = null;
+  document.querySelectorAll('.error-chip').forEach(c => c.className = 'error-chip');
+  document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+  document.getElementById('wq-star-label').textContent = '未選擇';
+  document.getElementById('wq-img-preview').innerHTML = '';
+  ['wq-question-input','wq-reason-input','wq-solution-input','wq-chapter-input','wq-review-date-input'].forEach(id => document.getElementById(id).value = '');
+  openModal('modal-wrongq');
+};
+
+function getReviewBadge(reviewDate) {
+  if (!reviewDate) return '';
+  const now = new Date(); now.setHours(0,0,0,0);
+  const rd = new Date(reviewDate); rd.setHours(0,0,0,0);
+  const diff = Math.ceil((rd - now) / 86400000);
+  if (diff <= 0) return `<span class="review-badge review-due">🔔 今日複習</span>`;
+  if (diff <= 3) return `<span class="review-badge review-soon">⏰ ${diff}天後複習</span>`;
+  return `<span class="review-badge review-ok">📅 ${diff}天後複習</span>`;
+}
+
+function getStars(n) {
+  if (!n) return '';
+  return '★'.repeat(n) + '☆'.repeat(5-n);
+}
+
+function renderWQStats() {
+  const total = wrongQs.length;
+  const pending = wrongQs.filter(q => !q.mastered).length;
+  const mastered = wrongQs.filter(q => q.mastered).length;
+  const accuracy = total ? Math.round(mastered / total * 100) : 0;
+
+  // Most common error type
+  const typeCounts = {};
+  wrongQs.forEach(q => { if (q.errorType) typeCounts[q.errorType] = (typeCounts[q.errorType]||0)+1; });
+  const topType = Object.entries(typeCounts).sort((a,b)=>b[1]-a[1])[0];
+
+  // Due today
+  const now = new Date(); now.setHours(0,0,0,0);
+  const dueToday = wrongQs.filter(q => {
+    if (!q.reviewDate || q.mastered) return false;
+    const rd = new Date(q.reviewDate); rd.setHours(0,0,0,0);
+    return rd <= now;
+  }).length;
+
+  document.getElementById('wq-stats').innerHTML = `
+    <div class="wq-stat">
+      <div class="wq-stat-label">Total Wrong</div>
+      <div class="wq-stat-value">${total}</div>
+    </div>
+    <div class="wq-stat">
+      <div class="wq-stat-label">Mastery Rate</div>
+      <div class="wq-stat-value" style="color:${accuracy>60?'var(--green)':accuracy>30?'var(--yellow)':'var(--red)'}">${accuracy}%</div>
+    </div>
+    <div class="wq-stat">
+      <div class="wq-stat-label">Due Today</div>
+      <div class="wq-stat-value" style="color:${dueToday>0?'var(--red)':'var(--green)'}">${dueToday}</div>
+    </div>
+    <div class="wq-stat">
+      <div class="wq-stat-label">Top Error</div>
+      <div style="font-size:13px;margin-top:4px;color:var(--text-sec);">${topType ? ERROR_TYPES[topType[0]]?.label || topType[0] : '—'}</div>
+    </div>`;
+}
+
 function renderWrongQ() {
-  const subFilter = document.getElementById('wrongq-filter').value;
+  renderWQStats();
+  const subFilter    = document.getElementById('wrongq-filter').value;
+  const typeFilter   = document.getElementById('wrongq-type-filter').value;
+  const diffFilter   = document.getElementById('wrongq-difficulty-filter').value;
   const statusFilter = document.getElementById('wrongq-status-filter').value;
+  const now = new Date(); now.setHours(0,0,0,0);
+
   let filtered = wrongQs;
-  if (subFilter !== 'all') filtered = filtered.filter(q => q.subject === subFilter);
-  if (statusFilter === 'pending') filtered = filtered.filter(q => !q.mastered);
+  if (subFilter !== 'all')    filtered = filtered.filter(q => q.subject === subFilter);
+  if (typeFilter !== 'all')   filtered = filtered.filter(q => q.errorType === typeFilter);
+  if (diffFilter !== 'all')   filtered = filtered.filter(q => String(q.difficulty) === diffFilter);
+  if (statusFilter === 'pending')  filtered = filtered.filter(q => !q.mastered);
   if (statusFilter === 'mastered') filtered = filtered.filter(q => q.mastered);
+  if (statusFilter === 'due') filtered = filtered.filter(q => {
+    if (!q.reviewDate || q.mastered) return false;
+    const rd = new Date(q.reviewDate); rd.setHours(0,0,0,0);
+    return rd <= now;
+  });
+
   const el = document.getElementById('wrongq-list');
   const empty = document.getElementById('wrongq-empty');
   if (!filtered.length) { el.innerHTML = ''; empty.style.display = ''; return; }
   empty.style.display = 'none';
-  el.innerHTML = filtered.map(q => `
+
+  el.innerHTML = filtered.map(q => {
+    const et = q.errorType ? ERROR_TYPES[q.errorType] : null;
+    const stars = q.difficulty ? `<span style="color:var(--yellow);letter-spacing:1px;font-size:11px;">${getStars(q.difficulty)}</span>` : '';
+    const etTag = et ? `<span class="tag" style="color:${et.color};border-color:${et.color}30;background:${et.color}10;">${et.label}</span>` : '';
+    const reviewBadge = getReviewBadge(q.reviewDate);
+    const chTag = q.chapter ? `<span class="tag" style="color:var(--text-sec);border-color:var(--border);">${q.chapter}</span>` : '';
+    return `
     <div class="wrongq-card ${q.mastered?'mastered':''}">
       <div class="wrongq-header">
         <span class="tag ${SUBJECTS[q.subject]?.class||''}">${SUBJECTS[q.subject]?.name}</span>
+        ${chTag}
         <span class="tag" style="color:var(--text-sec);border-color:var(--border);">${q.source}</span>
-        <span class="tag ${q.mastered?'tag-green':'tag-red'}">${q.mastered?'MASTERED':'PENDING'}</span>
-        <span style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-left:auto;">${new Date(q.date).toLocaleDateString('zh-TW')}</span>
+        ${etTag}
+        ${stars}
+        ${reviewBadge}
+        <span class="tag ${q.mastered?'tag-green':'tag-red'}" style="margin-left:auto;">${q.mastered?'MASTERED':'PENDING'}</span>
+        <span style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">${new Date(q.date).toLocaleDateString('zh-TW')}</span>
       </div>
-      <div style="font-size:13px;">${q.question}</div>
-      ${q.reason?`<div class="wrongq-reason">❌ 錯誤原因：${q.reason}</div>`:''}
-      ${q.solution?`<div class="wrongq-solution">✅ 正確解法：${q.solution}</div>`:''}
+      <div class="wrongq-question">${q.question}</div>
+      ${q.image ? `<img class="wrongq-img" src="${q.image}" alt="" onclick="openLightbox('${q.image.replace(/'/g,"\\'")}')">` : ''}
+      ${q.reason   ? `<div class="wrongq-reason">❌ 錯誤原因：${q.reason}</div>` : ''}
+      ${q.solution ? `<div class="wrongq-solution">✅ 正確解法：${q.solution}</div>` : ''}
       <div class="wrongq-actions">
-        <button class="btn btn-sm ${q.mastered?'btn-ghost':'btn-primary'}" onclick="toggleWQMastered('${q.id}',${q.mastered})">${q.mastered?'↩ 重新練習':'✓ 已掌握'}</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteWrongQ('${q.id}')">✕ 刪除</button>
+        <button class="ihb ${q.mastered?'':'ihb-green'}" onclick="toggleWQMastered('${q.id}',${q.mastered})">
+          <div class="ihb-bg"></div>
+          <span class="ihb-text">${q.mastered?'↩ 重練':'✓ 已掌握'}</span>
+          <div class="ihb-hover-content">${q.mastered?'↩ 重練 →':'✓ 已掌握 →'}</div>
+        </button>
+        <button class="ihb ihb-danger" onclick="deleteWrongQ('${q.id}')">
+          <div class="ihb-bg"></div>
+          <span class="ihb-text">✕ 刪除</span>
+          <div class="ihb-hover-content">✕ 刪除 →</div>
+        </button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 window.toggleWQMastered = async (id, current) => {
@@ -1259,9 +1547,10 @@ window.toggleWQMastered = async (id, current) => {
 };
 
 window.deleteWrongQ = async (id) => {
+  if (!confirm('確定刪除這題？')) return;
   await fbDelete('wrongq', id);
   wrongQs = wrongQs.filter(q => q.id !== id);
-  renderWrongQ();
+  renderWrongQ(); updateDashboardStats();
 };
 
 // ══════════════════════════════════════
