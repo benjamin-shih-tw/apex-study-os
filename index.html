@@ -4,692 +4,421 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>APEX STUDY OS</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@300;400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg-0: #040810;
-    --bg-1: #070e1a;
-    --bg-2: #0a1628;
-    --bg-3: #0d1f3c;
-    --panel: rgba(10, 22, 45, 0.85);
-    --border: rgba(0, 180, 255, 0.15);
-    --border-bright: rgba(0, 180, 255, 0.4);
-    --accent: #00b4ff;
-    --accent-dim: rgba(0, 180, 255, 0.6);
-    --accent-glow: rgba(0, 180, 255, 0.15);
-    --cyan: #00e5ff;
-    --green: #00ff9d;
-    --yellow: #ffd166;
-    --red: #ff4d6d;
-    --purple: #a855f7;
-    --text-pri: #e8f4fd;
-    --text-sec: #7ab3d4;
-    --text-dim: #3a6080;
-    --font-display: 'Orbitron', monospace;
-    --font-mono: 'Space Mono', monospace;
-    --font-body: 'Noto Sans TC', sans-serif;
-    --radius: 4px;
-    --radius-lg: 8px;
-  }
+:root {
+  --z950:#09090b; --z900:#18181b; --z800:#27272a; --z700:#3f3f46;
+  --z600:#52525b; --z500:#71717a; --z400:#a1a1aa; --z300:#d4d4d8;
+  --w5:rgba(255,255,255,0.05); --w8:rgba(255,255,255,0.08);
+  --w10:rgba(255,255,255,0.10); --w15:rgba(255,255,255,0.15);
+  --w20:rgba(255,255,255,0.20);
+  --green:#4ade80; --yellow:#fbbf24; --red:#f87171;
+  --blue:#60a5fa; --purple:#c084fc; --cyan:#22d3ee; --orange:#fb923c;
+  --sans:'Inter','Noto Sans TC',sans-serif; --mono:'Space Mono',monospace;
+  --r:12px; --rl:16px; --rxl:20px; --rf:999px;
+  --sw:240px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--z950);color:#d4d4d8;font-family:var(--sans);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+/* ambient blobs */
+.bg-blob-1{position:fixed;top:-150px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(96,165,250,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
+.bg-blob-2{position:fixed;bottom:-150px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(192,132,252,.05) 0%,transparent 70%);pointer-events:none;z-index:0}
 
-  body {
-    background: var(--bg-0);
-    color: var(--text-pri);
-    font-family: var(--font-body);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--z700);border-radius:99px}
 
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(0, 180, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 180, 255, 0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
+/* ── SYNC BAR ── */
+#sync-bar{position:fixed;top:0;left:0;right:0;height:26px;background:rgba(9,9,11,.9);border-bottom:1px solid var(--w10);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:flex-end;padding:0 16px;gap:6px;z-index:300;font-family:var(--mono);font-size:9px;letter-spacing:1px}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--z600);transition:all .3s;flex-shrink:0}
+.sync-dot.synced{background:var(--green);box-shadow:0 0 8px var(--green)}
+.sync-dot.syncing{background:var(--yellow);animation:pulse 1s infinite}
+.sync-dot.error{background:var(--red)}
+#sync-label{color:var(--z500)}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ping{75%,100%{transform:scale(2);opacity:0}}
 
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px);
-    pointer-events: none;
-    z-index: 0;
-  }
+/* ── LOGIN ── */
+#login-screen{position:fixed;inset:0;background:var(--z950);z-index:500;display:flex;align-items:center;justify-content:center}
+.login-box{position:relative;background:var(--w5);border:1px solid var(--w10);border-radius:var(--rxl);padding:48px 40px;width:380px;text-align:center;backdrop-filter:blur(20px);box-shadow:0 40px 80px rgba(0,0,0,.45);animation:fadeUp .5s ease}
+.login-badge{display:inline-flex;align-items:center;gap:6px;background:var(--w8);border:1px solid var(--w10);border-radius:var(--rf);padding:4px 12px;font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--z400);margin-bottom:20px}
+.pingdot{position:relative;display:inline-flex;width:7px;height:7px}
+.pingdot span:first-child{position:absolute;inset:0;border-radius:50%;background:var(--green);animation:ping 1.5s cubic-bezier(0,0,.2,1) infinite;opacity:.75}
+.pingdot span:last-child{position:relative;display:inline-flex;border-radius:50%;width:7px;height:7px;background:var(--green)}
+.login-title{font-size:42px;font-weight:800;letter-spacing:-2px;background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.6) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:6px}
+.login-sub{font-size:11px;color:var(--z600);letter-spacing:1px;margin-bottom:32px}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px;background:#fff;border:none;border-radius:var(--rf);font-family:var(--sans);font-size:14px;font-weight:600;color:#18181b;cursor:pointer;transition:all .2s}
+.btn-google:hover{background:#f4f4f5;transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.login-fine{margin-top:18px;font-size:10px;color:var(--z600)}
 
-  /* SYNC STATUS BAR */
-  #sync-bar {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 28px;
-    background: var(--bg-1);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0 20px;
-    gap: 8px;
-    z-index: 200;
-    font-family: var(--font-mono);
-    font-size: 9px;
-    letter-spacing: 1px;
-  }
+/* ── APP SHELL ── */
+.app-shell{display:flex;min-height:100vh;position:relative;z-index:1;padding-top:26px}
 
-  .sync-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--text-dim);
-    transition: background 0.3s;
-  }
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sw);flex-shrink:0;position:fixed;top:26px;left:0;bottom:0;background:rgba(9,9,11,.7);border-right:1px solid var(--w10);backdrop-filter:blur(20px);display:flex;flex-direction:column;z-index:100}
+.sidebar-logo{padding:22px 20px 18px;border-bottom:1px solid var(--w8)}
+.logo-word{font-size:22px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.55) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.logo-sub{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--z600);margin-top:3px;text-transform:uppercase}
+.sidebar-user{display:flex;align-items:center;gap:9px;padding:12px 16px;border-bottom:1px solid var(--w8)}
+.user-avatar{width:28px;height:28px;border-radius:50%;border:1px solid var(--w15);object-fit:cover;flex-shrink:0;background:var(--z800)}
+.user-name{font-size:12px;font-weight:500;color:var(--z300);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-logout{background:none;border:none;color:var(--z600);font-size:14px;cursor:pointer;padding:3px 5px;border-radius:5px;transition:all .15s;line-height:1}
+.btn-logout:hover{color:var(--red);background:rgba(248,113,113,.1)}
+.sidebar-nav{flex:1;padding:10px;overflow-y:auto}
+.nav-sec{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--z700);text-transform:uppercase;padding:10px 8px 5px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:10px;cursor:pointer;transition:all .15s;font-size:13px;color:var(--z500);border:1px solid transparent}
+.nav-item:hover{background:var(--w5);color:var(--z200)}
+.nav-item.active{background:var(--w10);color:#fff;border-color:var(--w15)}
+.nav-icon{font-size:14px;width:19px;text-align:center;flex-shrink:0;opacity:.7}
+.nav-item.active .nav-icon{opacity:1}
 
-  .sync-dot.synced { background: var(--green); box-shadow: 0 0 6px var(--green); }
-  .sync-dot.syncing { background: var(--yellow); animation: glowPulse 0.8s infinite; }
-  .sync-dot.error { background: var(--red); }
+/* ── MAIN ── */
+.main-content{margin-left:var(--sw);flex:1;padding:30px 34px;min-height:100vh}
+.page{display:none;animation:fadeUp .22s ease}
+.page.active{display:block}
 
-  #sync-label { color: var(--text-dim); }
+/* ── PAGE HEADER ── */
+.page-header{margin-bottom:26px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.page-title{font-size:24px;font-weight:700;letter-spacing:-.5px;color:#fff;line-height:1}
+.page-tag{font-family:var(--mono);font-size:9px;color:var(--z600);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
 
-  /* LOGIN SCREEN */
-  #login-screen {
-    position: fixed;
-    inset: 0;
-    background: var(--bg-0);
-    z-index: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 24px;
-  }
+/* ── GLASS CARD ── */
+.gc{background:var(--w5);border:1px solid var(--w10);border-radius:var(--rl);padding:20px 22px;backdrop-filter:blur(10px);position:relative;overflow:hidden}
+.gc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--w20),transparent)}
+.card-lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--z600);margin-bottom:12px}
 
-  .login-box {
-    background: var(--panel);
-    border: 1px solid var(--border-bright);
-    border-radius: var(--radius-lg);
-    padding: 40px;
-    width: 360px;
-    text-align: center;
-    box-shadow: 0 0 60px rgba(0,180,255,0.1);
-  }
+/* ── GRIDS ── */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
+.gm{display:grid;grid-template-columns:1.7fr 1fr;gap:13px}
+.mb4{margin-bottom:15px}.mt4{margin-top:14px}
+.fbetween{display:flex;justify-content:space-between;align-items:center}
+.fgap{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
 
-  .login-title {
-    font-family: var(--font-display);
-    font-size: 22px;
-    font-weight: 900;
-    letter-spacing: 4px;
-    color: var(--accent);
-    text-shadow: 0 0 20px var(--accent);
-    margin-bottom: 6px;
-  }
+/* ── STAT CARDS ── */
+.sc{background:var(--w5);border:1px solid var(--w10);border-radius:var(--rl);padding:17px 19px;position:relative;overflow:hidden;transition:all .2s}
+.sc:hover{background:var(--w8);border-color:var(--w15)}
+.sc-lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--z600);margin-bottom:8px}
+.sc-val{font-size:30px;font-weight:700;letter-spacing:-1px;color:#fff;line-height:1}
+.sc-unit{font-size:11px;color:var(--z500);margin-top:4px}
+.sc-g .sc-val{color:var(--green)} .sc-r .sc-val{color:var(--red)}
+.sc-y .sc-val{color:var(--yellow)} .sc-b .sc-val{color:var(--blue)}
+.sc-g::after,.sc-r::after,.sc-y::after,.sc-b::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.sc-g::after{background:linear-gradient(90deg,transparent,var(--green),transparent)}
+.sc-r::after{background:linear-gradient(90deg,transparent,var(--red),transparent)}
+.sc-y::after{background:linear-gradient(90deg,transparent,var(--yellow),transparent)}
+.sc-b::after{background:linear-gradient(90deg,transparent,var(--blue),transparent)}
 
-  .login-sub {
-    font-family: var(--font-mono);
-    font-size: 9px;
-    color: var(--text-dim);
-    letter-spacing: 2px;
-    margin-bottom: 32px;
-  }
+/* ── IHB BUTTON ── */
+.ihb{position:relative;overflow:hidden;border-radius:var(--rf);border:1px solid var(--w15);background:var(--w8);padding:9px 20px;font-family:var(--mono);font-size:10px;letter-spacing:1px;cursor:pointer;color:var(--z200);text-transform:uppercase;white-space:nowrap;transition:border-color .2s}
+.ihb:hover{border-color:var(--w25)}
+.ihb-t{display:inline-block;transition:transform .28s,opacity .28s}
+.ihb:hover .ihb-t{transform:translateX(34px);opacity:0}
+.ihb-hc{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:5px;transform:translateX(-34px);opacity:0;transition:transform .28s,opacity .28s;color:var(--z950);font-weight:700;z-index:2;font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.ihb:hover .ihb-hc{transform:translateX(0);opacity:1}
+.ihb-b{position:absolute;left:18%;top:38%;width:10px;height:10px;border-radius:99px;background:#fff;transition:all .32s cubic-bezier(.4,0,.2,1);z-index:1}
+.ihb:hover .ihb-b{left:0;top:0;width:100%;height:100%;border-radius:0}
+.ihb-r{border-color:rgba(248,113,113,.3);color:var(--red)}.ihb-r .ihb-b{background:var(--red)}
+.ihb-g{border-color:rgba(74,222,128,.3);color:var(--green)}.ihb-g .ihb-b{background:var(--green)}
+.ihb-sm{padding:6px 13px;font-size:9px}
 
-  .btn-google {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    padding: 12px;
-    background: white;
-    border: none;
-    border-radius: var(--radius);
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 500;
-    color: #333;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
+/* ── FORMS ── */
+.fg{margin-bottom:13px}
+.fl{display:block;font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--z600);margin-bottom:7px}
+.fi,.fs,.ft{width:100%;background:var(--w5);border:1px solid var(--w10);border-radius:9px;padding:10px 13px;color:#fff;font-family:var(--sans);font-size:13px;transition:border-color .18s,box-shadow .18s;outline:none}
+.fi::placeholder,.ft::placeholder{color:var(--z700)}
+.fi:focus,.fs:focus,.ft:focus{border-color:var(--w25);box-shadow:0 0 0 3px rgba(255,255,255,.04)}
+.ft{resize:vertical;min-height:78px}.fs option{background:var(--z900);color:#fff}
+input[type="file"]{display:none}
 
-  .btn-google:hover { background: #f5f5f5; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+/* ── TAGS ── */
+.tag{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:var(--rf);border:1px solid;text-transform:uppercase;white-space:nowrap}
+.t-ph{color:var(--cyan);  border-color:rgba(34,211,238,.3);background:rgba(34,211,238,.07)}
+.t-ch{color:var(--purple);border-color:rgba(192,132,252,.3);background:rgba(192,132,252,.07)}
+.t-bi{color:var(--green); border-color:rgba(74,222,128,.3); background:rgba(74,222,128,.07)}
+.t-ma{color:var(--yellow);border-color:rgba(251,191,36,.3); background:rgba(251,191,36,.07)}
+.t-ge{color:var(--orange);border-color:rgba(251,146,60,.3); background:rgba(251,146,60,.07)}
+.t-en{color:var(--red);   border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.07)}
+.t-ci{color:var(--blue);  border-color:rgba(96,165,250,.3); background:rgba(96,165,250,.07)}
+.t-ok{color:var(--green); border-color:rgba(74,222,128,.3); background:rgba(74,222,128,.07)}
+.t-ng{color:var(--red);   border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.07)}
+.t-wn{color:var(--yellow);border-color:rgba(251,191,36,.3); background:rgba(251,191,36,.07)}
 
-  .google-icon { font-size: 18px; }
+/* ── MODAL ── */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);z-index:1000;align-items:center;justify-content:center}
+.mo.open{display:flex}
+.mod{background:rgba(22,22,25,.96);border:1px solid var(--w10);border-radius:var(--rxl);padding:28px 28px 32px;width:510px;max-width:95vw;max-height:86vh;overflow-y:auto;position:relative;box-shadow:0 40px 80px rgba(0,0,0,.55),0 0 0 1px var(--w5);animation:fadeUp .18s ease}
+.mod-t{font-size:16px;font-weight:600;color:#fff;margin-bottom:20px;letter-spacing:-.2px}
+.mod-x{position:absolute;top:16px;right:16px;background:var(--w5);border:1px solid var(--w10);border-radius:6px;color:var(--z500);font-size:13px;cursor:pointer;width:26px;height:26px;display:flex;align-items:center;justify-content:center;transition:all .14s;line-height:1}
+.mod-x:hover{background:rgba(248,113,113,.14);border-color:rgba(248,113,113,.3);color:var(--red)}
 
-  /* LAYOUT */
-  .app-shell {
-    display: flex;
-    min-height: 100vh;
-    position: relative;
-    z-index: 1;
-    padding-top: 28px;
-  }
+/* ── TODO ── */
+.todo{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:9px;transition:background .12s}
+.todo:hover{background:var(--w5)}
+.tcb{width:17px;height:17px;border:1.5px solid var(--w20);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s;cursor:pointer}
+.tcb.ck{background:#fff;border-color:#fff}
+.tcb.ck::after{content:'✓';color:var(--z950);font-size:10px;font-weight:700}
+.ttx{font-size:13px;flex:1;color:var(--z300)}.ttx.dn{text-decoration:line-through;color:var(--z700)}
 
-  /* SIDEBAR */
-  .sidebar {
-    width: 220px;
-    flex-shrink: 0;
-    background: var(--bg-1);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 28px; left: 0; bottom: 0;
-    z-index: 100;
-  }
+/* ── SUBJ BARS ── */
+.sbr{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--w5)}
+.sbr:last-child{border-bottom:none}
+.snm{width:30px;font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--z600);flex-shrink:0}
+.sbw{flex:1;background:var(--w5);border-radius:99px;height:5px;overflow:hidden}
+.sbf{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.spc{width:32px;font-size:11px;color:var(--z500);text-align:right;font-weight:500;flex-shrink:0}
 
-  .sidebar-logo {
-    padding: 20px 20px 16px;
-    border-bottom: 1px solid var(--border);
-  }
+/* ── TIMER ── */
+.tdis{font-size:58px;font-weight:700;letter-spacing:-2px;text-align:center;padding:22px 0;background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,.45) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;transition:all .3s}
+.tdis.run{background:linear-gradient(180deg,var(--green) 0%,rgba(74,222,128,.4) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.tctl{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
 
-  .logo-text {
-    font-family: var(--font-display);
-    font-size: 13px;
-    font-weight: 900;
-    letter-spacing: 3px;
-    color: var(--accent);
-    text-shadow: 0 0 20px var(--accent);
-  }
+/* ── CHAPTERS ── */
+.chs{margin-bottom:14px}
+.chh{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;background:var(--w5);border:1px solid var(--w8);border-radius:var(--r);cursor:pointer;transition:all .14s;margin-bottom:3px}
+.chh:hover{background:var(--w8);border-color:var(--w15)}
+.chl{display:none;padding-left:9px}.chl.open{display:block}
+.chi{display:flex;align-items:center;gap:9px;padding:7px 11px;border-radius:8px;transition:background .12s}
+.chi:hover{background:var(--w5)}
+.cst{width:19px;height:19px;border:1.5px solid var(--z700);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer;transition:all .18s}
+.cst.not-started{color:var(--z700)}
+.cst.fuzzy{background:rgba(251,191,36,.1);border-color:var(--yellow);color:var(--yellow)}
+.cst.mastered{background:rgba(74,222,128,.1);border-color:var(--green);color:var(--green)}
+.cnm{font-size:13px;flex:1;color:var(--z300)}
+.cadd{background:none;border:1px dashed var(--w10);color:var(--z600);font-family:var(--mono);font-size:10px;padding:7px 11px;border-radius:8px;cursor:pointer;width:100%;transition:all .13s;text-align:left;margin-top:3px;letter-spacing:.5px}
+.cadd:hover{border-color:var(--w20);color:var(--z400)}
 
-  .logo-sub { font-family: var(--font-mono); font-size: 9px; color: var(--text-dim); letter-spacing: 2px; margin-top: 2px; }
+/* ── NOTES ── */
+.ngrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:13px}
+.ncard{background:var(--w5);border:1px solid var(--w8);border-radius:var(--rl);padding:15px;cursor:pointer;transition:all .18s}
+.ncard:hover{border-color:var(--w20);background:var(--w8);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.nct{font-size:14px;font-weight:500;color:#fff;margin-bottom:4px}
+.ncm{font-family:var(--mono);font-size:9px;color:var(--z700);letter-spacing:1px;margin-bottom:9px}
+.ncp{font-size:12px;color:var(--z500);line-height:1.55}
+.nth{width:100%;max-height:140px;object-fit:cover;border-radius:8px;margin-top:9px;border:1px solid var(--w8)}
+.ndetail{display:none}.ndetail.open{display:block}
+.nlist.hidden{display:none}
 
-  .user-info {
-    padding: 10px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+/* ── WRONG Q ── */
+.wqc{background:var(--w5);border:1px solid var(--w8);border-left:2px solid var(--red);border-radius:var(--rl);padding:17px 19px;margin-bottom:11px;transition:all .18s;position:relative;overflow:hidden}
+.wqc::before{content:'';position:absolute;top:0;right:0;width:180px;height:180px;background:radial-gradient(circle at top right,rgba(248,113,113,.04) 0%,transparent 70%);pointer-events:none}
+.wqc:hover{border-color:rgba(248,113,113,.28);background:var(--w8)}
+.wqc.mastered{border-left-color:var(--green);opacity:.5}
+.wqc.mastered::before{background:radial-gradient(circle at top right,rgba(74,222,128,.04) 0%,transparent 70%)}
+.wqh{display:flex;align-items:center;gap:6px;margin-bottom:11px;flex-wrap:wrap}
+.wqq{font-size:14px;line-height:1.7;color:var(--z200);margin-bottom:9px}
+.wqi{width:100%;max-height:210px;object-fit:contain;border-radius:8px;margin:9px 0;border:1px solid var(--w8);background:var(--w5);cursor:pointer}
+.wqreason{margin-top:7px;padding:9px 13px;background:rgba(248,113,113,.05);border-radius:8px;font-size:12px;color:var(--z500);border-left:2px solid rgba(248,113,113,.35)}
+.wqsol{margin-top:7px;padding:9px 13px;background:rgba(74,222,128,.04);border-radius:8px;font-size:12px;color:var(--z500);border-left:2px solid rgba(74,222,128,.35)}
+.wqact{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
 
-  .user-avatar {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    border: 1px solid var(--border-bright);
-    object-fit: cover;
-  }
+/* WQ STATS */
+.wqs4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:18px}
+.wqs{background:var(--w5);border:1px solid var(--w8);border-radius:var(--rl);padding:13px 15px}
+.wqsl{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--z600);text-transform:uppercase;margin-bottom:5px}
+.wqsv{font-size:22px;font-weight:700;letter-spacing:-.5px;color:#fff}
 
-  .user-name { font-size: 11px; color: var(--text-sec); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* STARS */
+.stars{display:flex;gap:5px;align-items:center}
+.star{font-size:20px;cursor:pointer;color:var(--z700);transition:color .1s,transform .14s}
+.star:hover,.star.on{color:var(--yellow);transform:scale(1.2)}
 
-  .btn-logout {
-    background: none;
-    border: none;
-    color: var(--text-dim);
-    font-size: 12px;
-    cursor: pointer;
-    transition: color 0.2s;
-  }
+/* ERROR CHIPS */
+.echips{display:flex;gap:7px;flex-wrap:wrap}
+.ec{padding:5px 11px;border-radius:var(--rf);font-size:11px;font-family:var(--mono);letter-spacing:.5px;cursor:pointer;border:1px solid var(--w10);color:var(--z500);background:transparent;transition:all .13s}
+.ec:hover{border-color:var(--w20);color:var(--z300)}
+.ec.s-cl{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.45);color:var(--yellow)}
+.ec.s-co{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.45);color:var(--red)}
+.ec.s-fo{background:rgba(192,132,252,.1);border-color:rgba(192,132,252,.45);color:var(--purple)}
+.ec.s-ca{background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.45);color:var(--cyan)}
+.ec.s-re{background:rgba(251,146,60,.1);border-color:rgba(251,146,60,.45);color:var(--orange)}
+.ec.s-ot{background:rgba(161,161,170,.1);border-color:rgba(161,161,170,.45);color:var(--z400)}
 
-  .btn-logout:hover { color: var(--red); }
+/* REVIEW BADGES */
+.rb{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:var(--rf);border:1px solid;white-space:nowrap}
+.rb-due{color:var(--red);border-color:rgba(248,113,113,.35);background:rgba(248,113,113,.07);animation:pulse 2s infinite}
+.rb-soon{color:var(--yellow);border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.07)}
+.rb-ok{color:var(--green);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.07)}
 
-  .sidebar-nav { flex: 1; padding: 16px 0; overflow-y: auto; }
+/* MISC */
+.div{height:1px;background:var(--w8);margin:16px 0}
+.empty{text-align:center;padding:52px 20px;color:var(--z700)}
+.eico{font-size:26px;margin-bottom:11px;opacity:.4}
+.etxt{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--z700)}
+.lbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:2000;align-items:center;justify-content:center;cursor:zoom-out;backdrop-filter:blur(4px)}
+.lbox.open{display:flex}
+.lbox img{max-width:92vw;max-height:92vh;border-radius:10px;box-shadow:0 0 80px rgba(0,0,0,.8)}
+.leg{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:13px}
+.leg-i{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--z500)}
+.leg-d{width:8px;height:8px;border-radius:50%}
 
-  .nav-section-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; color: var(--text-dim); padding: 8px 20px 4px; text-transform: uppercase; }
-
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-    border-left: 2px solid transparent;
-    font-size: 13px;
-    color: var(--text-sec);
-  }
-
-  .nav-item:hover { background: var(--accent-glow); color: var(--accent); border-left-color: var(--accent-dim); }
-  .nav-item.active { background: var(--accent-glow); color: var(--accent); border-left-color: var(--accent); }
-  .nav-icon { font-size: 14px; width: 18px; text-align: center; }
-
-  /* MAIN */
-  .main-content { margin-left: 220px; flex: 1; padding: 28px 32px; min-height: 100vh; }
-
-  .page { display: none; animation: fadeIn 0.3s ease; }
-  .page.active { display: block; }
-
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-  .page-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-  .page-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; letter-spacing: 3px; color: var(--text-pri); }
-  .page-tag { font-family: var(--font-mono); font-size: 10px; color: var(--accent); letter-spacing: 2px; opacity: 0.7; }
-
-  /* CARDS */
-  .card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    backdrop-filter: blur(10px);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
-    opacity: 0.5;
-  }
-
-  .card-title { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 14px; }
-
-  /* GRIDS */
-  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .grid-main { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
-
-  /* STAT CARDS */
-  .stat-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; position: relative; overflow: hidden; }
-  .stat-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 6px; }
-  .stat-value { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--accent); text-shadow: 0 0 15px var(--accent-dim); line-height: 1; }
-  .stat-unit { font-family: var(--font-mono); font-size: 11px; color: var(--text-sec); margin-top: 4px; }
-  .stat-accent-green .stat-value { color: var(--green); text-shadow: 0 0 15px rgba(0,255,157,0.4); }
-  .stat-accent-yellow .stat-value { color: var(--yellow); text-shadow: 0 0 15px rgba(255,209,102,0.4); }
-  .stat-accent-red .stat-value { color: var(--red); text-shadow: 0 0 15px rgba(255,77,109,0.4); }
-
-  /* BUTTONS */
-  .btn { font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; padding: 8px 16px; border-radius: var(--radius); cursor: pointer; transition: all 0.2s; border: 1px solid; text-transform: uppercase; }
-  .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--bg-0); font-weight: 700; }
-  .btn-primary:hover { background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 20px var(--accent-dim); }
-  .btn-ghost { background: transparent; border-color: var(--border-bright); color: var(--accent); }
-  .btn-ghost:hover { background: var(--accent-glow); border-color: var(--accent); }
-  .btn-danger { background: transparent; border-color: rgba(255,77,109,0.4); color: var(--red); }
-  .btn-danger:hover { background: rgba(255,77,109,0.1); }
-  .btn-sm { padding: 5px 10px; font-size: 9px; }
-
-  /* FORMS */
-  .form-group { margin-bottom: 14px; }
-  .form-label { display: block; font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 6px; }
-  .form-input, .form-select, .form-textarea { width: 100%; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 9px 12px; color: var(--text-pri); font-family: var(--font-body); font-size: 13px; transition: border-color 0.2s; outline: none; }
-  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-glow); }
-  .form-textarea { resize: vertical; min-height: 80px; }
-  .form-select option { background: var(--bg-2); }
-
-  /* TAGS */
-  .tag { display: inline-block; font-family: var(--font-mono); font-size: 9px; letter-spacing: 1px; padding: 2px 8px; border-radius: 2px; text-transform: uppercase; border: 1px solid; }
-  .tag-physics { color: #00e5ff; border-color: rgba(0,229,255,0.3); background: rgba(0,229,255,0.08); }
-  .tag-chem { color: #a855f7; border-color: rgba(168,85,247,0.3); background: rgba(168,85,247,0.08); }
-  .tag-bio { color: #00ff9d; border-color: rgba(0,255,157,0.3); background: rgba(0,255,157,0.08); }
-  .tag-math { color: #ffd166; border-color: rgba(255,209,102,0.3); background: rgba(255,209,102,0.08); }
-  .tag-geo { color: #ff9f43; border-color: rgba(255,159,67,0.3); background: rgba(255,159,67,0.08); }
-  .tag-eng { color: #ff4d6d; border-color: rgba(255,77,109,0.3); background: rgba(255,77,109,0.08); }
-  .tag-chi { color: #4cc9f0; border-color: rgba(76,201,240,0.3); background: rgba(76,201,240,0.08); }
-  .tag-red { color: var(--red); border-color: rgba(255,77,109,0.3); background: rgba(255,77,109,0.08); }
-  .tag-yellow { color: var(--yellow); border-color: rgba(255,209,102,0.3); background: rgba(255,209,102,0.08); }
-  .tag-green { color: var(--green); border-color: rgba(0,255,157,0.3); background: rgba(0,255,157,0.08); }
-
-  /* TABLE */
-  .data-table { width: 100%; border-collapse: collapse; }
-  .data-table th { font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
-  .data-table td { padding: 12px 14px; font-size: 13px; border-bottom: 1px solid rgba(0,180,255,0.06); vertical-align: top; }
-  .data-table tr:hover td { background: var(--accent-glow); }
-
-  /* MODAL */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(4, 8, 16, 0.85); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: var(--bg-1); border: 1px solid var(--border-bright); border-radius: var(--radius-lg); padding: 28px; width: 520px; max-width: 95vw; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 0 60px rgba(0,180,255,0.1); }
-  .modal-title { font-family: var(--font-display); font-size: 14px; letter-spacing: 2px; color: var(--accent); margin-bottom: 20px; }
-  .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text-dim); font-size: 18px; cursor: pointer; transition: color 0.2s; }
-  .modal-close:hover { color: var(--red); }
-
-  /* TODO */
-  .todo-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius); transition: background 0.15s; }
-  .todo-item:hover { background: var(--accent-glow); }
-  .todo-checkbox { width: 16px; height: 16px; border: 1px solid var(--border-bright); border-radius: 2px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; cursor: pointer; }
-  .todo-checkbox.checked { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px var(--accent-dim); }
-  .todo-checkbox.checked::after { content: '✓'; color: var(--bg-0); font-size: 10px; font-weight: 700; }
-  .todo-text { font-size: 13px; flex: 1; }
-  .todo-text.done { text-decoration: line-through; color: var(--text-dim); }
-
-  /* TIMER */
-  .timer-display { font-family: var(--font-display); font-size: 56px; font-weight: 900; text-align: center; padding: 24px 0; letter-spacing: 6px; color: var(--accent); text-shadow: 0 0 40px var(--accent), 0 0 80px rgba(0,180,255,0.2); transition: color 0.3s; }
-  .timer-display.running { color: var(--green); text-shadow: 0 0 40px var(--green), 0 0 80px rgba(0,255,157,0.2); }
-  .timer-controls { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-  /* CHAPTER */
-  .chapter-subject-section { margin-bottom: 20px; }
-  .chapter-subject-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: all 0.2s; margin-bottom: 8px; }
-  .chapter-subject-header:hover { border-color: var(--accent-dim); }
-  .chapter-subject-name { font-family: var(--font-display); font-size: 12px; letter-spacing: 2px; }
-  .chapter-list { display: none; padding-left: 12px; }
-  .chapter-list.open { display: block; }
-  .chapter-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: var(--radius); transition: background 0.15s; }
-  .chapter-item:hover { background: var(--accent-glow); }
-  .chapter-status { width: 20px; height: 20px; border: 1px solid var(--border-bright); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; cursor: pointer; transition: all 0.2s; }
-  .chapter-status.not-started { color: var(--text-dim); }
-  .chapter-status.fuzzy { background: rgba(255,209,102,0.15); border-color: var(--yellow); color: var(--yellow); }
-  .chapter-status.mastered { background: rgba(0,255,157,0.15); border-color: var(--green); color: var(--green); }
-  .chapter-name { font-size: 13px; flex: 1; }
-  .chapter-add-btn { background: none; border: 1px dashed var(--border); color: var(--text-dim); font-family: var(--font-mono); font-size: 10px; padding: 6px 12px; border-radius: var(--radius); cursor: pointer; width: 100%; transition: all 0.2s; text-align: left; margin-top: 4px; }
-  .chapter-add-btn:hover { border-color: var(--accent-dim); color: var(--accent); }
-
-  /* NOTES */
-  .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-  .note-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; cursor: pointer; transition: all 0.2s; }
-  .note-card:hover { border-color: var(--accent-dim); box-shadow: 0 0 20px rgba(0,180,255,0.08); }
-  .note-card-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
-  .note-card-meta { font-family: var(--font-mono); font-size: 9px; color: var(--text-dim); letter-spacing: 1px; margin-bottom: 10px; }
-  .note-card-preview { font-size: 12px; color: var(--text-sec); line-height: 1.6; }
-  .note-image-thumb { width: 100%; max-height: 160px; object-fit: cover; border-radius: var(--radius); margin-top: 10px; border: 1px solid var(--border); }
-  .note-detail { display: none; }
-  .note-detail.open { display: block; }
-  .note-list-view.hidden { display: none; }
-
-  /* WRONG Q */
-  .wrongq-card { background: var(--bg-2); border: 1px solid var(--border); border-left: 3px solid var(--red); border-radius: var(--radius-lg); padding: 18px; margin-bottom: 14px; transition: all 0.2s; }
-  .wrongq-card:hover { border-color: rgba(255,77,109,0.4); box-shadow: 0 4px 24px rgba(255,77,109,0.06); }
-  .wrongq-card.mastered { border-left-color: var(--green); opacity: 0.55; }
-  .wrongq-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-  .wrongq-question { font-size: 14px; line-height: 1.7; margin-bottom: 10px; color: var(--text-pri); }
-  .wrongq-img { width: 100%; max-height: 220px; object-fit: contain; border-radius: var(--radius); margin: 10px 0; border: 1px solid var(--border); background: var(--bg-3); cursor: pointer; }
-  .wrongq-reason { margin-top: 8px; padding: 10px 14px; background: rgba(255,77,109,0.06); border-radius: var(--radius); font-size: 12px; color: var(--text-sec); border-left: 2px solid rgba(255,77,109,0.35); }
-  .wrongq-solution { margin-top: 8px; padding: 10px 14px; background: rgba(0,255,157,0.05); border-radius: var(--radius); font-size: 12px; color: var(--text-sec); border-left: 2px solid rgba(0,255,157,0.35); }
-  .wrongq-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-
-  /* WRONG Q STATS */
-  .wq-stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
-  .wq-stat { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; }
-  .wq-stat-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 6px; }
-  .wq-stat-value { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--accent); text-shadow: 0 0 12px var(--accent-dim); }
-
-  /* STAR RATING */
-  .star-row { display: flex; gap: 6px; align-items: center; }
-  .star { font-size: 18px; cursor: pointer; color: var(--text-dim); transition: color 0.15s, transform 0.15s; }
-  .star:hover, .star.active { color: var(--yellow); transform: scale(1.2); }
-
-  /* ERROR TYPE CHIPS */
-  .error-type-row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .error-chip { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-family: var(--font-mono); letter-spacing: 1px; cursor: pointer; border: 1px solid var(--border); color: var(--text-sec); background: transparent; transition: all 0.15s; }
-  .error-chip:hover { border-color: var(--accent-dim); color: var(--accent); }
-  .error-chip.selected-careless { background: rgba(255,209,102,0.15); border-color: var(--yellow); color: var(--yellow); }
-  .error-chip.selected-concept  { background: rgba(255,77,109,0.15); border-color: var(--red); color: var(--red); }
-  .error-chip.selected-formula  { background: rgba(168,85,247,0.15); border-color: var(--purple); color: var(--purple); }
-  .error-chip.selected-calc     { background: rgba(0,229,255,0.15); border-color: var(--cyan); color: var(--cyan); }
-  .error-chip.selected-reading  { background: rgba(255,159,67,0.15); border-color: #ff9f43; color: #ff9f43; }
-  .error-chip.selected-other    { background: rgba(122,179,212,0.15); border-color: var(--text-sec); color: var(--text-sec); }
-
-  /* REVIEW COUNTDOWN */
-  .review-badge { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: 9px; padding: 2px 8px; border-radius: 10px; border: 1px solid; }
-  .review-due  { color: var(--red);    border-color: rgba(255,77,109,0.4);   background: rgba(255,77,109,0.08);   animation: glowPulse 2s infinite; }
-  .review-soon { color: var(--yellow); border-color: rgba(255,209,102,0.4);  background: rgba(255,209,102,0.08); }
-  .review-ok   { color: var(--green);  border-color: rgba(0,255,157,0.4);    background: rgba(0,255,157,0.08); }
-
-  /* INTERACTIVE HOVER BUTTON */
-  .ihb { position: relative; overflow: hidden; border-radius: 999px; border: 1px solid var(--border-bright); background: transparent; padding: 8px 20px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; cursor: pointer; color: var(--accent); text-transform: uppercase; white-space: nowrap; }
-  .ihb-text { display: inline-block; transition: transform 0.3s, opacity 0.3s; }
-  .ihb:hover .ihb-text { transform: translateX(40px); opacity: 0; }
-  .ihb-hover-content { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 6px; transform: translateX(-40px); opacity: 0; transition: transform 0.3s, opacity 0.3s; color: var(--bg-0); font-weight: 700; z-index: 2; font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
-  .ihb:hover .ihb-hover-content { transform: translateX(0); opacity: 1; }
-  .ihb-bg { position: absolute; left: 20%; top: 40%; width: 8px; height: 8px; border-radius: 999px; background: var(--accent); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); z-index: 1; }
-  .ihb:hover .ihb-bg { left: 0; top: 0; width: 100%; height: 100%; border-radius: 0; }
-  .ihb-danger { border-color: rgba(255,77,109,0.4); color: var(--red); }
-  .ihb-danger .ihb-bg { background: var(--red); }
-  .ihb-green { border-color: rgba(0,255,157,0.4); color: var(--green); }
-  .ihb-green .ihb-bg { background: var(--green); }
-
-  /* IMAGE LIGHTBOX */
-  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 2000; align-items: center; justify-content: center; cursor: zoom-out; }
-  .lightbox.open { display: flex; }
-  .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: var(--radius); }
-
-  /* SUBJECT ROW */
-  .subject-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(0,180,255,0.06); }
-  .subject-row:last-child { border-bottom: none; }
-  .subject-name { width: 40px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; color: var(--text-sec); flex-shrink: 0; }
-  .subject-bar-wrap { flex: 1; background: var(--bg-3); border-radius: 2px; height: 6px; overflow: hidden; }
-  .subject-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
-  .subject-pct { width: 36px; font-family: var(--font-display); font-size: 11px; color: var(--text-sec); text-align: right; flex-shrink: 0; }
-
-  /* MISC */
-  .divider { height: 1px; background: var(--border); margin: 20px 0; }
-  .mt-4 { margin-top: 16px; }
-  .mb-4 { margin-bottom: 16px; }
-  .flex-between { display: flex; justify-content: space-between; align-items: center; }
-  .flex-gap { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
-  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-sec); }
-  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
-  .empty-state { text-align: center; padding: 48px 20px; color: var(--text-dim); }
-  .empty-icon { font-size: 32px; margin-bottom: 12px; }
-  .empty-text { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; }
-  input[type="file"] { display: none; }
-
-  @keyframes glowPulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
-
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg-1); }
-  ::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--accent-dim); }
+/* legacy fallback btns */
+.btn{font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:7px 15px;border-radius:var(--rf);cursor:pointer;transition:all .18s;border:1px solid;text-transform:uppercase}
+.btn-primary{background:#fff;border-color:#fff;color:var(--z950);font-weight:700}.btn-primary:hover{background:var(--z200)}
+.btn-ghost{background:var(--w5);border-color:var(--w15);color:var(--z300)}.btn-ghost:hover{background:var(--w10)}
+.btn-danger{background:transparent;border-color:rgba(248,113,113,.3);color:var(--red)}.btn-danger:hover{background:rgba(248,113,113,.09)}
+.btn-sm{padding:4px 9px;font-size:9px}
 </style>
 </head>
 <body>
+<div class="bg-blob-1"></div>
+<div class="bg-blob-2"></div>
 
-<!-- SYNC BAR -->
 <div id="sync-bar">
   <div class="sync-dot" id="sync-dot"></div>
   <span id="sync-label">Not connected</span>
 </div>
 
-<!-- LOGIN SCREEN -->
 <div id="login-screen">
   <div class="login-box">
+    <div class="login-badge"><div class="pingdot"><span></span><span></span></div>CLOUD SYNC</div>
     <div class="login-title">APEX</div>
-    <div class="login-sub">STUDY OS v2.0 · CLOUD SYNC</div>
+    <div class="login-sub">STUDY OS · v5.0</div>
     <button class="btn-google" onclick="signInWithGoogle()">
-      <span class="google-icon">G</span>
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
       使用 Google 帳號登入
     </button>
-    <div style="margin-top:16px;font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">資料加密存於 Firebase · 跨裝置同步</div>
+    <div class="login-fine">資料加密存於 Firebase · 跨裝置同步</div>
   </div>
 </div>
 
 <div class="app-shell" id="app-shell" style="display:none;">
-
-  <!-- SIDEBAR -->
   <nav class="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-text">APEX</div>
-      <div class="logo-sub">STUDY OS v2.0</div>
-    </div>
-    <div class="user-info">
+    <div class="sidebar-logo"><div class="logo-word">APEX</div><div class="logo-sub">Study OS v5</div></div>
+    <div class="sidebar-user">
       <img id="user-avatar" class="user-avatar" src="" alt="">
       <span id="user-name" class="user-name"></span>
       <button class="btn-logout" onclick="signOut()" title="登出">⏻</button>
     </div>
     <div class="sidebar-nav">
-      <div class="nav-section-label">Main</div>
+      <div class="nav-sec">Main</div>
       <div class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">⊞</span> Dashboard</div>
       <div class="nav-item" onclick="showPage('timer')"><span class="nav-icon">◷</span> Study Timer</div>
-      <div class="nav-section-label" style="margin-top:8px;">Academics</div>
+      <div class="nav-sec">Academics</div>
       <div class="nav-item" onclick="showPage('progress')"><span class="nav-icon">◈</span> 章節進度</div>
       <div class="nav-item" onclick="showPage('notes')"><span class="nav-icon">◻</span> 筆記本</div>
       <div class="nav-item" onclick="showPage('wrongq')"><span class="nav-icon">⚠</span> 錯題本</div>
-      <div class="nav-section-label" style="margin-top:8px;">Exams</div>
+      <div class="nav-sec">Exams</div>
       <div class="nav-item" onclick="showPage('exams')"><span class="nav-icon">◆</span> 考試倒數</div>
     </div>
   </nav>
 
-  <!-- MAIN -->
   <main class="main-content">
 
-    <!-- DASHBOARD -->
     <div id="page-dashboard" class="page active">
       <div class="page-header">
-        <div class="page-title">DASHBOARD</div>
-        <div class="page-tag" id="today-date-label"></div>
+        <div><div class="page-title">Dashboard</div><div class="page-tag" id="today-date-label"></div></div>
       </div>
-      <div class="grid-4 mb-4">
-        <div class="stat-card stat-accent-green">
-          <div class="stat-label">Today Study</div>
-          <div class="stat-value" id="dash-study-time">0</div>
-          <div class="stat-unit">分鐘</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Next Exam</div>
-          <div class="stat-value" id="dash-next-exam">--</div>
-          <div class="stat-unit" id="dash-next-exam-name">尚未設定</div>
-        </div>
-        <div class="stat-card stat-accent-red">
-          <div class="stat-label">Wrong Q</div>
-          <div class="stat-value" id="dash-wrong-count">0</div>
-          <div class="stat-unit">題待複習</div>
-        </div>
-        <div class="stat-card stat-accent-yellow">
-          <div class="stat-label">Overall Progress</div>
-          <div class="stat-value" id="dash-overall-pct">0%</div>
-          <div class="stat-unit">章節掌握率</div>
-        </div>
+      <div class="g4 mb4">
+        <div class="sc sc-g"><div class="sc-lbl">Today Study</div><div class="sc-val" id="dash-study-time">0</div><div class="sc-unit">分鐘</div></div>
+        <div class="sc sc-b"><div class="sc-lbl">Next Exam</div><div class="sc-val" id="dash-next-exam">--</div><div class="sc-unit" id="dash-next-exam-name">尚未設定</div></div>
+        <div class="sc sc-r"><div class="sc-lbl">Wrong Q</div><div class="sc-val" id="dash-wrong-count">0</div><div class="sc-unit">題待複習</div></div>
+        <div class="sc sc-y"><div class="sc-lbl">Overall</div><div class="sc-val" id="dash-overall-pct">0%</div><div class="sc-unit">章節掌握率</div></div>
       </div>
-      <div class="grid-main">
-        <div class="card">
-          <div class="flex-between mb-4">
-            <div class="card-title">Today's Tasks</div>
-            <button class="btn btn-ghost btn-sm" onclick="openAddTodo()">+ Add</button>
+      <div class="gm">
+        <div class="gc">
+          <div class="fbetween mb4">
+            <div class="card-lbl">Today's Tasks</div>
+            <button class="ihb ihb-sm" onclick="openAddTodo()"><div class="ihb-b"></div><span class="ihb-t">+ Add</span><div class="ihb-hc">+ Add →</div></button>
           </div>
           <div id="todo-list"></div>
-          <div class="empty-state" id="todo-empty" style="display:none;"><div class="empty-icon">◻</div><div class="empty-text">No tasks yet</div></div>
+          <div class="empty" id="todo-empty" style="display:none;"><div class="eico">◻</div><div class="etxt">No tasks yet</div></div>
         </div>
-        <div class="card">
-          <div class="card-title">Subject Overview</div>
-          <div id="dash-subject-overview"></div>
-        </div>
+        <div class="gc"><div class="card-lbl">Subject Overview</div><div id="dash-subject-overview"></div></div>
       </div>
     </div>
 
-    <!-- TIMER -->
     <div id="page-timer" class="page">
-      <div class="page-header"><div class="page-title">STUDY TIMER</div><div class="page-tag">Focus Mode</div></div>
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">Session Timer</div>
-          <div class="timer-display" id="timer-display">00:00:00</div>
-          <div class="timer-controls">
-            <button class="btn btn-primary" onclick="timerStart()">▶ START</button>
-            <button class="btn btn-ghost" onclick="timerPause()">⏸ PAUSE</button>
-            <button class="btn btn-danger" onclick="timerReset()">↺ RESET</button>
+      <div class="page-header"><div><div class="page-title">Study Timer</div><div class="page-tag">Focus Mode</div></div></div>
+      <div class="g2">
+        <div class="gc">
+          <div class="card-lbl">Session Timer</div>
+          <div class="tdis" id="timer-display">00:00:00</div>
+          <div class="tctl">
+            <button class="ihb" onclick="timerStart()"><div class="ihb-b"></div><span class="ihb-t">▶ Start</span><div class="ihb-hc">▶ Start →</div></button>
+            <button class="ihb" onclick="timerPause()"><div class="ihb-b"></div><span class="ihb-t">⏸ Pause</span><div class="ihb-hc">⏸ Pause →</div></button>
+            <button class="ihb ihb-r" onclick="timerReset()"><div class="ihb-b"></div><span class="ihb-t">↺ Reset</span><div class="ihb-hc">↺ Reset →</div></button>
           </div>
-          <div class="mt-4">
-            <div class="form-group">
-              <label class="form-label">科目</label>
-              <select class="form-select" id="timer-subject">
+          <div class="mt4">
+            <div class="fg"><label class="fl">科目</label>
+              <select class="fs" id="timer-subject">
                 <option value="physics">物理</option><option value="chem">化學</option><option value="bio">生物</option>
                 <option value="math">數學</option><option value="geo">地理</option><option value="eng">英文</option><option value="chi">國文</option>
               </select>
             </div>
-            <button class="btn btn-primary" onclick="saveSession()" style="width:100%;">✓ Log Session</button>
+            <button class="ihb ihb-g" style="width:100%;justify-content:center;" onclick="saveSession()"><div class="ihb-b"></div><span class="ihb-t">✓ Log Session</span><div class="ihb-hc">✓ Log Session →</div></button>
           </div>
         </div>
-        <div class="card">
-          <div class="card-title">Today's Log</div>
-          <div id="session-log"></div>
-          <div class="empty-state" id="session-empty"><div class="empty-icon">◷</div><div class="empty-text">No sessions logged</div></div>
-        </div>
+        <div class="gc"><div class="card-lbl">Today's Log</div><div id="session-log"></div><div class="empty" id="session-empty"><div class="eico">◷</div><div class="etxt">No sessions</div></div></div>
       </div>
     </div>
 
-    <!-- PROGRESS -->
     <div id="page-progress" class="page">
-      <div class="page-header"><div class="page-title">章節進度</div><div class="page-tag">Chapter Tracker</div></div>
-      <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--text-dim);border:1px solid var(--border-bright);"></div> 未開始</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--yellow);"></div> 模糊 / 讀過</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div> 掌握</div>
-      </div>
-      <div class="flex-gap mb-4"><button class="btn btn-primary" onclick="openAddChapter()">+ 新增章節</button></div>
+      <div class="page-header"><div><div class="page-title">章節進度</div><div class="page-tag">Chapter Tracker</div></div></div>
+      <div class="leg"><div class="leg-i"><div class="leg-d" style="background:var(--z700)"></div>未開始</div><div class="leg-i"><div class="leg-d" style="background:var(--yellow)"></div>模糊</div><div class="leg-i"><div class="leg-d" style="background:var(--green)"></div>掌握</div></div>
+      <div class="fgap mb4"><button class="ihb" onclick="openAddChapter()"><div class="ihb-b"></div><span class="ihb-t">+ 新增章節</span><div class="ihb-hc">+ 新增章節 →</div></button></div>
       <div id="chapter-tree"></div>
     </div>
 
-    <!-- NOTES -->
     <div id="page-notes" class="page">
-      <div class="page-header"><div class="page-title">筆記本</div><div class="page-tag">Notes</div></div>
-      <div class="note-list-view" id="notes-list-view">
-        <div class="flex-gap mb-4">
-          <button class="btn btn-primary" onclick="openAddNote()">+ 新增筆記</button>
-          <select class="form-select" style="width:140px;" id="notes-filter" onchange="renderNotes()">
+      <div class="page-header"><div><div class="page-title">筆記本</div><div class="page-tag">Notes</div></div></div>
+      <div class="nlist" id="notes-list-view">
+        <div class="fgap mb4">
+          <button class="ihb" onclick="openAddNote()"><div class="ihb-b"></div><span class="ihb-t">+ 新增筆記</span><div class="ihb-hc">+ 新增筆記 →</div></button>
+          <select class="fs" style="width:125px;" id="notes-filter" onchange="renderNotes()">
             <option value="all">全部科目</option>
             <option value="physics">物理</option><option value="chem">化學</option><option value="bio">生物</option>
             <option value="math">數學</option><option value="geo">地理</option><option value="eng">英文</option><option value="chi">國文</option>
           </select>
         </div>
-        <div class="notes-grid" id="notes-grid"></div>
-        <div class="empty-state" id="notes-empty" style="display:none;"><div class="empty-icon">◻</div><div class="empty-text">No notes yet</div></div>
+        <div class="ngrid" id="notes-grid"></div>
+        <div class="empty" id="notes-empty" style="display:none;"><div class="eico">◻</div><div class="etxt">No notes yet</div></div>
       </div>
-      <div class="note-detail" id="note-detail-view">
-        <button class="btn btn-ghost btn-sm" onclick="closeNoteDetail()" style="margin-bottom:16px;">← Back</button>
-        <div class="card">
-          <div class="flex-between mb-4">
-            <div>
-              <div id="note-detail-title" style="font-size:18px;font-weight:500;margin-bottom:6px;"></div>
-              <div id="note-detail-meta" class="page-tag"></div>
-            </div>
-            <button class="btn btn-danger btn-sm" onclick="deleteCurrentNote()">Delete</button>
+      <div class="ndetail" id="note-detail-view">
+        <button class="ihb ihb-sm" onclick="closeNoteDetail()" style="margin-bottom:16px;"><div class="ihb-b"></div><span class="ihb-t">← Back</span><div class="ihb-hc">← Back →</div></button>
+        <div class="gc">
+          <div class="fbetween mb4">
+            <div><div id="note-detail-title" style="font-size:18px;font-weight:600;color:#fff;margin-bottom:4px;"></div><div id="note-detail-meta" class="page-tag"></div></div>
+            <button class="ihb ihb-r ihb-sm" onclick="deleteCurrentNote()"><div class="ihb-b"></div><span class="ihb-t">Delete</span><div class="ihb-hc">Delete →</div></button>
           </div>
-          <div id="note-detail-tags" class="flex-gap mb-4"></div>
-          <img id="note-detail-img" class="note-image-thumb" style="display:none;" alt="">
-          <div class="divider"></div>
-          <div id="note-detail-summary" style="font-size:14px;line-height:1.8;white-space:pre-wrap;"></div>
-          <div id="note-detail-questions" style="margin-top:16px;"></div>
+          <div id="note-detail-tags" class="fgap mb4"></div>
+          <img id="note-detail-img" class="nth" style="display:none;" alt="">
+          <div class="div"></div>
+          <div id="note-detail-summary" style="font-size:14px;line-height:1.9;white-space:pre-wrap;color:var(--z400);"></div>
+          <div id="note-detail-questions" style="margin-top:15px;"></div>
         </div>
       </div>
     </div>
 
-    <!-- WRONG Q -->
     <div id="page-wrongq" class="page">
-      <div class="page-header"><div class="page-title">錯題本</div><div class="page-tag">Wrong Answer Bank</div></div>
-
-      <!-- Stats -->
-      <div class="wq-stats-grid" id="wq-stats"></div>
-
-      <!-- Filters -->
-      <div class="flex-gap mb-4" style="flex-wrap:wrap;">
-        <button class="ihb ihb-primary" onclick="openAddWrongQ()"><div class="ihb-bg"></div><span class="ihb-text">+ 新增錯題</span><div class="ihb-hover-content">+ 新增錯題 →</div></button>
-        <select class="form-select" style="width:130px;" id="wrongq-filter" onchange="renderWrongQ()">
-          <option value="all">全部科目</option>
-          <option value="physics">物理</option><option value="chem">化學</option><option value="bio">生物</option>
-          <option value="math">數學</option><option value="geo">地理</option><option value="eng">英文</option><option value="chi">國文</option>
-        </select>
-        <select class="form-select" style="width:130px;" id="wrongq-type-filter" onchange="renderWrongQ()">
-          <option value="all">全部類型</option>
-          <option value="careless">粗心</option><option value="concept">觀念錯誤</option>
-          <option value="formula">公式記錯</option><option value="calc">小計算錯</option>
-          <option value="reading">題意看錯</option><option value="other">其他</option>
-        </select>
-        <select class="form-select" style="width:130px;" id="wrongq-difficulty-filter" onchange="renderWrongQ()">
-          <option value="all">全部難度</option>
-          <option value="1">★ 1星</option><option value="2">★★ 2星</option><option value="3">★★★ 3星</option>
-          <option value="4">★★★★ 4星</option><option value="5">★★★★★ 5星</option>
-        </select>
-        <select class="form-select" style="width:130px;" id="wrongq-status-filter" onchange="renderWrongQ()">
-          <option value="all">全部狀態</option><option value="pending">待複習</option><option value="due">今日到期</option><option value="mastered">已掌握</option>
-        </select>
+      <div class="page-header"><div><div class="page-title">錯題本</div><div class="page-tag">Wrong Answer Bank</div></div></div>
+      <div class="wqs4" id="wq-stats"></div>
+      <div class="fgap mb4" style="flex-wrap:wrap;">
+        <button class="ihb" onclick="openAddWrongQ()"><div class="ihb-b"></div><span class="ihb-t">+ 新增錯題</span><div class="ihb-hc">+ 新增錯題 →</div></button>
+        <select class="fs" style="width:115px;" id="wrongq-filter" onchange="renderWrongQ()"><option value="all">全部科目</option><option value="physics">物理</option><option value="chem">化學</option><option value="bio">生物</option><option value="math">數學</option><option value="geo">地理</option><option value="eng">英文</option><option value="chi">國文</option></select>
+        <select class="fs" style="width:115px;" id="wrongq-type-filter" onchange="renderWrongQ()"><option value="all">全部類型</option><option value="careless">粗心</option><option value="concept">觀念錯誤</option><option value="formula">公式記錯</option><option value="calc">小計算錯</option><option value="reading">題意看錯</option><option value="other">其他</option></select>
+        <select class="fs" style="width:115px;" id="wrongq-difficulty-filter" onchange="renderWrongQ()"><option value="all">全部難度</option><option value="1">★ 1星</option><option value="2">★★ 2星</option><option value="3">★★★ 3星</option><option value="4">★★★★ 4星</option><option value="5">★★★★★ 5星</option></select>
+        <select class="fs" style="width:115px;" id="wrongq-status-filter" onchange="renderWrongQ()"><option value="all">全部狀態</option><option value="pending">待複習</option><option value="due">今日到期</option><option value="mastered">已掌握</option></select>
       </div>
-
       <div id="wrongq-list"></div>
-      <div class="empty-state" id="wrongq-empty" style="display:none;"><div class="empty-icon">⚠</div><div class="empty-text">No wrong answers logged — great job!</div></div>
+      <div class="empty" id="wrongq-empty" style="display:none;"><div class="eico">⚠</div><div class="etxt">No wrong answers — great job!</div></div>
     </div>
 
-    <!-- EXAMS -->
     <div id="page-exams" class="page">
-      <div class="page-header"><div class="page-title">考試倒數</div><div class="page-tag">Exam Countdown</div></div>
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">Add Exam</div>
-          <div class="form-group"><label class="form-label">考試名稱</label><input class="form-input" id="exam-name-input" placeholder="e.g. 期中考"></div>
-          <div class="form-group"><label class="form-label">考試日期</label><input class="form-input" type="date" id="exam-date-input"></div>
-          <div class="form-group"><label class="form-label">科目範圍（選填）</label><input class="form-input" id="exam-scope-input" placeholder="e.g. 物理 CH1–3"></div>
-          <button class="btn btn-primary" onclick="addExam()" style="width:100%;">+ Add Exam</button>
+      <div class="page-header"><div><div class="page-title">考試倒數</div><div class="page-tag">Exam Countdown</div></div></div>
+      <div class="g2">
+        <div class="gc">
+          <div class="card-lbl">Add Exam</div>
+          <div class="fg"><label class="fl">考試名稱</label><input class="fi" id="exam-name-input" placeholder="e.g. 期中考"></div>
+          <div class="fg"><label class="fl">考試日期</label><input class="fi" type="date" id="exam-date-input"></div>
+          <div class="fg"><label class="fl">科目範圍（選填）</label><input class="fi" id="exam-scope-input" placeholder="e.g. 物理 CH1–3"></div>
+          <button class="ihb" style="width:100%;justify-content:center;" onclick="addExam()"><div class="ihb-b"></div><span class="ihb-t">+ Add Exam</span><div class="ihb-hc">+ Add Exam →</div></button>
         </div>
-        <div class="card">
-          <div class="card-title">Upcoming Exams</div>
-          <div id="exam-list"></div>
-          <div class="empty-state" id="exam-empty" style="display:none;"><div class="empty-icon">◆</div><div class="empty-text">No exams scheduled</div></div>
-        </div>
+        <div class="gc"><div class="card-lbl">Upcoming Exams</div><div id="exam-list"></div><div class="empty" id="exam-empty" style="display:none;"><div class="eico">◆</div><div class="etxt">No exams scheduled</div></div></div>
       </div>
     </div>
 
@@ -697,912 +426,298 @@
 </div>
 
 <!-- MODALS -->
-<div class="modal-overlay" id="modal-todo">
-  <div class="modal">
-    <div class="modal-title">Add Task</div>
-    <button class="modal-close" onclick="closeModal('modal-todo')">✕</button>
-    <div class="form-group"><label class="form-label">任務內容</label><input class="form-input" id="todo-input" placeholder="e.g. 物理 CH3 例題練習" onkeydown="if(event.key==='Enter')addTodo()"></div>
-    <div class="form-group">
-      <label class="form-label">科目（選填）</label>
-      <select class="form-select" id="todo-subject-input">
-        <option value="">無</option>
-        <option value="physics">物理</option><option value="chem">化學</option><option value="bio">生物</option>
-        <option value="math">數學</option><option value="geo">地理</option><option value="eng">英文</option><option value="chi">國文</option>
-      </select>
-    </div>
-    <div class="flex-gap"><button class="btn btn-primary" onclick="addTodo()">Add</button><button class="btn btn-ghost" onclick="closeModal('modal-todo')">Cancel</button></div>
+<div class="mo" id="modal-todo">
+  <div class="mod">
+    <div class="mod-t">Add Task</div><button class="mod-x" onclick="closeModal('modal-todo')">✕</button>
+    <div class="fg"><label class="fl">任務內容</label><input class="fi" id="todo-input" placeholder="e.g. 物理 CH3 例題練習" onkeydown="if(event.key==='Enter')addTodo()"></div>
+    <div class="fg"><label class="fl">科目（選填）</label><select class="fs" id="todo-subject-input"><option value="">無</option><option value="physics">物理</option><option value="chem">化學</option><option value="bio">生物</option><option value="math">數學</option><option value="geo">地理</option><option value="eng">英文</option><option value="chi">國文</option></select></div>
+    <div class="fgap"><button class="ihb" onclick="addTodo()"><div class="ihb-b"></div><span class="ihb-t">Add</span><div class="ihb-hc">Add →</div></button><button class="ihb" onclick="closeModal('modal-todo')"><div class="ihb-b"></div><span class="ihb-t">Cancel</span><div class="ihb-hc">Cancel →</div></button></div>
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-note">
-  <div class="modal">
-    <div class="modal-title">New Note</div>
-    <button class="modal-close" onclick="closeModal('modal-note')">✕</button>
-    <div class="form-group"><label class="form-label">標題</label><input class="form-input" id="note-title-input" placeholder="e.g. 物理 CH3 牛頓第二定律"></div>
-    <div class="grid-2">
-      <div class="form-group">
-        <label class="form-label">科目</label>
-        <select class="form-select" id="note-subject-input">
-          <option value="physics">物理</option><option value="chem">化學</option><option value="bio">生物</option>
-          <option value="math">數學</option><option value="geo">地理</option><option value="eng">英文</option><option value="chi">國文</option>
-        </select>
-      </div>
-      <div class="form-group"><label class="form-label">章節</label><input class="form-input" id="note-chapter-input" placeholder="e.g. CH3"></div>
+<div class="mo" id="modal-note">
+  <div class="mod">
+    <div class="mod-t">New Note</div><button class="mod-x" onclick="closeModal('modal-note')">✕</button>
+    <div class="fg"><label class="fl">標題</label><input class="fi" id="note-title-input" placeholder="e.g. 物理 CH3 牛頓第二定律"></div>
+    <div class="g2">
+      <div class="fg"><label class="fl">科目</label><select class="fs" id="note-subject-input"><option value="physics">物理</option><option value="chem">化學</option><option value="bio">生物</option><option value="math">數學</option><option value="geo">地理</option><option value="eng">英文</option><option value="chi">國文</option></select></div>
+      <div class="fg"><label class="fl">章節</label><input class="fi" id="note-chapter-input" placeholder="e.g. CH3"></div>
     </div>
-    <div class="form-group"><label class="form-label">重點摘要</label><textarea class="form-textarea" id="note-summary-input" placeholder="記錄這堂課的重點概念..."></textarea></div>
-    <div class="form-group"><label class="form-label">不懂的問題</label><textarea class="form-textarea" id="note-questions-input" placeholder="今天還不清楚的地方...（一行一個問題）" style="min-height:60px;"></textarea></div>
-    <div class="form-group">
-      <label class="form-label">手寫筆記照片</label>
-      <label class="btn btn-ghost" style="display:inline-block;cursor:pointer;">📷 選擇圖片<input type="file" accept="image/*" onchange="handleNoteImage(this)"></label>
-      <div id="note-img-preview" style="margin-top:8px;"></div>
-    </div>
-    <div class="flex-gap"><button class="btn btn-primary" onclick="addNote()">Save Note</button><button class="btn btn-ghost" onclick="closeModal('modal-note')">Cancel</button></div>
+    <div class="fg"><label class="fl">重點摘要</label><textarea class="ft" id="note-summary-input" placeholder="記錄這堂課的重點概念..."></textarea></div>
+    <div class="fg"><label class="fl">不懂的問題</label><textarea class="ft" id="note-questions-input" placeholder="今天還不清楚的地方...（一行一個問題）" style="min-height:60px;"></textarea></div>
+    <div class="fg"><label class="fl">手寫筆記照片</label><label class="btn btn-ghost btn-sm" style="display:inline-block;cursor:pointer;border-radius:99px;">📷 選擇圖片<input type="file" accept="image/*" onchange="handleNoteImage(this)"></label><div id="note-img-preview" style="margin-top:8px;"></div></div>
+    <div class="fgap"><button class="ihb" onclick="addNote()"><div class="ihb-b"></div><span class="ihb-t">Save Note</span><div class="ihb-hc">Save Note →</div></button><button class="ihb" onclick="closeModal('modal-note')"><div class="ihb-b"></div><span class="ihb-t">Cancel</span><div class="ihb-hc">Cancel →</div></button></div>
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-wrongq">
-  <div class="modal" style="width:600px;">
-    <div class="modal-title">Log Wrong Answer</div>
-    <button class="modal-close" onclick="closeModal('modal-wrongq')">✕</button>
-
-    <div class="grid-2">
-      <div class="form-group">
-        <label class="form-label">科目</label>
-        <select class="form-select" id="wq-subject-input">
-          <option value="physics">物理</option><option value="chem">化學</option><option value="bio">生物</option>
-          <option value="math">數學</option><option value="geo">地理</option><option value="eng">英文</option><option value="chi">國文</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">來源</label>
-        <select class="form-select" id="wq-source-input">
-          <option value="課本例題">課本例題</option><option value="學校考卷">學校考卷</option>
-          <option value="參考書/講義">參考書/講義</option><option value="網路題庫">網路題庫</option><option value="模擬考">模擬考</option>
-        </select>
+<div class="mo" id="modal-wrongq">
+  <div class="mod" style="width:570px;">
+    <div class="mod-t">Log Wrong Answer</div><button class="mod-x" onclick="closeModal('modal-wrongq')">✕</button>
+    <div class="g2">
+      <div class="fg"><label class="fl">科目</label><select class="fs" id="wq-subject-input"><option value="physics">物理</option><option value="chem">化學</option><option value="bio">生物</option><option value="math">數學</option><option value="geo">地理</option><option value="eng">英文</option><option value="chi">國文</option></select></div>
+      <div class="fg"><label class="fl">來源</label><select class="fs" id="wq-source-input"><option value="課本例題">課本例題</option><option value="學校考卷">學校考卷</option><option value="參考書/講義">參考書/講義</option><option value="網路題庫">網路題庫</option><option value="模擬考">模擬考</option></select></div>
+    </div>
+    <div class="fg"><label class="fl">章節（選填）</label><input class="fi" id="wq-chapter-input" placeholder="e.g. CH3"></div>
+    <div class="fg"><label class="fl">錯誤類型</label>
+      <div class="echips">
+        <div class="ec" data-type="careless" onclick="selectErrorType('careless')">😵 粗心</div>
+        <div class="ec" data-type="concept"  onclick="selectErrorType('concept')">🧠 觀念錯誤</div>
+        <div class="ec" data-type="formula"  onclick="selectErrorType('formula')">📐 公式記錯</div>
+        <div class="ec" data-type="calc"     onclick="selectErrorType('calc')">🔢 小計算錯</div>
+        <div class="ec" data-type="reading"  onclick="selectErrorType('reading')">📖 題意看錯</div>
+        <div class="ec" data-type="other"    onclick="selectErrorType('other')">❓ 其他</div>
       </div>
     </div>
-
-    <div class="form-group">
-      <label class="form-label">章節（選填）</label>
-      <input class="form-input" id="wq-chapter-input" placeholder="e.g. CH3">
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">錯誤類型</label>
-      <div class="error-type-row" id="wq-error-type-row">
-        <div class="error-chip" data-type="careless" onclick="selectErrorType('careless')">😵 粗心</div>
-        <div class="error-chip" data-type="concept"  onclick="selectErrorType('concept')">🧠 觀念錯誤</div>
-        <div class="error-chip" data-type="formula"  onclick="selectErrorType('formula')">📐 公式記錯</div>
-        <div class="error-chip" data-type="calc"     onclick="selectErrorType('calc')">🔢 小計算錯</div>
-        <div class="error-chip" data-type="reading"  onclick="selectErrorType('reading')">📖 題意看錯</div>
-        <div class="error-chip" data-type="other"    onclick="selectErrorType('other')">❓ 其他</div>
+    <div class="fg"><label class="fl">難度</label>
+      <div class="stars">
+        <span class="star" onclick="selectStar(1)">★</span><span class="star" onclick="selectStar(2)">★</span>
+        <span class="star" onclick="selectStar(3)">★</span><span class="star" onclick="selectStar(4)">★</span>
+        <span class="star" onclick="selectStar(5)">★</span>
+        <span style="font-family:var(--mono);font-size:9px;color:var(--z600);margin-left:9px;" id="wq-star-label">未選擇</span>
       </div>
     </div>
-
-    <div class="form-group">
-      <label class="form-label">難度</label>
-      <div class="star-row" id="wq-star-row">
-        <span class="star" data-star="1" onclick="selectStar(1)">★</span>
-        <span class="star" data-star="2" onclick="selectStar(2)">★</span>
-        <span class="star" data-star="3" onclick="selectStar(3)">★</span>
-        <span class="star" data-star="4" onclick="selectStar(4)">★</span>
-        <span class="star" data-star="5" onclick="selectStar(5)">★</span>
-        <span style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);margin-left:8px;" id="wq-star-label">未選擇</span>
+    <div class="fg"><label class="fl">題目描述</label><textarea class="ft" id="wq-question-input" placeholder="簡述題目內容或貼上題號..."></textarea></div>
+    <div class="fg"><label class="fl">題目照片（可選）</label><label class="btn btn-ghost btn-sm" style="display:inline-block;cursor:pointer;border-radius:99px;">📷 上傳照片<input type="file" accept="image/*" onchange="handleWQImage(this)"></label><div id="wq-img-preview" style="margin-top:8px;"></div></div>
+    <div class="fg"><label class="fl">❌ 錯誤原因</label><textarea class="ft" id="wq-reason-input" placeholder="我為什麼答錯？"></textarea></div>
+    <div class="fg"><label class="fl">✅ 正確解法 / 觀念</label><textarea class="ft" id="wq-solution-input" placeholder="正確的解題思路是..."></textarea></div>
+    <div class="fg"><label class="fl">下次複習日期</label>
+      <input class="fi" type="date" id="wq-review-date-input">
+      <div style="display:flex;gap:7px;margin-top:7px;flex-wrap:wrap;">
+        <button class="btn btn-ghost btn-sm" onclick="setReviewDate(1)">明天</button>
+        <button class="btn btn-ghost btn-sm" onclick="setReviewDate(3)">3天後</button>
+        <button class="btn btn-ghost btn-sm" onclick="setReviewDate(7)">1週後</button>
+        <button class="btn btn-ghost btn-sm" onclick="setReviewDate(14)">2週後</button>
       </div>
     </div>
-
-    <div class="form-group"><label class="form-label">題目描述</label><textarea class="form-textarea" id="wq-question-input" placeholder="簡述題目內容或貼上題號..."></textarea></div>
-
-    <div class="form-group">
-      <label class="form-label">題目照片（可選）</label>
-      <label class="btn btn-ghost btn-sm" style="display:inline-block;cursor:pointer;border-radius:999px;">
-        📷 上傳照片
-        <input type="file" accept="image/*" onchange="handleWQImage(this)">
-      </label>
-      <div id="wq-img-preview" style="margin-top:8px;"></div>
-    </div>
-
-    <div class="form-group"><label class="form-label">❌ 錯誤原因</label><textarea class="form-textarea" id="wq-reason-input" placeholder="我為什麼答錯？粗心、觀念不清、公式記錯..."></textarea></div>
-    <div class="form-group"><label class="form-label">✅ 正確解法 / 觀念</label><textarea class="form-textarea" id="wq-solution-input" placeholder="正確的解題思路是..."></textarea></div>
-
-    <div class="form-group">
-      <label class="form-label">下次複習日期</label>
-      <input class="form-input" type="date" id="wq-review-date-input">
-      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-        <button class="btn btn-ghost btn-sm" style="border-radius:999px;" onclick="setReviewDate(1)">明天</button>
-        <button class="btn btn-ghost btn-sm" style="border-radius:999px;" onclick="setReviewDate(3)">3天後</button>
-        <button class="btn btn-ghost btn-sm" style="border-radius:999px;" onclick="setReviewDate(7)">1週後</button>
-        <button class="btn btn-ghost btn-sm" style="border-radius:999px;" onclick="setReviewDate(14)">2週後</button>
-      </div>
-    </div>
-
-    <div class="flex-gap" style="margin-top:4px;">
-      <button class="ihb ihb-primary" onclick="addWrongQ()"><div class="ihb-bg"></div><span class="ihb-text">Save</span><div class="ihb-hover-content">Save →</div></button>
-      <button class="ihb" onclick="closeModal('modal-wrongq')"><div class="ihb-bg"></div><span class="ihb-text">Cancel</span><div class="ihb-hover-content">Cancel →</div></button>
+    <div class="fgap">
+      <button class="ihb ihb-g" onclick="addWrongQ()"><div class="ihb-b"></div><span class="ihb-t">Save</span><div class="ihb-hc">Save →</div></button>
+      <button class="ihb" onclick="closeModal('modal-wrongq')"><div class="ihb-b"></div><span class="ihb-t">Cancel</span><div class="ihb-hc">Cancel →</div></button>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-chapter">
-  <div class="modal">
-    <div class="modal-title">新增章節</div>
-    <button class="modal-close" onclick="closeModal('modal-chapter')">✕</button>
-    <div class="form-group">
-      <label class="form-label">科目</label>
-      <select class="form-select" id="ch-subject-input">
-        <option value="physics">物理</option><option value="chem">化學</option><option value="bio">生物</option>
-        <option value="math">數學</option><option value="geo">地理</option><option value="eng">英文</option><option value="chi">國文</option>
-      </select>
-    </div>
-    <div class="form-group"><label class="form-label">章節名稱</label><input class="form-input" id="ch-name-input" placeholder="e.g. CH3 牛頓運動定律" onkeydown="if(event.key==='Enter')addChapter()"></div>
-    <div class="flex-gap"><button class="btn btn-primary" onclick="addChapter()">Add</button><button class="btn btn-ghost" onclick="closeModal('modal-chapter')">Cancel</button></div>
+<div class="mo" id="modal-chapter">
+  <div class="mod">
+    <div class="mod-t">新增章節</div><button class="mod-x" onclick="closeModal('modal-chapter')">✕</button>
+    <div class="fg"><label class="fl">科目</label><select class="fs" id="ch-subject-input"><option value="physics">物理</option><option value="chem">化學</option><option value="bio">生物</option><option value="math">數學</option><option value="geo">地理</option><option value="eng">英文</option><option value="chi">國文</option></select></div>
+    <div class="fg"><label class="fl">章節名稱</label><input class="fi" id="ch-name-input" placeholder="e.g. CH3 牛頓運動定律" onkeydown="if(event.key==='Enter')addChapter()"></div>
+    <div class="fgap"><button class="ihb" onclick="addChapter()"><div class="ihb-b"></div><span class="ihb-t">Add</span><div class="ihb-hc">Add →</div></button><button class="ihb" onclick="closeModal('modal-chapter')"><div class="ihb-b"></div><span class="ihb-t">Cancel</span><div class="ihb-hc">Cancel →</div></button></div>
   </div>
 </div>
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="this.classList.remove('open')">
-  <img id="lightbox-img" src="" alt="">
-</div>
+<div class="lbox" id="lightbox" onclick="this.classList.remove('open')"><img id="lightbox-img" src="" alt=""></div>
 
-<!-- FIREBASE SDK -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, updateDoc, deleteDoc, query, where, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import{getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut as fbSignOut}from"https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import{getFirestore,doc,setDoc,getDoc,collection,addDoc,getDocs,updateDoc,deleteDoc,query,onSnapshot,orderBy}from"https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-// ══════════════════════════════════════
-// YOUR FIREBASE CONFIG
-// ══════════════════════════════════════
-const firebaseConfig = {
-  apiKey: "AIzaSyAJGa2F3yzgA6DMGzCC6D3ARfS3H_sdiRU",
-  authDomain: "apex-study-os.firebaseapp.com",
-  projectId: "apex-study-os",
-  storageBucket: "apex-study-os.firebasestorage.app",
-  messagingSenderId: "722597129488",
-  appId: "1:722597129488:web:3e97eade0769edffb48995",
-  measurementId: "G-ZS3JEKRGMK"
-};
+const fbCfg={apiKey:"AIzaSyAJGa2F3yzgA6DMGzCC6D3ARfS3H_sdiRU",authDomain:"apex-study-os.firebaseapp.com",projectId:"apex-study-os",storageBucket:"apex-study-os.firebasestorage.app",messagingSenderId:"722597129488",appId:"1:722597129488:web:3e97eade0769edffb48995"};
+const app=initializeApp(fbCfg),auth=getAuth(app),db=getFirestore(app),prov=new GoogleAuthProvider();
+const MASTER="s410315@hlhs.hlc.edu.tw";
+const ACCOUNTS=["s410315@hlhs.hlc.edu.tw","benjaminshih1229@gmail.com"];
+let masterUID=null;
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
+const SUBJ={physics:{n:'物理',c:'t-ph'},chem:{n:'化學',c:'t-ch'},bio:{n:'生物',c:'t-bi'},math:{n:'數學',c:'t-ma'},geo:{n:'地理',c:'t-ge'},eng:{n:'英文',c:'t-en'},chi:{n:'國文',c:'t-ci'}};
+const ETYPES={careless:{l:'😵 粗心',col:'var(--yellow)'},concept:{l:'🧠 觀念錯誤',col:'var(--red)'},formula:{l:'📐 公式記錯',col:'var(--purple)'},calc:{l:'🔢 小計算錯',col:'var(--cyan)'},reading:{l:'📖 題意看錯',col:'var(--orange)'},other:{l:'❓ 其他',col:'var(--z400)'}};
 
-// ══════════════════════════════════════
-// ACCOUNT MAPPING — 副帳號 → 主帳號 UID
-// ══════════════════════════════════════
-const MASTER_EMAIL = "s410315@hlhs.hlc.edu.tw";
-const SHARED_ACCOUNTS = [
-  "s410315@hlhs.hlc.edu.tw",
-  "benjaminshih1229@gmail.com",
-];
-// 主帳號的 UID（登入後自動填入）
-let masterUID = null;
+let cu=null,noteImg=null,noteId=null,tiInt=null,tiSec=0,tiRun=false;
+let todos=[],notes=[],wrongs=[],chaps={},exams=[],sess=[];
+let wqEType='',wqStars=0,wqImg=null;
 
-// ══════════════════════════════════════
-// GLOBALS
-// ══════════════════════════════════════
-const SUBJECTS = {
-  physics: { name: '物理', class: 'tag-physics' },
-  chem:    { name: '化學', class: 'tag-chem' },
-  bio:     { name: '生物', class: 'tag-bio' },
-  math:    { name: '數學', class: 'tag-math' },
-  geo:     { name: '地理', class: 'tag-geo' },
-  eng:     { name: '英文', class: 'tag-eng' },
-  chi:     { name: '國文', class: 'tag-chi' },
-};
+const $=id=>document.getElementById(id);
+function ss(s,l){$('sync-dot').className='sync-dot '+s;$('sync-label').textContent=l}
 
-let currentUser = null;
-let currentNoteImg = null;
-let currentNoteId = null;
-let timerInterval = null, timerSeconds = 0, timerRunning = false;
+window.signInWithGoogle=async()=>{try{await signInWithPopup(auth,prov)}catch(e){alert('登入失敗，請再試一次')}};
+window.signOut=async()=>{await fbSignOut(auth);location.reload()};
 
-// Local cache
-let todos = [], notes = [], wrongQs = [], chapters = {}, exams = [], sessions = [];
-
-// Sync status
-function setSyncStatus(status, label) {
-  const dot = document.getElementById('sync-dot');
-  const lbl = document.getElementById('sync-label');
-  dot.className = 'sync-dot ' + status;
-  lbl.textContent = label;
-}
-
-// ══════════════════════════════════════
-// AUTH
-// ══════════════════════════════════════
-window.signInWithGoogle = async () => {
-  try {
-    await signInWithPopup(auth, provider);
-  } catch (e) { console.error(e); alert('登入失敗，請再試一次'); }
-};
-
-window.signOut = async () => {
-  await fbSignOut(auth);
-  location.reload();
-};
-
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    currentUser = user;
-
-    // 檢查是否為授權帳號
-    if (!SHARED_ACCOUNTS.includes(user.email)) {
-      await fbSignOut(auth);
-      alert('此帳號無存取權限');
-      return;
-    }
-
-    // 解析主帳號 UID：
-    // 如果是主帳號本人 → 把自己的 UID 存到 Firestore mapping
-    // 如果是副帳號 → 從 Firestore 讀取主帳號 UID
-    const mappingRef = doc(db, 'accountMapping', 'masterUID');
-
-    if (user.email === MASTER_EMAIL) {
-      // 主帳號：寫入自己的 UID
-      masterUID = user.uid;
-      await setDoc(mappingRef, { uid: user.uid }, { merge: true });
-    } else {
-      // 副帳號：讀取主帳號 UID
-      const mappingSnap = await getDoc(mappingRef);
-      if (mappingSnap.exists()) {
-        masterUID = mappingSnap.data().uid;
-      } else {
-        alert('請先用主帳號（s410315@hlhs.hlc.edu.tw）登入一次，建立資料後副帳號才能存取。');
-        await fbSignOut(auth);
-        return;
-      }
-    }
-
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app-shell').style.display = 'flex';
-    document.getElementById('user-name').textContent = user.displayName || user.email;
-    if (user.photoURL) document.getElementById('user-avatar').src = user.photoURL;
-    setSyncStatus('syncing', 'Loading...');
-    await loadAllData();
-    setSyncStatus('synced', 'Synced');
-    renderDashboard();
-    setupRealtimeListeners();
-  } else {
-    document.getElementById('login-screen').style.display = 'flex';
-    document.getElementById('app-shell').style.display = 'none';
-  }
+onAuthStateChanged(auth,async u=>{
+  if(u){
+    cu=u;
+    if(!ACCOUNTS.includes(u.email)){await fbSignOut(auth);alert('此帳號無存取權限');return}
+    const mr=doc(db,'accountMapping','masterUID');
+    if(u.email===MASTER){masterUID=u.uid;await setDoc(mr,{uid:u.uid},{merge:true})}
+    else{const s=await getDoc(mr);if(s.exists())masterUID=s.data().uid;else{alert('請先用主帳號登入一次');await fbSignOut(auth);return}}
+    $('login-screen').style.display='none';$('app-shell').style.display='flex';
+    $('user-name').textContent=u.displayName||u.email;
+    if(u.photoURL)$('user-avatar').src=u.photoURL;
+    ss('syncing','Loading...');await load();ss('synced','Synced ✓');
+    renderDash();setupRT();
+  }else{$('login-screen').style.display='flex';$('app-shell').style.display='none'}
 });
 
-// ══════════════════════════════════════
-// FIRESTORE HELPERS
-// ══════════════════════════════════════
-function uid() { return masterUID || currentUser.uid; }
-
-function col(name) { return collection(db, 'users', uid(), name); }
-
-async function loadAllData() {
-  const [todosSnap, notesSnap, wrongSnap, chSnap, examsSnap, sessSnap] = await Promise.all([
-    getDocs(query(col('todos'), orderBy('day', 'desc'))),
-    getDocs(query(col('notes'), orderBy('date', 'desc'))),
-    getDocs(query(col('wrongq'), orderBy('date', 'desc'))),
-    getDocs(col('chapters')),
-    getDocs(col('exams')),
-    getDocs(col('sessions')),
-  ]);
-  todos    = todosSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-  notes    = notesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-  wrongQs  = wrongSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-  exams    = examsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-  sessions = sessSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-  chapters = {};
-  chSnap.docs.forEach(d => {
-    const data = d.data();
-    if (!chapters[data.subject]) chapters[data.subject] = [];
-    chapters[data.subject].push({ id: d.id, ...data });
-  });
+function uid(){return masterUID||cu.uid}
+function col(n){return collection(db,'users',uid(),n)}
+async function load(){
+  const[t,n,w,c,e,s]=await Promise.all([getDocs(query(col('todos'),orderBy('day','desc'))),getDocs(query(col('notes'),orderBy('date','desc'))),getDocs(query(col('wrongq'),orderBy('date','desc'))),getDocs(col('chapters')),getDocs(col('exams')),getDocs(col('sessions'))]);
+  todos=t.docs.map(d=>({id:d.id,...d.data()}));notes=n.docs.map(d=>({id:d.id,...d.data()}));
+  wrongs=w.docs.map(d=>({id:d.id,...d.data()}));exams=e.docs.map(d=>({id:d.id,...d.data()}));
+  sess=s.docs.map(d=>({id:d.id,...d.data()}));chaps={};
+  c.docs.forEach(d=>{const x=d.data();if(!chaps[x.subject])chaps[x.subject]=[];chaps[x.subject].push({id:d.id,...x})});
 }
-
-function setupRealtimeListeners() {
-  onSnapshot(col('todos'), snap => {
-    todos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderTodos(); updateDashboardStats();
-  });
-  onSnapshot(col('wrongq'), snap => {
-    wrongQs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    updateDashboardStats();
-  });
-  onSnapshot(col('chapters'), snap => {
-    chapters = {};
-    snap.docs.forEach(d => {
-      const data = d.data();
-      if (!chapters[data.subject]) chapters[data.subject] = [];
-      chapters[data.subject].push({ id: d.id, ...data });
-    });
-    updateDashboardStats();
-  });
+function setupRT(){
+  onSnapshot(col('todos'),s=>{todos=s.docs.map(d=>({id:d.id,...d.data()}));renderTodos();updateStats()});
+  onSnapshot(col('wrongq'),s=>{wrongs=s.docs.map(d=>({id:d.id,...d.data()}));updateStats()});
+  onSnapshot(col('chapters'),s=>{chaps={};s.docs.forEach(d=>{const x=d.data();if(!chaps[x.subject])chaps[x.subject]=[];chaps[x.subject].push({id:d.id,...x})});updateStats()});
 }
+async function fadd(c,d){ss('syncing','Saving...');const r=await addDoc(col(c),d);ss('synced','Synced ✓');return r.id}
+async function fup(c,id,d){ss('syncing','Saving...');await updateDoc(doc(db,'users',uid(),c,id),d);ss('synced','Synced ✓')}
+async function fdel(c,id){ss('syncing','Deleting...');await deleteDoc(doc(db,'users',uid(),c,id));ss('synced','Synced ✓')}
 
-async function fbAdd(collName, data) {
-  setSyncStatus('syncing', 'Saving...');
-  const ref = await addDoc(col(collName), data);
-  setSyncStatus('synced', 'Synced ✓');
-  return ref.id;
-}
-
-async function fbUpdate(collName, id, data) {
-  setSyncStatus('syncing', 'Saving...');
-  await updateDoc(doc(db, 'users', uid(), collName, id), data);
-  setSyncStatus('synced', 'Synced ✓');
-}
-
-async function fbDelete(collName, id) {
-  setSyncStatus('syncing', 'Deleting...');
-  await deleteDoc(doc(db, 'users', uid(), collName, id));
-  setSyncStatus('synced', 'Synced ✓');
-}
-
-// ══════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════
-window.showPage = (id) => {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n => {
-    if (n.getAttribute('onclick')?.includes("'" + id + "'")) n.classList.add('active');
-  });
-  if (id === 'dashboard') renderDashboard();
-  if (id === 'progress')  renderChapterTree();
-  if (id === 'notes')     renderNotes();
-  if (id === 'wrongq')    renderWrongQ();
-  if (id === 'exams')     renderExams();
-  if (id === 'timer')     renderSessionLog();
+window.showPage=id=>{
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  $('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')?.includes("'"+id+"'"))n.classList.add('active')});
+  if(id==='dashboard')renderDash();if(id==='progress')renderChaps();if(id==='notes')renderNotes();
+  if(id==='wrongq')renderWQ();if(id==='exams')renderExams();if(id==='timer')renderSessLog();
 };
+window.openModal=id=>$(id).classList.add('open');
+window.closeModal=id=>$(id).classList.remove('open');
+document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+window.openAddTodo=()=>{$('todo-input').value='';openModal('modal-todo');setTimeout(()=>$('todo-input').focus(),50)};
+window.openAddNote=()=>{noteImg=null;$('note-img-preview').innerHTML='';['note-title-input','note-chapter-input','note-summary-input','note-questions-input'].forEach(id=>$(id).value='');openModal('modal-note')};
+window.openAddChapter=()=>{$('ch-name-input').value='';openModal('modal-chapter')};
+window.openAddChapterFor=s=>{$('ch-subject-input').value=s;openAddChapter()};
 
-// ══════════════════════════════════════
-// MODALS
-// ══════════════════════════════════════
-window.openModal  = (id) => document.getElementById(id).classList.add('open');
-window.closeModal = (id) => document.getElementById(id).classList.remove('open');
-document.querySelectorAll('.modal-overlay').forEach(o => {
-  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
-});
-
-window.openAddTodo    = () => { document.getElementById('todo-input').value = ''; openModal('modal-todo'); setTimeout(() => document.getElementById('todo-input').focus(), 50); };
-window.openAddNote    = () => { currentNoteImg = null; document.getElementById('note-img-preview').innerHTML = ''; ['note-title-input','note-chapter-input','note-summary-input','note-questions-input'].forEach(id => document.getElementById(id).value = ''); openModal('modal-note'); };
-window.openAddWrongQ  = () => { ['wq-question-input','wq-reason-input','wq-solution-input'].forEach(id => document.getElementById(id).value = ''); openModal('modal-wrongq'); };
-window.openAddChapter = () => { document.getElementById('ch-name-input').value = ''; openModal('modal-chapter'); };
-
-// ══════════════════════════════════════
-// DASHBOARD
-// ══════════════════════════════════════
-function renderDashboard() {
-  const now = new Date();
-  document.getElementById('today-date-label').textContent = now.toLocaleDateString('zh-TW', { weekday:'short', year:'numeric', month:'long', day:'numeric' });
-  updateDashboardStats();
-  renderTodos();
+function renderDash(){
+  $('today-date-label').textContent=new Date().toLocaleDateString('zh-TW',{weekday:'short',year:'numeric',month:'long',day:'numeric'});
+  updateStats();renderTodos();
 }
-
-function updateDashboardStats() {
-  const now = new Date();
-  const today = now.toDateString();
-  const todayMins = sessions.filter(s => new Date(s.date).toDateString() === today).reduce((a,s) => a + (s.minutes||0), 0);
-  document.getElementById('dash-study-time').textContent = todayMins;
-
-  const upcoming = exams.filter(e => new Date(e.date) >= now).sort((a,b) => new Date(a.date)-new Date(b.date));
-  if (upcoming.length) {
-    document.getElementById('dash-next-exam').textContent = Math.ceil((new Date(upcoming[0].date) - now) / 86400000);
-    document.getElementById('dash-next-exam-name').textContent = upcoming[0].name;
-  }
-
-  document.getElementById('dash-wrong-count').textContent = wrongQs.filter(q => !q.mastered).length;
-
-  const allChaps = Object.values(chapters).flat();
-  const mastered = allChaps.filter(c => c.status === 'mastered').length;
-  const pct = allChaps.length ? Math.round(mastered / allChaps.length * 100) : 0;
-  document.getElementById('dash-overall-pct').textContent = pct + '%';
-
-  document.getElementById('dash-subject-overview').innerHTML = Object.keys(SUBJECTS).map(key => {
-    const chaps = chapters[key] || [];
-    const m = chaps.filter(c => c.status === 'mastered').length;
-    const total = chaps.length;
-    const p = total ? Math.round(m / total * 100) : 0;
-    const color = p > 70 ? 'var(--green)' : p > 30 ? 'var(--yellow)' : 'var(--accent)';
-    return `<div class="subject-row"><div class="subject-name">${SUBJECTS[key].name}</div><div class="subject-bar-wrap"><div class="subject-bar-fill" style="width:${p}%;background:${color};"></div></div><div class="subject-pct">${p}%</div></div>`;
+function updateStats(){
+  const now=new Date(),today=now.toDateString();
+  $('dash-study-time').textContent=sess.filter(s=>new Date(s.date).toDateString()===today).reduce((a,s)=>a+(s.minutes||0),0);
+  const up=exams.filter(e=>new Date(e.date)>=now).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  if(up.length){$('dash-next-exam').textContent=Math.ceil((new Date(up[0].date)-now)/86400000);$('dash-next-exam-name').textContent=up[0].name}
+  $('dash-wrong-count').textContent=wrongs.filter(q=>!q.mastered).length;
+  const all=Object.values(chaps).flat(),m=all.filter(c=>c.status==='mastered').length;
+  const pct=all.length?Math.round(m/all.length*100):0;
+  $('dash-overall-pct').textContent=pct+'%';
+  $('dash-subject-overview').innerHTML=Object.keys(SUBJ).map(k=>{
+    const c=chaps[k]||[],p=c.length?Math.round(c.filter(x=>x.status==='mastered').length/c.length*100):0;
+    const col=p>70?'var(--green)':p>30?'var(--yellow)':'var(--blue)';
+    return`<div class="sbr"><div class="snm">${SUBJ[k].n}</div><div class="sbw"><div class="sbf" style="width:${p}%;background:${col};"></div></div><div class="spc">${p}%</div></div>`;
   }).join('');
 }
 
-// ══════════════════════════════════════
-// TODOS
-// ══════════════════════════════════════
-function renderTodos() {
-  const today = new Date().toDateString();
-  const todayTodos = todos.filter(t => t.day === today);
-  const list = document.getElementById('todo-list');
-  const empty = document.getElementById('todo-empty');
-  if (!todayTodos.length) { list.innerHTML = ''; empty.style.display = ''; return; }
-  empty.style.display = 'none';
-  list.innerHTML = todayTodos.map(t => `
-    <div class="todo-item">
-      <div class="todo-checkbox ${t.done ? 'checked' : ''}" onclick="toggleTodo('${t.id}')"></div>
-      <div class="todo-text ${t.done ? 'done' : ''}">${t.text}${t.subject ? ` <span class="tag ${SUBJECTS[t.subject]?.class||''}">${SUBJECTS[t.subject]?.name}</span>` : ''}</div>
-      <button class="btn btn-danger btn-sm" onclick="deleteTodo('${t.id}')">✕</button>
-    </div>`).join('');
+function renderTodos(){
+  const today=new Date().toDateString(),list=todos.filter(t=>t.day===today);
+  const el=$('todo-list'),em=$('todo-empty');
+  if(!list.length){el.innerHTML='';em.style.display='';return}
+  em.style.display='none';
+  el.innerHTML=list.map(t=>`<div class="todo"><div class="tcb ${t.done?'ck':''}" onclick="toggleTodo('${t.id}')"></div><div class="ttx ${t.done?'dn':''}">${t.text}${t.subject?` <span class="tag ${SUBJ[t.subject]?.c||''}">${SUBJ[t.subject]?.n}</span>`:''}</div><button class="btn btn-danger btn-sm" onclick="deleteTodo('${t.id}')">✕</button></div>`).join('');
+}
+window.addTodo=async()=>{const tx=$('todo-input').value.trim();if(!tx)return;await fadd('todos',{text:tx,subject:$('todo-subject-input').value,done:false,day:new Date().toDateString()});closeModal('modal-todo')};
+window.toggleTodo=async id=>{const t=todos.find(t=>t.id===id);if(t)await fup('todos',id,{done:!t.done})};
+window.deleteTodo=async id=>fdel('todos',id);
+
+window.timerStart=()=>{if(tiRun)return;tiRun=true;$('timer-display').classList.add('run');tiInt=setInterval(()=>{tiSec++;updTi()},1000)};
+window.timerPause=()=>{tiRun=false;clearInterval(tiInt);$('timer-display').classList.remove('run')};
+window.timerReset=()=>{timerPause();tiSec=0;updTi()};
+function updTi(){const h=Math.floor(tiSec/3600),m=Math.floor((tiSec%3600)/60),s=tiSec%60;$('timer-display').textContent=[h,m,s].map(n=>String(n).padStart(2,'0')).join(':')}
+window.saveSession=async()=>{
+  if(tiSec<60){alert('請至少計時 1 分鐘');return}
+  await fadd('sessions',{subject:$('timer-subject').value,minutes:Math.round(tiSec/60),date:new Date().toISOString()});
+  timerReset();const sn=await getDocs(col('sessions'));sess=sn.docs.map(d=>({id:d.id,...d.data()}));renderSessLog();updateStats();
+};
+function renderSessLog(){
+  const today=new Date().toDateString(),list=sess.filter(s=>new Date(s.date).toDateString()===today);
+  const el=$('session-log'),em=$('session-empty');
+  if(!list.length){el.innerHTML='';em.style.display='';return}
+  em.style.display='none';
+  el.innerHTML=list.map(s=>`<div class="sbr"><span class="tag ${SUBJ[s.subject]?.c||''}">${SUBJ[s.subject]?.n}</span><div style="flex:1;"></div><span style="font-size:18px;font-weight:700;color:var(--green);letter-spacing:-.5px;">${s.minutes}</span><span style="font-size:10px;color:var(--z600);margin-left:4px;">min</span></div>`).join('');
 }
 
-window.addTodo = async () => {
-  const text = document.getElementById('todo-input').value.trim();
-  if (!text) return;
-  await fbAdd('todos', { text, subject: document.getElementById('todo-subject-input').value, done: false, day: new Date().toDateString() });
-  closeModal('modal-todo');
-};
-
-window.toggleTodo = async (id) => {
-  const t = todos.find(t => t.id === id);
-  if (t) await fbUpdate('todos', id, { done: !t.done });
-};
-
-window.deleteTodo = async (id) => { await fbDelete('todos', id); };
-
-// ══════════════════════════════════════
-// TIMER
-// ══════════════════════════════════════
-window.timerStart = () => {
-  if (timerRunning) return;
-  timerRunning = true;
-  document.getElementById('timer-display').classList.add('running');
-  timerInterval = setInterval(() => { timerSeconds++; updateTimerDisplay(); }, 1000);
-};
-
-window.timerPause = () => {
-  timerRunning = false;
-  clearInterval(timerInterval);
-  document.getElementById('timer-display').classList.remove('running');
-};
-
-window.timerReset = () => { timerPause(); timerSeconds = 0; updateTimerDisplay(); };
-
-function updateTimerDisplay() {
-  const h = Math.floor(timerSeconds/3600), m = Math.floor((timerSeconds%3600)/60), s = timerSeconds%60;
-  document.getElementById('timer-display').textContent = [h,m,s].map(n => String(n).padStart(2,'0')).join(':');
-}
-
-window.saveSession = async () => {
-  if (timerSeconds < 60) { alert('請至少計時 1 分鐘'); return; }
-  const minutes = Math.round(timerSeconds / 60);
-  await fbAdd('sessions', { subject: document.getElementById('timer-subject').value, minutes, date: new Date().toISOString() });
-  sessions = [...sessions]; // trigger re-render
-  timerReset();
-  const snap = await getDocs(col('sessions'));
-  sessions = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderSessionLog();
-  updateDashboardStats();
-};
-
-function renderSessionLog() {
-  const today = new Date().toDateString();
-  const todaySessions = sessions.filter(s => new Date(s.date).toDateString() === today);
-  const el = document.getElementById('session-log');
-  const empty = document.getElementById('session-empty');
-  if (!todaySessions.length) { el.innerHTML = ''; empty.style.display = ''; return; }
-  empty.style.display = 'none';
-  el.innerHTML = todaySessions.map(s => `
-    <div class="subject-row">
-      <span class="tag ${SUBJECTS[s.subject]?.class||''}">${SUBJECTS[s.subject]?.name}</span>
-      <div style="flex:1;"></div>
-      <span style="font-family:var(--font-display);color:var(--green);font-size:14px;">${s.minutes}</span>
-      <span style="font-size:11px;color:var(--text-dim);margin-left:4px;">min</span>
-    </div>`).join('');
-}
-
-// ══════════════════════════════════════
-// CHAPTERS
-// ══════════════════════════════════════
-function renderChapterTree() {
-  document.getElementById('chapter-tree').innerHTML = Object.keys(SUBJECTS).map(key => {
-    const chaps = chapters[key] || [];
-    const mastered = chaps.filter(c => c.status === 'mastered').length;
-    const pct = chaps.length ? Math.round(mastered / chaps.length * 100) : 0;
-    const barColor = pct > 70 ? 'var(--green)' : pct > 30 ? 'var(--yellow)' : 'var(--accent)';
-    return `
-      <div class="chapter-subject-section">
-        <div class="chapter-subject-header" onclick="this.nextElementSibling.classList.toggle('open')">
-          <div class="flex-gap">
-            <span class="tag ${SUBJECTS[key].class}">${SUBJECTS[key].name}</span>
-            <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-sec);">${mastered}/${chaps.length} 掌握</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:100px;background:var(--bg-3);border-radius:2px;height:4px;"><div style="width:${pct}%;height:100%;border-radius:2px;background:${barColor};"></div></div>
-          </div>
-        </div>
-        <div class="chapter-list open">
-          ${chaps.map(c => `
-            <div class="chapter-item">
-              <div class="chapter-status ${c.status}" onclick="cycleChapterStatus('${c.id}','${key}','${c.status}')" title="點擊切換">
-                ${c.status==='mastered'?'✓':c.status==='fuzzy'?'~':'○'}
-              </div>
-              <div class="chapter-name">${c.name}</div>
-              <button class="btn btn-danger btn-sm" onclick="deleteChapter('${c.id}')">✕</button>
-            </div>`).join('')}
-          <button class="chapter-add-btn" onclick="openAddChapterFor('${key}')">+ 新增章節</button>
-        </div>
-      </div>`;
+function renderChaps(){
+  $('chapter-tree').innerHTML=Object.keys(SUBJ).map(k=>{
+    const c=chaps[k]||[],m=c.filter(x=>x.status==='mastered').length,pct=c.length?Math.round(m/c.length*100):0;
+    const bc=pct>70?'var(--green)':pct>30?'var(--yellow)':'var(--blue)';
+    return`<div class="chs"><div class="chh" onclick="this.nextElementSibling.classList.toggle('open')"><div class="fgap"><span class="tag ${SUBJ[k].c}">${SUBJ[k].n}</span><span style="font-size:11px;color:var(--z500);">${m}/${c.length} 掌握</span></div><div style="display:flex;align-items:center;gap:11px;"><div style="width:85px;background:var(--w5);border-radius:99px;height:4px;"><div style="width:${pct}%;height:100%;border-radius:99px;background:${bc};"></div></div><span style="color:var(--z600);font-size:11px;">▾</span></div></div><div class="chl open">${c.map(x=>`<div class="chi"><div class="cst ${x.status}" onclick="cycleChap('${x.id}','${k}','${x.status}')">${x.status==='mastered'?'✓':x.status==='fuzzy'?'~':'○'}</div><div class="cnm">${x.name}</div><button class="btn btn-danger btn-sm" onclick="delChap('${x.id}')">✕</button></div>`).join('')}<button class="cadd" onclick="openAddChapterFor('${k}')">+ 新增章節</button></div></div>`;
   }).join('');
 }
+window.cycleChap=async(id,k,cur)=>{const o=['not-started','fuzzy','mastered'];await fup('chapters',id,{status:o[(o.indexOf(cur)+1)%o.length]});const sn=await getDocs(col('chapters'));chaps={};sn.docs.forEach(d=>{const x=d.data();if(!chaps[x.subject])chaps[x.subject]=[];chaps[x.subject].push({id:d.id,...x})});renderChaps();updateStats()};
+window.delChap=async id=>{await fdel('chapters',id);const sn=await getDocs(col('chapters'));chaps={};sn.docs.forEach(d=>{const x=d.data();if(!chaps[x.subject])chaps[x.subject]=[];chaps[x.subject].push({id:d.id,...x})});renderChaps()};
+window.addChapter=async()=>{const nm=$('ch-name-input').value.trim();if(!nm)return;await fadd('chapters',{name:nm,subject:$('ch-subject-input').value,status:'not-started'});closeModal('modal-chapter');const sn=await getDocs(col('chapters'));chaps={};sn.docs.forEach(d=>{const x=d.data();if(!chaps[x.subject])chaps[x.subject]=[];chaps[x.subject].push({id:d.id,...x})});renderChaps()};
 
-window.cycleChapterStatus = async (id, subject, current) => {
-  const order = ['not-started', 'fuzzy', 'mastered'];
-  const next = order[(order.indexOf(current) + 1) % order.length];
-  await fbUpdate('chapters', id, { status: next });
-  const snap = await getDocs(col('chapters'));
-  chapters = {};
-  snap.docs.forEach(d => {
-    const data = d.data();
-    if (!chapters[data.subject]) chapters[data.subject] = [];
-    chapters[data.subject].push({ id: d.id, ...data });
-  });
-  renderChapterTree();
-  updateDashboardStats();
+window.handleNoteImage=inp=>{const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{noteImg=e.target.result;$('note-img-preview').innerHTML=`<img src="${noteImg}" style="max-width:100%;max-height:120px;border-radius:8px;border:1px solid var(--w10);">`};r.readAsDataURL(f)};
+window.addNote=async()=>{const t=$('note-title-input').value.trim();if(!t)return;await fadd('notes',{title:t,subject:$('note-subject-input').value,chapter:$('note-chapter-input').value.trim(),summary:$('note-summary-input').value.trim(),questions:$('note-questions-input').value.trim(),image:noteImg||null,date:new Date().toISOString()});closeModal('modal-note');const sn=await getDocs(query(col('notes'),orderBy('date','desc')));notes=sn.docs.map(d=>({id:d.id,...d.data()}));renderNotes()};
+function renderNotes(){
+  const f=$('notes-filter').value,fl=f==='all'?notes:notes.filter(n=>n.subject===f);
+  const g=$('notes-grid'),em=$('notes-empty');
+  if(!fl.length){g.innerHTML='';em.style.display='';return}
+  em.style.display='none';
+  g.innerHTML=fl.map(n=>`<div class="ncard" onclick="openNote('${n.id}')"><div class="nct">${n.title}</div><div class="ncm">${new Date(n.date).toLocaleDateString('zh-TW')}${n.chapter?' · '+n.chapter:''}</div><div class="fgap" style="margin-bottom:7px;"><span class="tag ${SUBJ[n.subject]?.c||''}">${SUBJ[n.subject]?.n}</span></div>${n.summary?`<div class="ncp">${n.summary.slice(0,75)}${n.summary.length>75?'...':''}</div>`:''}${n.image?`<img src="${n.image}" class="nth" alt="">`:''}</div>`).join('');
+}
+window.openNote=id=>{
+  const n=notes.find(n=>n.id===id);if(!n)return;noteId=id;
+  $('note-detail-title').textContent=n.title;$('note-detail-meta').textContent=new Date(n.date).toLocaleDateString('zh-TW')+(n.chapter?' · '+n.chapter:'');
+  $('note-detail-tags').innerHTML=`<span class="tag ${SUBJ[n.subject]?.c||''}">${SUBJ[n.subject]?.n}</span>`;
+  const img=$('note-detail-img');if(n.image){img.src=n.image;img.style.display=''}else img.style.display='none';
+  $('note-detail-summary').textContent=n.summary||'（無摘要）';
+  $('note-detail-questions').innerHTML=n.questions?`<div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--z600);margin-bottom:7px;">❓ 待解問題</div>`+n.questions.split('\n').filter(Boolean).map(q=>`<div style="padding:8px 12px;background:rgba(251,191,36,.05);border-left:2px solid rgba(251,191,36,.35);margin-bottom:6px;font-size:13px;border-radius:7px;color:var(--z400);">${q}</div>`).join(''):'';
+  $('notes-list-view').classList.add('hidden');$('note-detail-view').classList.add('open');
+};
+window.closeNoteDetail=()=>{$('note-detail-view').classList.remove('open');$('notes-list-view').classList.remove('hidden')};
+window.deleteCurrentNote=async()=>{if(!noteId||!confirm('確定刪除？'))return;await fdel('notes',noteId);const sn=await getDocs(query(col('notes'),orderBy('date','desc')));notes=sn.docs.map(d=>({id:d.id,...d.data()}));closeNoteDetail();renderNotes()};
+
+window.selectErrorType=t=>{wqEType=t;document.querySelectorAll('.ec').forEach(c=>{c.className='ec';if(c.dataset.type===t)c.classList.add('s-'+t.slice(0,2))});};
+window.selectStar=n=>{wqStars=n;const lb=['','簡單','普通','中等','困難','地獄'];document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('on',i<n));$('wq-star-label').textContent=lb[n]||'未選擇'};
+window.setReviewDate=d=>{const x=new Date();x.setDate(x.getDate()+d);$('wq-review-date-input').value=x.toISOString().slice(0,10)};
+window.handleWQImage=inp=>{const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{wqImg=e.target.result;$('wq-img-preview').innerHTML=`<img src="${wqImg}" style="max-width:100%;max-height:130px;border-radius:8px;border:1px solid var(--w10);">`};r.readAsDataURL(f)};
+window.openLightbox=src=>{$('lightbox-img').src=src;$('lightbox').classList.add('open')};
+window.openAddWrongQ=()=>{wqEType='';wqStars=0;wqImg=null;document.querySelectorAll('.ec').forEach(c=>c.className='ec');document.querySelectorAll('.star').forEach(s=>s.classList.remove('on'));$('wq-img-preview').innerHTML='';['wq-question-input','wq-reason-input','wq-solution-input','wq-chapter-input','wq-review-date-input'].forEach(id=>$(id).value='');openModal('modal-wrongq')};
+window.addWrongQ=async()=>{
+  const q=$('wq-question-input').value.trim();if(!q){alert('請填入題目描述');return}
+  await fadd('wrongq',{subject:$('wq-subject-input').value,source:$('wq-source-input').value,chapter:$('wq-chapter-input').value.trim(),errorType:wqEType,difficulty:wqStars,question:q,image:wqImg||null,reason:$('wq-reason-input').value.trim(),solution:$('wq-solution-input').value.trim(),reviewDate:$('wq-review-date-input').value||null,mastered:false,date:new Date().toISOString()});
+  wqEType='';wqStars=0;wqImg=null;document.querySelectorAll('.ec').forEach(c=>c.className='ec');document.querySelectorAll('.star').forEach(s=>s.classList.remove('on'));$('wq-img-preview').innerHTML='';
+  ['wq-question-input','wq-reason-input','wq-solution-input','wq-chapter-input','wq-review-date-input'].forEach(id=>$(id).value='');
+  closeModal('modal-wrongq');const sn=await getDocs(query(col('wrongq'),orderBy('date','desc')));wrongs=sn.docs.map(d=>({id:d.id,...d.data()}));renderWQ();updateStats();
 };
 
-window.deleteChapter = async (id) => { await fbDelete('chapters', id); const snap = await getDocs(col('chapters')); chapters={}; snap.docs.forEach(d=>{const data=d.data();if(!chapters[data.subject])chapters[data.subject]=[];chapters[data.subject].push({id:d.id,...data});}); renderChapterTree(); };
+function revBadge(d){if(!d)return'';const now=new Date();now.setHours(0,0,0,0);const rd=new Date(d);rd.setHours(0,0,0,0);const diff=Math.ceil((rd-now)/86400000);if(diff<=0)return`<span class="rb rb-due">🔔 今日複習</span>`;if(diff<=3)return`<span class="rb rb-soon">⏰ ${diff}天後</span>`;return`<span class="rb rb-ok">📅 ${diff}天後</span>`}
+function stars(n){return n?'★'.repeat(n)+'☆'.repeat(5-n):''}
 
-window.openAddChapterFor = (subject) => { document.getElementById('ch-subject-input').value = subject; openAddChapter(); };
-
-window.addChapter = async () => {
-  const name = document.getElementById('ch-name-input').value.trim();
-  if (!name) return;
-  await fbAdd('chapters', { name, subject: document.getElementById('ch-subject-input').value, status: 'not-started' });
-  closeModal('modal-chapter');
-  const snap = await getDocs(col('chapters'));
-  chapters = {};
-  snap.docs.forEach(d => { const data = d.data(); if (!chapters[data.subject]) chapters[data.subject]=[]; chapters[data.subject].push({id:d.id,...data}); });
-  renderChapterTree();
-};
-
-// ══════════════════════════════════════
-// NOTES
-// ══════════════════════════════════════
-window.handleNoteImage = (input) => {
-  const file = input.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => { currentNoteImg = e.target.result; document.getElementById('note-img-preview').innerHTML = `<img src="${currentNoteImg}" style="max-width:100%;max-height:120px;border-radius:4px;border:1px solid var(--border);">`; };
-  reader.readAsDataURL(file);
-};
-
-window.addNote = async () => {
-  const title = document.getElementById('note-title-input').value.trim();
-  if (!title) return;
-  await fbAdd('notes', {
-    title,
-    subject: document.getElementById('note-subject-input').value,
-    chapter: document.getElementById('note-chapter-input').value.trim(),
-    summary: document.getElementById('note-summary-input').value.trim(),
-    questions: document.getElementById('note-questions-input').value.trim(),
-    image: currentNoteImg || null,
-    date: new Date().toISOString(),
-  });
-  closeModal('modal-note');
-  const snap = await getDocs(query(col('notes'), orderBy('date','desc')));
-  notes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderNotes();
-};
-
-function renderNotes() {
-  const filter = document.getElementById('notes-filter').value;
-  const filtered = filter === 'all' ? notes : notes.filter(n => n.subject === filter);
-  const grid = document.getElementById('notes-grid');
-  const empty = document.getElementById('notes-empty');
-  if (!filtered.length) { grid.innerHTML = ''; empty.style.display = ''; return; }
-  empty.style.display = 'none';
-  grid.innerHTML = filtered.map(n => `
-    <div class="note-card" onclick="openNoteDetail('${n.id}')">
-      <div class="note-card-title">${n.title}</div>
-      <div class="note-card-meta">${new Date(n.date).toLocaleDateString('zh-TW')} · ${n.chapter||''}</div>
-      <div class="flex-gap" style="margin-bottom:8px;"><span class="tag ${SUBJECTS[n.subject]?.class||''}">${SUBJECTS[n.subject]?.name}</span></div>
-      ${n.summary ? `<div class="note-card-preview">${n.summary.slice(0,80)}${n.summary.length>80?'...':''}</div>` : ''}
-      ${n.image ? `<img src="${n.image}" class="note-image-thumb" alt="">` : ''}
-    </div>`).join('');
+function renderWQStats(){
+  const tot=wrongs.length,m=wrongs.filter(q=>q.mastered).length,acc=tot?Math.round(m/tot*100):0;
+  const tc={};wrongs.forEach(q=>{if(q.errorType)tc[q.errorType]=(tc[q.errorType]||0)+1});
+  const top=Object.entries(tc).sort((a,b)=>b[1]-a[1])[0];
+  const now=new Date();now.setHours(0,0,0,0);
+  const due=wrongs.filter(q=>{if(!q.reviewDate||q.mastered)return false;const rd=new Date(q.reviewDate);rd.setHours(0,0,0,0);return rd<=now}).length;
+  $('wq-stats').innerHTML=`<div class="wqs"><div class="wqsl">Total Wrong</div><div class="wqsv">${tot}</div></div><div class="wqs"><div class="wqsl">Mastery Rate</div><div class="wqsv" style="color:${acc>60?'var(--green)':acc>30?'var(--yellow)':'var(--red)'}">${acc}%</div></div><div class="wqs"><div class="wqsl">Due Today</div><div class="wqsv" style="color:${due>0?'var(--red)':'var(--green)'}">${due}</div></div><div class="wqs"><div class="wqsl">Top Error</div><div style="font-size:12px;margin-top:4px;color:var(--z500);">${top?ETYPES[top[0]]?.l||top[0]:'—'}</div></div>`;
 }
 
-window.openNoteDetail = (id) => {
-  const n = notes.find(n => n.id === id); if (!n) return;
-  currentNoteId = id;
-  document.getElementById('note-detail-title').textContent = n.title;
-  document.getElementById('note-detail-meta').textContent = `${new Date(n.date).toLocaleDateString('zh-TW')} · ${n.chapter||''}`;
-  document.getElementById('note-detail-tags').innerHTML = `<span class="tag ${SUBJECTS[n.subject]?.class||''}">${SUBJECTS[n.subject]?.name}</span>`;
-  const img = document.getElementById('note-detail-img');
-  if (n.image) { img.src = n.image; img.style.display = ''; } else img.style.display = 'none';
-  document.getElementById('note-detail-summary').textContent = n.summary || '（無摘要）';
-  document.getElementById('note-detail-questions').innerHTML = n.questions
-    ? `<div style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--text-dim);margin-bottom:8px;">❓ 待解問題</div>` +
-      n.questions.split('\n').filter(Boolean).map(q => `<div style="padding:6px 10px;background:rgba(255,209,102,0.06);border-left:2px solid var(--yellow);margin-bottom:6px;font-size:13px;border-radius:2px;">${q}</div>`).join('') : '';
-  document.getElementById('notes-list-view').classList.add('hidden');
-  document.getElementById('note-detail-view').classList.add('open');
-};
-
-window.closeNoteDetail = () => { document.getElementById('note-detail-view').classList.remove('open'); document.getElementById('notes-list-view').classList.remove('hidden'); };
-
-window.deleteCurrentNote = async () => {
-  if (!currentNoteId || !confirm('確定刪除？')) return;
-  await fbDelete('notes', currentNoteId);
-  const snap = await getDocs(query(col('notes'), orderBy('date','desc')));
-  notes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  closeNoteDetail(); renderNotes();
-};
-
-// ══════════════════════════════════════
-// WRONG Q
-// ══════════════════════════════════════
-let wqSelectedErrorType = '';
-let wqSelectedStars = 0;
-let wqCurrentImg = null;
-
-const ERROR_TYPES = {
-  careless: { label: '😵 粗心',    color: 'var(--yellow)' },
-  concept:  { label: '🧠 觀念錯誤', color: 'var(--red)' },
-  formula:  { label: '📐 公式記錯', color: 'var(--purple)' },
-  calc:     { label: '🔢 小計算錯', color: 'var(--cyan)' },
-  reading:  { label: '📖 題意看錯', color: '#ff9f43' },
-  other:    { label: '❓ 其他',     color: 'var(--text-sec)' },
-};
-
-window.selectErrorType = (type) => {
-  wqSelectedErrorType = type;
-  document.querySelectorAll('.error-chip').forEach(c => {
-    c.className = 'error-chip';
-    if (c.dataset.type === type) c.classList.add('selected-' + type);
-  });
-};
-
-window.selectStar = (n) => {
-  wqSelectedStars = n;
-  const labels = ['', '簡單', '普通', '中等', '困難', '地獄'];
-  document.querySelectorAll('.star').forEach((s, i) => {
-    s.classList.toggle('active', i < n);
-  });
-  document.getElementById('wq-star-label').textContent = labels[n] || '未選擇';
-};
-
-window.setReviewDate = (days) => {
-  const d = new Date();
-  d.setDate(d.getDate() + days);
-  document.getElementById('wq-review-date-input').value = d.toISOString().slice(0,10);
-};
-
-window.handleWQImage = (input) => {
-  const file = input.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    wqCurrentImg = e.target.result;
-    document.getElementById('wq-img-preview').innerHTML = `<img src="${wqCurrentImg}" style="max-width:100%;max-height:140px;border-radius:4px;border:1px solid var(--border);">`;
-  };
-  reader.readAsDataURL(file);
-};
-
-window.openLightbox = (src) => {
-  document.getElementById('lightbox-img').src = src;
-  document.getElementById('lightbox').classList.add('open');
-};
-
-window.addWrongQ = async () => {
-  const question = document.getElementById('wq-question-input').value.trim();
-  if (!question) { alert('請填入題目描述'); return; }
-  await fbAdd('wrongq', {
-    subject:    document.getElementById('wq-subject-input').value,
-    source:     document.getElementById('wq-source-input').value,
-    chapter:    document.getElementById('wq-chapter-input').value.trim(),
-    errorType:  wqSelectedErrorType,
-    difficulty: wqSelectedStars,
-    question,
-    image:      wqCurrentImg || null,
-    reason:     document.getElementById('wq-reason-input').value.trim(),
-    solution:   document.getElementById('wq-solution-input').value.trim(),
-    reviewDate: document.getElementById('wq-review-date-input').value || null,
-    mastered:   false,
-    attempts:   0,
-    date:       new Date().toISOString(),
-  });
-  // reset
-  wqSelectedErrorType = ''; wqSelectedStars = 0; wqCurrentImg = null;
-  document.querySelectorAll('.error-chip').forEach(c => c.className = 'error-chip');
-  document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
-  document.getElementById('wq-star-label').textContent = '未選擇';
-  document.getElementById('wq-img-preview').innerHTML = '';
-  ['wq-question-input','wq-reason-input','wq-solution-input','wq-chapter-input','wq-review-date-input'].forEach(id => document.getElementById(id).value = '');
-
-  closeModal('modal-wrongq');
-  const snap = await getDocs(query(col('wrongq'), orderBy('date','desc')));
-  wrongQs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderWrongQ(); updateDashboardStats();
-};
-
-window.openAddWrongQ = () => {
-  wqSelectedErrorType = ''; wqSelectedStars = 0; wqCurrentImg = null;
-  document.querySelectorAll('.error-chip').forEach(c => c.className = 'error-chip');
-  document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
-  document.getElementById('wq-star-label').textContent = '未選擇';
-  document.getElementById('wq-img-preview').innerHTML = '';
-  ['wq-question-input','wq-reason-input','wq-solution-input','wq-chapter-input','wq-review-date-input'].forEach(id => document.getElementById(id).value = '');
-  openModal('modal-wrongq');
-};
-
-function getReviewBadge(reviewDate) {
-  if (!reviewDate) return '';
-  const now = new Date(); now.setHours(0,0,0,0);
-  const rd = new Date(reviewDate); rd.setHours(0,0,0,0);
-  const diff = Math.ceil((rd - now) / 86400000);
-  if (diff <= 0) return `<span class="review-badge review-due">🔔 今日複習</span>`;
-  if (diff <= 3) return `<span class="review-badge review-soon">⏰ ${diff}天後複習</span>`;
-  return `<span class="review-badge review-ok">📅 ${diff}天後複習</span>`;
-}
-
-function getStars(n) {
-  if (!n) return '';
-  return '★'.repeat(n) + '☆'.repeat(5-n);
-}
-
-function renderWQStats() {
-  const total = wrongQs.length;
-  const pending = wrongQs.filter(q => !q.mastered).length;
-  const mastered = wrongQs.filter(q => q.mastered).length;
-  const accuracy = total ? Math.round(mastered / total * 100) : 0;
-
-  // Most common error type
-  const typeCounts = {};
-  wrongQs.forEach(q => { if (q.errorType) typeCounts[q.errorType] = (typeCounts[q.errorType]||0)+1; });
-  const topType = Object.entries(typeCounts).sort((a,b)=>b[1]-a[1])[0];
-
-  // Due today
-  const now = new Date(); now.setHours(0,0,0,0);
-  const dueToday = wrongQs.filter(q => {
-    if (!q.reviewDate || q.mastered) return false;
-    const rd = new Date(q.reviewDate); rd.setHours(0,0,0,0);
-    return rd <= now;
-  }).length;
-
-  document.getElementById('wq-stats').innerHTML = `
-    <div class="wq-stat">
-      <div class="wq-stat-label">Total Wrong</div>
-      <div class="wq-stat-value">${total}</div>
-    </div>
-    <div class="wq-stat">
-      <div class="wq-stat-label">Mastery Rate</div>
-      <div class="wq-stat-value" style="color:${accuracy>60?'var(--green)':accuracy>30?'var(--yellow)':'var(--red)'}">${accuracy}%</div>
-    </div>
-    <div class="wq-stat">
-      <div class="wq-stat-label">Due Today</div>
-      <div class="wq-stat-value" style="color:${dueToday>0?'var(--red)':'var(--green)'}">${dueToday}</div>
-    </div>
-    <div class="wq-stat">
-      <div class="wq-stat-label">Top Error</div>
-      <div style="font-size:13px;margin-top:4px;color:var(--text-sec);">${topType ? ERROR_TYPES[topType[0]]?.label || topType[0] : '—'}</div>
-    </div>`;
-}
-
-function renderWrongQ() {
+function renderWQ(){
   renderWQStats();
-  const subFilter    = document.getElementById('wrongq-filter').value;
-  const typeFilter   = document.getElementById('wrongq-type-filter').value;
-  const diffFilter   = document.getElementById('wrongq-difficulty-filter').value;
-  const statusFilter = document.getElementById('wrongq-status-filter').value;
-  const now = new Date(); now.setHours(0,0,0,0);
-
-  let filtered = wrongQs;
-  if (subFilter !== 'all')    filtered = filtered.filter(q => q.subject === subFilter);
-  if (typeFilter !== 'all')   filtered = filtered.filter(q => q.errorType === typeFilter);
-  if (diffFilter !== 'all')   filtered = filtered.filter(q => String(q.difficulty) === diffFilter);
-  if (statusFilter === 'pending')  filtered = filtered.filter(q => !q.mastered);
-  if (statusFilter === 'mastered') filtered = filtered.filter(q => q.mastered);
-  if (statusFilter === 'due') filtered = filtered.filter(q => {
-    if (!q.reviewDate || q.mastered) return false;
-    const rd = new Date(q.reviewDate); rd.setHours(0,0,0,0);
-    return rd <= now;
-  });
-
-  const el = document.getElementById('wrongq-list');
-  const empty = document.getElementById('wrongq-empty');
-  if (!filtered.length) { el.innerHTML = ''; empty.style.display = ''; return; }
-  empty.style.display = 'none';
-
-  el.innerHTML = filtered.map(q => {
-    const et = q.errorType ? ERROR_TYPES[q.errorType] : null;
-    const stars = q.difficulty ? `<span style="color:var(--yellow);letter-spacing:1px;font-size:11px;">${getStars(q.difficulty)}</span>` : '';
-    const etTag = et ? `<span class="tag" style="color:${et.color};border-color:${et.color}30;background:${et.color}10;">${et.label}</span>` : '';
-    const reviewBadge = getReviewBadge(q.reviewDate);
-    const chTag = q.chapter ? `<span class="tag" style="color:var(--text-sec);border-color:var(--border);">${q.chapter}</span>` : '';
-    return `
-    <div class="wrongq-card ${q.mastered?'mastered':''}">
-      <div class="wrongq-header">
-        <span class="tag ${SUBJECTS[q.subject]?.class||''}">${SUBJECTS[q.subject]?.name}</span>
-        ${chTag}
-        <span class="tag" style="color:var(--text-sec);border-color:var(--border);">${q.source}</span>
-        ${etTag}
-        ${stars}
-        ${reviewBadge}
-        <span class="tag ${q.mastered?'tag-green':'tag-red'}" style="margin-left:auto;">${q.mastered?'MASTERED':'PENDING'}</span>
-        <span style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">${new Date(q.date).toLocaleDateString('zh-TW')}</span>
-      </div>
-      <div class="wrongq-question">${q.question}</div>
-      ${q.image ? `<img class="wrongq-img" src="${q.image}" alt="" onclick="openLightbox('${q.image.replace(/'/g,"\\'")}')">` : ''}
-      ${q.reason   ? `<div class="wrongq-reason">❌ 錯誤原因：${q.reason}</div>` : ''}
-      ${q.solution ? `<div class="wrongq-solution">✅ 正確解法：${q.solution}</div>` : ''}
-      <div class="wrongq-actions">
-        <button class="ihb ${q.mastered?'':'ihb-green'}" onclick="toggleWQMastered('${q.id}',${q.mastered})">
-          <div class="ihb-bg"></div>
-          <span class="ihb-text">${q.mastered?'↩ 重練':'✓ 已掌握'}</span>
-          <div class="ihb-hover-content">${q.mastered?'↩ 重練 →':'✓ 已掌握 →'}</div>
-        </button>
-        <button class="ihb ihb-danger" onclick="deleteWrongQ('${q.id}')">
-          <div class="ihb-bg"></div>
-          <span class="ihb-text">✕ 刪除</span>
-          <div class="ihb-hover-content">✕ 刪除 →</div>
-        </button>
-      </div>
-    </div>`;
+  const sf=$('wrongq-filter').value,tf=$('wrongq-type-filter').value,df=$('wrongq-difficulty-filter').value,stf=$('wrongq-status-filter').value;
+  const now=new Date();now.setHours(0,0,0,0);
+  let fl=wrongs;
+  if(sf!=='all')fl=fl.filter(q=>q.subject===sf);if(tf!=='all')fl=fl.filter(q=>q.errorType===tf);
+  if(df!=='all')fl=fl.filter(q=>String(q.difficulty)===df);
+  if(stf==='pending')fl=fl.filter(q=>!q.mastered);if(stf==='mastered')fl=fl.filter(q=>q.mastered);
+  if(stf==='due')fl=fl.filter(q=>{if(!q.reviewDate||q.mastered)return false;const rd=new Date(q.reviewDate);rd.setHours(0,0,0,0);return rd<=now});
+  const el=$('wrongq-list'),em=$('wrongq-empty');
+  if(!fl.length){el.innerHTML='';em.style.display='';return}em.style.display='none';
+  el.innerHTML=fl.map(q=>{
+    const et=q.errorType?ETYPES[q.errorType]:null;
+    const et_tag=et?`<span class="tag" style="color:${et.col};border-color:${et.col}38;background:${et.col}10;">${et.l}</span>`:'';
+    const ch_tag=q.chapter?`<span class="tag" style="color:var(--z500);border-color:var(--w10);">${q.chapter}</span>`:'';
+    const strs=q.difficulty?`<span style="color:var(--yellow);font-size:11px;">${stars(q.difficulty)}</span>`:'';
+    return`<div class="wqc ${q.mastered?'mastered':''}"><div class="wqh"><span class="tag ${SUBJ[q.subject]?.c||''}">${SUBJ[q.subject]?.n}</span>${ch_tag}<span class="tag" style="color:var(--z500);border-color:var(--w10);">${q.source}</span>${et_tag}${strs}${revBadge(q.reviewDate)}<span class="tag ${q.mastered?'t-ok':'t-ng'}" style="margin-left:auto;">${q.mastered?'MASTERED':'PENDING'}</span><span style="font-family:var(--mono);font-size:9px;color:var(--z600);">${new Date(q.date).toLocaleDateString('zh-TW')}</span></div><div class="wqq">${q.question}</div>${q.image?`<img class="wqi" src="${q.image}" alt="" onclick="openLightbox('${q.image.replace(/'/g,"\\'")}')">`:''} ${q.reason?`<div class="wqreason">❌ 錯誤原因：${q.reason}</div>`:''}${q.solution?`<div class="wqsol">✅ 正確解法：${q.solution}</div>`:''}<div class="wqact"><button class="ihb ${q.mastered?'':'ihb-g'} ihb-sm" onclick="toggleWQ('${q.id}',${q.mastered})"><div class="ihb-b"></div><span class="ihb-t">${q.mastered?'↩ 重練':'✓ 已掌握'}</span><div class="ihb-hc">${q.mastered?'↩ 重練':'✓ 已掌握'} →</div></button><button class="ihb ihb-r ihb-sm" onclick="delWQ('${q.id}')"><div class="ihb-b"></div><span class="ihb-t">✕ 刪除</span><div class="ihb-hc">✕ 刪除 →</div></button></div></div>`;
   }).join('');
 }
+window.toggleWQ=async(id,cur)=>{await fup('wrongq',id,{mastered:!cur});const sn=await getDocs(query(col('wrongq'),orderBy('date','desc')));wrongs=sn.docs.map(d=>({id:d.id,...d.data()}));renderWQ();updateStats()};
+window.delWQ=async id=>{if(!confirm('確定刪除這題？'))return;await fdel('wrongq',id);wrongs=wrongs.filter(q=>q.id!==id);renderWQ();updateStats()};
 
-window.toggleWQMastered = async (id, current) => {
-  await fbUpdate('wrongq', id, { mastered: !current });
-  const snap = await getDocs(query(col('wrongq'), orderBy('date','desc')));
-  wrongQs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderWrongQ(); updateDashboardStats();
-};
-
-window.deleteWrongQ = async (id) => {
-  if (!confirm('確定刪除這題？')) return;
-  await fbDelete('wrongq', id);
-  wrongQs = wrongQs.filter(q => q.id !== id);
-  renderWrongQ(); updateDashboardStats();
-};
-
-// ══════════════════════════════════════
-// EXAMS
-// ══════════════════════════════════════
-window.addExam = async () => {
-  const name = document.getElementById('exam-name-input').value.trim();
-  const date = document.getElementById('exam-date-input').value;
-  if (!name || !date) { alert('請填入名稱和日期'); return; }
-  await fbAdd('exams', { name, date, scope: document.getElementById('exam-scope-input').value.trim() });
-  ['exam-name-input','exam-date-input','exam-scope-input'].forEach(id => document.getElementById(id).value = '');
-  const snap = await getDocs(col('exams'));
-  exams = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderExams(); updateDashboardStats();
-};
-
-function renderExams() {
-  const now = new Date();
-  const sorted = [...exams].sort((a,b) => new Date(a.date)-new Date(b.date));
-  const el = document.getElementById('exam-list');
-  const empty = document.getElementById('exam-empty');
-  if (!sorted.length) { el.innerHTML = ''; empty.style.display = ''; return; }
-  empty.style.display = 'none';
-  el.innerHTML = sorted.map(e => {
-    const days = Math.ceil((new Date(e.date) - now) / 86400000);
-    const isPast = days < 0;
-    const color = isPast ? 'var(--text-dim)' : days <= 7 ? 'var(--red)' : days <= 30 ? 'var(--yellow)' : 'var(--green)';
-    return `
-      <div style="padding:14px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:10px;">
-        <div class="flex-between">
-          <div>
-            <div style="font-size:14px;font-weight:500;margin-bottom:4px;">${e.name}</div>
-            <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);">${e.date}${e.scope?' · '+e.scope:''}</div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-family:var(--font-display);font-size:24px;font-weight:700;color:${color};line-height:1;">${isPast?'DONE':days}</div>
-            <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">${isPast?'':'days left'}</div>
-          </div>
-        </div>
-        <button class="btn btn-danger btn-sm" style="margin-top:8px;" onclick="deleteExam('${e.id}')">✕ 刪除</button>
-      </div>`;
-  }).join('');
+window.addExam=async()=>{const nm=$('exam-name-input').value.trim(),dt=$('exam-date-input').value;if(!nm||!dt){alert('請填入名稱和日期');return}await fadd('exams',{name:nm,date:dt,scope:$('exam-scope-input').value.trim()});['exam-name-input','exam-date-input','exam-scope-input'].forEach(id=>$(id).value='');const sn=await getDocs(col('exams'));exams=sn.docs.map(d=>({id:d.id,...d.data()}));renderExams();updateStats()};
+function renderExams(){
+  const now=new Date(),s=[...exams].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const el=$('exam-list'),em=$('exam-empty');
+  if(!s.length){el.innerHTML='';em.style.display='';return}em.style.display='none';
+  el.innerHTML=s.map(e=>{const d=Math.ceil((new Date(e.date)-now)/86400000),p=d<0;const col=p?'var(--z600)':d<=7?'var(--red)':d<=30?'var(--yellow)':'var(--green)';return`<div style="padding:13px 15px;background:var(--w5);border:1px solid var(--w8);border-radius:var(--r);margin-bottom:9px;"><div class="fbetween"><div><div style="font-size:14px;font-weight:500;color:#fff;margin-bottom:3px;">${e.name}</div><div style="font-family:var(--mono);font-size:9px;color:var(--z600);">${e.date}${e.scope?' · '+e.scope:''}</div></div><div style="text-align:right;"><div style="font-size:28px;font-weight:700;color:${col};letter-spacing:-1px;line-height:1;">${p?'DONE':d}</div><div style="font-family:var(--mono);font-size:9px;color:var(--z600);">${p?'':'days left'}</div></div></div><button class="ihb ihb-r ihb-sm" style="margin-top:9px;" onclick="delExam('${e.id}')"><div class="ihb-b"></div><span class="ihb-t">✕ 刪除</span><div class="ihb-hc">✕ 刪除 →</div></button></div>`}).join('');
 }
+window.delExam=async id=>{await fdel('exams',id);exams=exams.filter(e=>e.id!==id);renderExams();updateStats()};
 
-window.deleteExam = async (id) => {
-  await fbDelete('exams', id);
-  exams = exams.filter(e => e.id !== id);
-  renderExams(); updateDashboardStats();
-};
-
-// INIT
-updateTimerDisplay();
+updTi();
 </script>
 </body>
 </html>
