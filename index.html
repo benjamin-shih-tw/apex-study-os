@@ -20,7 +20,7 @@
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--z950);color:#d4d4d8;font-family:var(--sans);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{background:var(--z950);color:#d4d4d8;font-family:var(--sans);font-size:15px;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
 /* ambient blobs */
 .bg-blob-1{position:fixed;top:-150px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(96,165,250,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
@@ -69,7 +69,7 @@ body{background:var(--z950);color:#d4d4d8;font-family:var(--sans);min-height:100
 .btn-logout:hover{color:var(--red);background:rgba(248,113,113,.1)}
 .sidebar-nav{flex:1;padding:10px;overflow-y:auto}
 .nav-sec{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--z700);text-transform:uppercase;padding:10px 8px 5px}
-.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:10px;cursor:pointer;transition:all .15s;font-size:13px;color:var(--z500);border:1px solid transparent}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:10px;cursor:pointer;transition:all .15s;font-size:14px;color:var(--z500);border:1px solid transparent}
 .nav-item:hover{background:var(--w5);color:var(--z200)}
 .nav-item.active{background:var(--w10);color:#fff;border-color:var(--w15)}
 .nav-icon{font-size:14px;width:19px;text-align:center;flex-shrink:0;opacity:.7}
@@ -82,13 +82,13 @@ body{background:var(--z950);color:#d4d4d8;font-family:var(--sans);min-height:100
 
 /* ── PAGE HEADER ── */
 .page-header{margin-bottom:26px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.page-title{font-size:24px;font-weight:700;letter-spacing:-.5px;color:#fff;line-height:1}
-.page-tag{font-family:var(--mono);font-size:9px;color:var(--z600);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.page-title{font-size:26px;font-weight:700;letter-spacing:-.5px;color:#fff;line-height:1}
+.page-tag{font-family:var(--mono);font-size:10px;color:var(--z600);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
 
 /* ── GLASS CARD ── */
 .gc{background:var(--w5);border:1px solid var(--w10);border-radius:var(--rl);padding:20px 22px;backdrop-filter:blur(10px);position:relative;overflow:hidden}
 .gc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--w20),transparent)}
-.card-lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--z600);margin-bottom:12px}
+.card-lbl{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--z600);margin-bottom:12px}
 
 /* ── GRIDS ── */
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
@@ -128,8 +128,8 @@ body{background:var(--z950);color:#d4d4d8;font-family:var(--sans);min-height:100
 
 /* ── FORMS ── */
 .fg{margin-bottom:13px}
-.fl{display:block;font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--z600);margin-bottom:7px}
-.fi,.fs,.ft{width:100%;background:var(--w5);border:1px solid var(--w10);border-radius:9px;padding:10px 13px;color:#fff;font-family:var(--sans);font-size:13px;transition:border-color .18s,box-shadow .18s;outline:none}
+.fl{display:block;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--z600);margin-bottom:7px}
+.fi,.fs,.ft{width:100%;background:var(--w5);border:1px solid var(--w10);border-radius:9px;padding:10px 13px;color:#fff;font-family:var(--sans);font-size:14px;transition:border-color .18s,box-shadow .18s;outline:none}
 .fi::placeholder,.ft::placeholder{color:var(--z700)}
 .fi:focus,.fs:focus,.ft:focus{border-color:var(--w25);box-shadow:0 0 0 3px rgba(255,255,255,.04)}
 .ft{resize:vertical;min-height:78px}.fs option{background:var(--z900);color:#fff}
@@ -152,7 +152,7 @@ input[type="file"]{display:none}
 .mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);z-index:1000;align-items:center;justify-content:center}
 .mo.open{display:flex}
 .mod{background:rgba(22,22,25,.96);border:1px solid var(--w10);border-radius:var(--rxl);padding:28px 28px 32px;width:510px;max-width:95vw;max-height:86vh;overflow-y:auto;position:relative;box-shadow:0 40px 80px rgba(0,0,0,.55),0 0 0 1px var(--w5);animation:fadeUp .18s ease}
-.mod-t{font-size:16px;font-weight:600;color:#fff;margin-bottom:20px;letter-spacing:-.2px}
+.mod-t{font-size:17px;font-weight:600;color:#fff;margin-bottom:20px;letter-spacing:-.2px}
 .mod-x{position:absolute;top:16px;right:16px;background:var(--w5);border:1px solid var(--w10);border-radius:6px;color:var(--z500);font-size:13px;cursor:pointer;width:26px;height:26px;display:flex;align-items:center;justify-content:center;transition:all .14s;line-height:1}
 .mod-x:hover{background:rgba(248,113,113,.14);border-color:rgba(248,113,113,.3);color:var(--red)}
 
@@ -162,7 +162,7 @@ input[type="file"]{display:none}
 .tcb{width:17px;height:17px;border:1.5px solid var(--w20);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s;cursor:pointer}
 .tcb.ck{background:#fff;border-color:#fff}
 .tcb.ck::after{content:'✓';color:var(--z950);font-size:10px;font-weight:700}
-.ttx{font-size:13px;flex:1;color:var(--z300)}.ttx.dn{text-decoration:line-through;color:var(--z700)}
+.ttx{font-size:14px;flex:1;color:var(--z300)}.ttx.dn{text-decoration:line-through;color:var(--z700)}
 
 /* ── SUBJ BARS ── */
 .sbr{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--w5)}
@@ -188,7 +188,7 @@ input[type="file"]{display:none}
 .cst.not-started{color:var(--z700)}
 .cst.fuzzy{background:rgba(251,191,36,.1);border-color:var(--yellow);color:var(--yellow)}
 .cst.mastered{background:rgba(74,222,128,.1);border-color:var(--green);color:var(--green)}
-.cnm{font-size:13px;flex:1;color:var(--z300)}
+.cnm{font-size:14px;flex:1;color:var(--z300)}
 .cadd{background:none;border:1px dashed var(--w10);color:var(--z600);font-family:var(--mono);font-size:10px;padding:7px 11px;border-radius:8px;cursor:pointer;width:100%;transition:all .13s;text-align:left;margin-top:3px;letter-spacing:.5px}
 .cadd:hover{border-color:var(--w20);color:var(--z400)}
 
@@ -196,9 +196,9 @@ input[type="file"]{display:none}
 .ngrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:13px}
 .ncard{background:var(--w5);border:1px solid var(--w8);border-radius:var(--rl);padding:15px;cursor:pointer;transition:all .18s}
 .ncard:hover{border-color:var(--w20);background:var(--w8);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
-.nct{font-size:14px;font-weight:500;color:#fff;margin-bottom:4px}
-.ncm{font-family:var(--mono);font-size:9px;color:var(--z700);letter-spacing:1px;margin-bottom:9px}
-.ncp{font-size:12px;color:var(--z500);line-height:1.55}
+.nct{font-size:15px;font-weight:500;color:#fff;margin-bottom:4px}
+.ncm{font-family:var(--mono);font-size:10px;color:var(--z700);letter-spacing:1px;margin-bottom:9px}
+.ncp{font-size:13px;color:var(--z500);line-height:1.55}
 .nth{width:100%;max-height:140px;object-fit:cover;border-radius:8px;margin-top:9px;border:1px solid var(--w8)}
 .ndetail{display:none}.ndetail.open{display:block}
 .nlist.hidden{display:none}
@@ -210,10 +210,10 @@ input[type="file"]{display:none}
 .wqc.mastered{border-left-color:var(--green);opacity:.5}
 .wqc.mastered::before{background:radial-gradient(circle at top right,rgba(74,222,128,.04) 0%,transparent 70%)}
 .wqh{display:flex;align-items:center;gap:6px;margin-bottom:11px;flex-wrap:wrap}
-.wqq{font-size:14px;line-height:1.7;color:var(--z200);margin-bottom:9px}
+.wqq{font-size:15px;line-height:1.7;color:var(--z200);margin-bottom:9px}
 .wqi{width:100%;max-height:210px;object-fit:contain;border-radius:8px;margin:9px 0;border:1px solid var(--w8);background:var(--w5);cursor:pointer}
-.wqreason{margin-top:7px;padding:9px 13px;background:rgba(248,113,113,.05);border-radius:8px;font-size:12px;color:var(--z500);border-left:2px solid rgba(248,113,113,.35)}
-.wqsol{margin-top:7px;padding:9px 13px;background:rgba(74,222,128,.04);border-radius:8px;font-size:12px;color:var(--z500);border-left:2px solid rgba(74,222,128,.35)}
+.wqreason{margin-top:7px;padding:9px 13px;background:rgba(248,113,113,.05);border-radius:8px;font-size:13px;color:var(--z500);border-left:2px solid rgba(248,113,113,.35)}
+.wqsol{margin-top:7px;padding:9px 13px;background:rgba(74,222,128,.04);border-radius:8px;font-size:13px;color:var(--z500);border-left:2px solid rgba(74,222,128,.35)}
 .wqact{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
 
 /* WQ STATS */
@@ -255,6 +255,39 @@ input[type="file"]{display:none}
 .leg{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:13px}
 .leg-i{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--z500)}
 .leg-d{width:8px;height:8px;border-radius:50%}
+
+
+/* ── SEMESTER BAR ── */
+#sem-bar{background:rgba(9,9,11,.85);border-bottom:1px solid var(--w10);backdrop-filter:blur(12px);display:flex;align-items:center;gap:12px;padding:0 24px;height:42px;flex-shrink:0}
+.sem-lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--z600);text-transform:uppercase;white-space:nowrap}
+#sem-sel{background:var(--w8);border:1px solid var(--w15);border-radius:var(--rf);padding:5px 14px;color:#fff;font-family:var(--mono);font-size:11px;letter-spacing:1px;cursor:pointer;outline:none;transition:border-color .15s}
+#sem-sel:focus{border-color:var(--w25)}
+#sem-sel option{background:var(--z900);color:#fff}
+
+/* ── ADMIN PANEL (sidebar bottom, master only) ── */
+#admin-panel{display:none;margin:8px 10px 10px;background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.18);border-radius:var(--r);padding:12px 14px}
+.admin-hd{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:10px}
+.au-row{display:flex;align-items:center;gap:7px;padding:5px 8px;background:var(--w5);border-radius:8px;margin-bottom:4px}
+.au-em{flex:1;font-family:var(--mono);font-size:10px;color:var(--z300);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.au-badge{font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:2px 6px;border-radius:99px;border:1px solid;flex-shrink:0}
+.au-master{color:var(--yellow);border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.08)}
+.au-user{color:var(--z500);border-color:var(--w10)}
+.au-del{background:none;border:none;color:var(--z700);cursor:pointer;font-size:12px;padding:3px 5px;border-radius:4px;transition:all .13s;flex-shrink:0;line-height:1}
+.au-del:hover{color:var(--red);background:rgba(248,113,113,.1)}
+.admin-add{display:flex;gap:7px;margin-top:8px}
+.admin-add .fi{font-size:12px;padding:7px 10px}
+
+/* ── PDF VIEWER ── */
+.pdf-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:2100;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.pdf-overlay.open{display:flex}
+.pdf-box{width:90vw;height:90vh;background:var(--z900);border:1px solid var(--w15);border-radius:var(--rxl);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 40px 80px rgba(0,0,0,.6)}
+.pdf-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--w8);flex-shrink:0}
+.pdf-bar-title{font-size:14px;font-weight:500;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%}
+.pdf-frame{flex:1;width:100%;border:none;background:#fff}
+.pdf-thumb{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--w5);border:1px solid var(--w10);border-radius:8px;margin-top:8px;cursor:pointer;transition:all .15s;color:var(--z400);font-size:13px}
+.pdf-thumb:hover{border-color:var(--w20);background:var(--w8);color:#fff}
+.pdf-thumb-icon{font-size:22px;flex-shrink:0}
+.pdf-thumb-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-family:var(--mono)}
 
 /* legacy fallback btns */
 .btn{font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:7px 15px;border-radius:var(--rf);cursor:pointer;transition:all .18s;border:1px solid;text-transform:uppercase}
@@ -305,9 +338,26 @@ input[type="file"]{display:none}
       <div class="nav-sec">Exams</div>
       <div class="nav-item" onclick="showPage('exams')"><span class="nav-icon">◆</span> 考試倒數</div>
     </div>
+    <div id="admin-panel">
+      <div class="admin-hd">⚙ 帳號管理</div>
+      <div id="admin-user-list"></div>
+      <div class="admin-add">
+        <input class="fi" id="admin-email-input" placeholder="新增 Gmail…" onkeydown="if(event.key==='Enter')adminAddUser()">
+        <button class="ihb ihb-sm" onclick="adminAddUser()"><div class="ihb-b"></div><span class="ihb-t">新增</span><div class="ihb-hc">新增 →</div></button>
+      </div>
+    </div>
   </nav>
 
   <main class="main-content">
+    <div id="sem-bar">
+      <span class="sem-lbl">學期</span>
+      <select id="sem-sel" onchange="changeSem()">
+        <option value="114-2">114 下學期</option>
+        <option value="114-1">114 上學期</option>
+        <option value="113-2">113 下學期</option>
+        <option value="113-1">113 上學期</option>
+      </select>
+    </div>
 
     <div id="page-dashboard" class="page active">
       <div class="page-header">
@@ -387,6 +437,7 @@ input[type="file"]{display:none}
           </div>
           <div id="note-detail-tags" class="fgap mb4"></div>
           <img id="note-detail-img" class="nth" style="display:none;" alt="">
+          <div id="note-detail-pdf"></div>
           <div class="div"></div>
           <div id="note-detail-summary" style="font-size:14px;line-height:1.9;white-space:pre-wrap;color:var(--z400);"></div>
           <div id="note-detail-questions" style="margin-top:15px;"></div>
@@ -445,7 +496,13 @@ input[type="file"]{display:none}
     </div>
     <div class="fg"><label class="fl">重點摘要</label><textarea class="ft" id="note-summary-input" placeholder="記錄這堂課的重點概念..."></textarea></div>
     <div class="fg"><label class="fl">不懂的問題</label><textarea class="ft" id="note-questions-input" placeholder="今天還不清楚的地方...（一行一個問題）" style="min-height:60px;"></textarea></div>
-    <div class="fg"><label class="fl">手寫筆記照片</label><label class="btn btn-ghost btn-sm" style="display:inline-block;cursor:pointer;border-radius:99px;">📷 選擇圖片<input type="file" accept="image/*" onchange="handleNoteImage(this)"></label><div id="note-img-preview" style="margin-top:8px;"></div></div>
+    <div class="fg"><label class="fl">附件（圖片 / PDF）</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <label class="btn btn-ghost btn-sm" style="display:inline-block;cursor:pointer;border-radius:99px;">📷 圖片<input type="file" accept="image/*" onchange="handleNoteImage(this)"></label>
+        <label class="btn btn-ghost btn-sm" style="display:inline-block;cursor:pointer;border-radius:99px;">📄 PDF<input type="file" accept="application/pdf" onchange="handleNotePDF(this)"></label>
+      </div>
+      <div id="note-img-preview" style="margin-top:8px;"></div>
+    </div>
     <div class="fgap"><button class="ihb" onclick="addNote()"><div class="ihb-b"></div><span class="ihb-t">Save Note</span><div class="ihb-hc">Save Note →</div></button><button class="ihb" onclick="closeModal('modal-note')"><div class="ihb-b"></div><span class="ihb-t">Cancel</span><div class="ihb-hc">Cancel →</div></button></div>
   </div>
 </div>
@@ -477,7 +534,13 @@ input[type="file"]{display:none}
       </div>
     </div>
     <div class="fg"><label class="fl">題目描述</label><textarea class="ft" id="wq-question-input" placeholder="簡述題目內容或貼上題號..."></textarea></div>
-    <div class="fg"><label class="fl">題目照片（可選）</label><label class="btn btn-ghost btn-sm" style="display:inline-block;cursor:pointer;border-radius:99px;">📷 上傳照片<input type="file" accept="image/*" onchange="handleWQImage(this)"></label><div id="wq-img-preview" style="margin-top:8px;"></div></div>
+    <div class="fg"><label class="fl">附件（圖片 / PDF，可選）</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <label class="btn btn-ghost btn-sm" style="display:inline-block;cursor:pointer;border-radius:99px;">📷 圖片<input type="file" accept="image/*" onchange="handleWQImage(this)"></label>
+        <label class="btn btn-ghost btn-sm" style="display:inline-block;cursor:pointer;border-radius:99px;">📄 PDF<input type="file" accept="application/pdf" onchange="handleWQPDF(this)"></label>
+      </div>
+      <div id="wq-img-preview" style="margin-top:8px;"></div>
+    </div>
     <div class="fg"><label class="fl">❌ 錯誤原因</label><textarea class="ft" id="wq-reason-input" placeholder="我為什麼答錯？"></textarea></div>
     <div class="fg"><label class="fl">✅ 正確解法 / 觀念</label><textarea class="ft" id="wq-solution-input" placeholder="正確的解題思路是..."></textarea></div>
     <div class="fg"><label class="fl">下次複習日期</label>
@@ -505,51 +568,84 @@ input[type="file"]{display:none}
   </div>
 </div>
 
+<!-- PDF VIEWER -->
+<div class="pdf-overlay" id="pdf-overlay">
+  <div class="pdf-box">
+    <div class="pdf-bar">
+      <span class="pdf-bar-title" id="pdf-bar-title">PDF</span>
+      <button class="mod-x" style="position:static;" onclick="$('pdf-overlay').classList.remove('open')">✕</button>
+    </div>
+    <iframe class="pdf-frame" id="pdf-frame" src=""></iframe>
+  </div>
+</div>
+
 <div class="lbox" id="lightbox" onclick="this.classList.remove('open')"><img id="lightbox-img" src="" alt=""></div>
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import{getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut as fbSignOut}from"https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import{getFirestore,doc,setDoc,getDoc,collection,addDoc,getDocs,updateDoc,deleteDoc,query,onSnapshot,orderBy}from"https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import{getFirestore,doc,setDoc,getDoc,collection,addDoc,getDocs,updateDoc,deleteDoc,query,onSnapshot,orderBy,arrayUnion,arrayRemove}from"https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const fbCfg={apiKey:"AIzaSyAJGa2F3yzgA6DMGzCC6D3ARfS3H_sdiRU",authDomain:"apex-study-os.firebaseapp.com",projectId:"apex-study-os",storageBucket:"apex-study-os.firebasestorage.app",messagingSenderId:"722597129488",appId:"1:722597129488:web:3e97eade0769edffb48995"};
 const app=initializeApp(fbCfg),auth=getAuth(app),db=getFirestore(app),prov=new GoogleAuthProvider();
+
 const MASTER="s410315@hlhs.hlc.edu.tw";
-const ACCOUNTS=["s410315@hlhs.hlc.edu.tw","benjaminshih1229@gmail.com"];
+let allowedEmails=[];   // loaded from Firestore config/whitelist
 let masterUID=null;
+let sem="114-2";        // current semester
 
 const SUBJ={physics:{n:'物理',c:'t-ph'},chem:{n:'化學',c:'t-ch'},bio:{n:'生物',c:'t-bi'},math:{n:'數學',c:'t-ma'},geo:{n:'地理',c:'t-ge'},eng:{n:'英文',c:'t-en'},chi:{n:'國文',c:'t-ci'}};
 const ETYPES={careless:{l:'😵 粗心',col:'var(--yellow)'},concept:{l:'🧠 觀念錯誤',col:'var(--red)'},formula:{l:'📐 公式記錯',col:'var(--purple)'},calc:{l:'🔢 小計算錯',col:'var(--cyan)'},reading:{l:'📖 題意看錯',col:'var(--orange)'},other:{l:'❓ 其他',col:'var(--z400)'}};
 
-let cu=null,noteImg=null,noteId=null,tiInt=null,tiSec=0,tiRun=false;
+let cu=null,noteImg=null,notePDF=null,noteId=null,tiInt=null,tiSec=0,tiRun=false;
 let todos=[],notes=[],wrongs=[],chaps={},exams=[],sess=[];
-let wqEType='',wqStars=0,wqImg=null;
+let wqEType='',wqStars=0,wqImg=null,wqPDF=null;
 
 const $=id=>document.getElementById(id);
 function ss(s,l){$('sync-dot').className='sync-dot '+s;$('sync-label').textContent=l}
 
+// ── AUTH ─────────────────────────────────────────────────────────────────
 window.signInWithGoogle=async()=>{try{await signInWithPopup(auth,prov)}catch(e){alert('登入失敗，請再試一次')}};
 window.signOut=async()=>{await fbSignOut(auth);location.reload()};
 
 onAuthStateChanged(auth,async u=>{
   if(u){
     cu=u;
-    if(!ACCOUNTS.includes(u.email)){await fbSignOut(auth);alert('此帳號無存取權限');return}
+    // Load whitelist from Firestore (master manages this)
+    const wlRef=doc(db,'config','whitelist');
+    const wlSnap=await getDoc(wlRef);
+    if(wlSnap.exists()){
+      allowedEmails=wlSnap.data().emails||[];
+    } else {
+      // First run: seed with defaults
+      allowedEmails=[MASTER,"benjaminshih1229@gmail.com","s410337@hlhs.hlc.edu.tw"];
+      await setDoc(wlRef,{emails:allowedEmails});
+    }
+    if(!allowedEmails.includes(u.email)){await fbSignOut(auth);alert('此帳號無存取權限');return}
     const mr=doc(db,'accountMapping','masterUID');
     if(u.email===MASTER){masterUID=u.uid;await setDoc(mr,{uid:u.uid},{merge:true})}
     else{const s=await getDoc(mr);if(s.exists())masterUID=s.data().uid;else{alert('請先用主帳號登入一次');await fbSignOut(auth);return}}
     $('login-screen').style.display='none';$('app-shell').style.display='flex';
     $('user-name').textContent=u.displayName||u.email;
     if(u.photoURL)$('user-avatar').src=u.photoURL;
+    // Admin panel only for master
+    if(u.email===MASTER){$('admin-panel').style.display='block';renderAdminPanel();}
     ss('syncing','Loading...');await load();ss('synced','Synced ✓');
     renderDash();setupRT();
   }else{$('login-screen').style.display='flex';$('app-shell').style.display='none'}
 });
 
+// ── FIRESTORE ────────────────────────────────────────────────────────────
 function uid(){return masterUID||cu.uid}
-function col(n){return collection(db,'users',uid(),n)}
+// All data is scoped under semester
+function col(n){return collection(db,'users',uid(),'semesters',sem,n)}
 async function load(){
-  const[t,n,w,c,e,s]=await Promise.all([getDocs(query(col('todos'),orderBy('day','desc'))),getDocs(query(col('notes'),orderBy('date','desc'))),getDocs(query(col('wrongq'),orderBy('date','desc'))),getDocs(col('chapters')),getDocs(col('exams')),getDocs(col('sessions'))]);
+  const[t,n,w,c,e,s]=await Promise.all([
+    getDocs(query(col('todos'),orderBy('day','desc'))),
+    getDocs(query(col('notes'),orderBy('date','desc'))),
+    getDocs(query(col('wrongq'),orderBy('date','desc'))),
+    getDocs(col('chapters')),getDocs(col('exams')),getDocs(col('sessions'))
+  ]);
   todos=t.docs.map(d=>({id:d.id,...d.data()}));notes=n.docs.map(d=>({id:d.id,...d.data()}));
   wrongs=w.docs.map(d=>({id:d.id,...d.data()}));exams=e.docs.map(d=>({id:d.id,...d.data()}));
   sess=s.docs.map(d=>({id:d.id,...d.data()}));chaps={};
@@ -561,9 +657,46 @@ function setupRT(){
   onSnapshot(col('chapters'),s=>{chaps={};s.docs.forEach(d=>{const x=d.data();if(!chaps[x.subject])chaps[x.subject]=[];chaps[x.subject].push({id:d.id,...x})});updateStats()});
 }
 async function fadd(c,d){ss('syncing','Saving...');const r=await addDoc(col(c),d);ss('synced','Synced ✓');return r.id}
-async function fup(c,id,d){ss('syncing','Saving...');await updateDoc(doc(db,'users',uid(),c,id),d);ss('synced','Synced ✓')}
-async function fdel(c,id){ss('syncing','Deleting...');await deleteDoc(doc(db,'users',uid(),c,id));ss('synced','Synced ✓')}
+async function fup(c,id,d){ss('syncing','Saving...');await updateDoc(doc(db,'users',uid(),'semesters',sem,c,id),d);ss('synced','Synced ✓')}
+async function fdel(c,id){ss('syncing','Deleting...');await deleteDoc(doc(db,'users',uid(),'semesters',sem,c,id));ss('synced','Synced ✓')}
 
+// ── SEMESTER SWITCH ───────────────────────────────────────────────────────
+window.changeSem=async()=>{
+  sem=$('sem-sel').value;
+  ss('syncing','Loading...');await load();ss('synced','Synced ✓');
+  const pg=document.querySelector('.page.active');if(pg)showPage(pg.id.replace('page-',''));
+  updateStats();
+};
+
+// ── ADMIN PANEL ───────────────────────────────────────────────────────────
+function renderAdminPanel(){
+  $('admin-user-list').innerHTML=allowedEmails.map(em=>`
+    <div class="au-row">
+      <span class="au-em">${em}</span>
+      <span class="au-badge ${em===MASTER?'au-master':'au-user'}">${em===MASTER?'MASTER':'USER'}</span>
+      ${em===MASTER?'':'<button class="au-del" onclick="adminDelUser(''+em+'')">✕</button>'}
+    </div>`).join('');
+}
+window.adminAddUser=async()=>{
+  const em=$('admin-email-input').value.trim().toLowerCase();
+  if(!em||!em.includes('@')){alert('請輸入有效的 Gmail');return}
+  if(allowedEmails.includes(em)){alert('此帳號已在列表中');return}
+  const wlRef=doc(db,'config','whitelist');
+  await updateDoc(wlRef,{emails:arrayUnion(em)});
+  allowedEmails=[...allowedEmails,em];
+  $('admin-email-input').value='';
+  renderAdminPanel();
+};
+window.adminDelUser=async em=>{
+  if(em===MASTER){alert('無法刪除主帳號');return}
+  if(!confirm(`確定移除 ${em}？`))return;
+  const wlRef=doc(db,'config','whitelist');
+  await updateDoc(wlRef,{emails:arrayRemove(em)});
+  allowedEmails=allowedEmails.filter(x=>x!==em);
+  renderAdminPanel();
+};
+
+// ── NAV ──────────────────────────────────────────────────────────────────
 window.showPage=id=>{
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -576,10 +709,11 @@ window.openModal=id=>$(id).classList.add('open');
 window.closeModal=id=>$(id).classList.remove('open');
 document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
 window.openAddTodo=()=>{$('todo-input').value='';openModal('modal-todo');setTimeout(()=>$('todo-input').focus(),50)};
-window.openAddNote=()=>{noteImg=null;$('note-img-preview').innerHTML='';['note-title-input','note-chapter-input','note-summary-input','note-questions-input'].forEach(id=>$(id).value='');openModal('modal-note')};
+window.openAddNote=()=>{noteImg=null;notePDF=null;$('note-img-preview').innerHTML='';['note-title-input','note-chapter-input','note-summary-input','note-questions-input'].forEach(id=>$(id).value='');openModal('modal-note')};
 window.openAddChapter=()=>{$('ch-name-input').value='';openModal('modal-chapter')};
 window.openAddChapterFor=s=>{$('ch-subject-input').value=s;openAddChapter()};
 
+// ── DASHBOARD ────────────────────────────────────────────────────────────
 function renderDash(){
   $('today-date-label').textContent=new Date().toLocaleDateString('zh-TW',{weekday:'short',year:'numeric',month:'long',day:'numeric'});
   updateStats();renderTodos();
@@ -591,15 +725,15 @@ function updateStats(){
   if(up.length){$('dash-next-exam').textContent=Math.ceil((new Date(up[0].date)-now)/86400000);$('dash-next-exam-name').textContent=up[0].name}
   $('dash-wrong-count').textContent=wrongs.filter(q=>!q.mastered).length;
   const all=Object.values(chaps).flat(),m=all.filter(c=>c.status==='mastered').length;
-  const pct=all.length?Math.round(m/all.length*100):0;
-  $('dash-overall-pct').textContent=pct+'%';
+  $('dash-overall-pct').textContent=(all.length?Math.round(m/all.length*100):0)+'%';
   $('dash-subject-overview').innerHTML=Object.keys(SUBJ).map(k=>{
     const c=chaps[k]||[],p=c.length?Math.round(c.filter(x=>x.status==='mastered').length/c.length*100):0;
-    const col=p>70?'var(--green)':p>30?'var(--yellow)':'var(--blue)';
-    return`<div class="sbr"><div class="snm">${SUBJ[k].n}</div><div class="sbw"><div class="sbf" style="width:${p}%;background:${col};"></div></div><div class="spc">${p}%</div></div>`;
+    const cl=p>70?'var(--green)':p>30?'var(--yellow)':'var(--blue)';
+    return`<div class="sbr"><div class="snm">${SUBJ[k].n}</div><div class="sbw"><div class="sbf" style="width:${p}%;background:${cl};"></div></div><div class="spc">${p}%</div></div>`;
   }).join('');
 }
 
+// ── TODOS ────────────────────────────────────────────────────────────────
 function renderTodos(){
   const today=new Date().toDateString(),list=todos.filter(t=>t.day===today);
   const el=$('todo-list'),em=$('todo-empty');
@@ -611,6 +745,7 @@ window.addTodo=async()=>{const tx=$('todo-input').value.trim();if(!tx)return;awa
 window.toggleTodo=async id=>{const t=todos.find(t=>t.id===id);if(t)await fup('todos',id,{done:!t.done})};
 window.deleteTodo=async id=>fdel('todos',id);
 
+// ── TIMER ────────────────────────────────────────────────────────────────
 window.timerStart=()=>{if(tiRun)return;tiRun=true;$('timer-display').classList.add('run');tiInt=setInterval(()=>{tiSec++;updTi()},1000)};
 window.timerPause=()=>{tiRun=false;clearInterval(tiInt);$('timer-display').classList.remove('run')};
 window.timerReset=()=>{timerPause();tiSec=0;updTi()};
@@ -625,51 +760,87 @@ function renderSessLog(){
   const el=$('session-log'),em=$('session-empty');
   if(!list.length){el.innerHTML='';em.style.display='';return}
   em.style.display='none';
-  el.innerHTML=list.map(s=>`<div class="sbr"><span class="tag ${SUBJ[s.subject]?.c||''}">${SUBJ[s.subject]?.n}</span><div style="flex:1;"></div><span style="font-size:18px;font-weight:700;color:var(--green);letter-spacing:-.5px;">${s.minutes}</span><span style="font-size:10px;color:var(--z600);margin-left:4px;">min</span></div>`).join('');
+  el.innerHTML=list.map(s=>`<div class="sbr"><span class="tag ${SUBJ[s.subject]?.c||''}">${SUBJ[s.subject]?.n}</span><div style="flex:1;"></div><span style="font-size:18px;font-weight:700;color:var(--green);letter-spacing:-.5px;">${s.minutes}</span><span style="font-size:11px;color:var(--z600);margin-left:4px;">min</span></div>`).join('');
 }
 
+// ── CHAPTERS ─────────────────────────────────────────────────────────────
 function renderChaps(){
   $('chapter-tree').innerHTML=Object.keys(SUBJ).map(k=>{
     const c=chaps[k]||[],m=c.filter(x=>x.status==='mastered').length,pct=c.length?Math.round(m/c.length*100):0;
     const bc=pct>70?'var(--green)':pct>30?'var(--yellow)':'var(--blue)';
-    return`<div class="chs"><div class="chh" onclick="this.nextElementSibling.classList.toggle('open')"><div class="fgap"><span class="tag ${SUBJ[k].c}">${SUBJ[k].n}</span><span style="font-size:11px;color:var(--z500);">${m}/${c.length} 掌握</span></div><div style="display:flex;align-items:center;gap:11px;"><div style="width:85px;background:var(--w5);border-radius:99px;height:4px;"><div style="width:${pct}%;height:100%;border-radius:99px;background:${bc};"></div></div><span style="color:var(--z600);font-size:11px;">▾</span></div></div><div class="chl open">${c.map(x=>`<div class="chi"><div class="cst ${x.status}" onclick="cycleChap('${x.id}','${k}','${x.status}')">${x.status==='mastered'?'✓':x.status==='fuzzy'?'~':'○'}</div><div class="cnm">${x.name}</div><button class="btn btn-danger btn-sm" onclick="delChap('${x.id}')">✕</button></div>`).join('')}<button class="cadd" onclick="openAddChapterFor('${k}')">+ 新增章節</button></div></div>`;
+    return`<div class="chs"><div class="chh" onclick="this.nextElementSibling.classList.toggle('open')"><div class="fgap"><span class="tag ${SUBJ[k].c}">${SUBJ[k].n}</span><span style="font-size:12px;color:var(--z500);">${m}/${c.length} 掌握</span></div><div style="display:flex;align-items:center;gap:11px;"><div style="width:85px;background:var(--w5);border-radius:99px;height:4px;"><div style="width:${pct}%;height:100%;border-radius:99px;background:${bc};"></div></div><span style="color:var(--z600);font-size:11px;">▾</span></div></div><div class="chl open">${c.map(x=>`<div class="chi"><div class="cst ${x.status}" onclick="cycleChap('${x.id}','${k}','${x.status}')">${x.status==='mastered'?'✓':x.status==='fuzzy'?'~':'○'}</div><div class="cnm">${x.name}</div><button class="btn btn-danger btn-sm" onclick="delChap('${x.id}')">✕</button></div>`).join('')}<button class="cadd" onclick="openAddChapterFor('${k}')">+ 新增章節</button></div></div>`;
   }).join('');
 }
 window.cycleChap=async(id,k,cur)=>{const o=['not-started','fuzzy','mastered'];await fup('chapters',id,{status:o[(o.indexOf(cur)+1)%o.length]});const sn=await getDocs(col('chapters'));chaps={};sn.docs.forEach(d=>{const x=d.data();if(!chaps[x.subject])chaps[x.subject]=[];chaps[x.subject].push({id:d.id,...x})});renderChaps();updateStats()};
 window.delChap=async id=>{await fdel('chapters',id);const sn=await getDocs(col('chapters'));chaps={};sn.docs.forEach(d=>{const x=d.data();if(!chaps[x.subject])chaps[x.subject]=[];chaps[x.subject].push({id:d.id,...x})});renderChaps()};
 window.addChapter=async()=>{const nm=$('ch-name-input').value.trim();if(!nm)return;await fadd('chapters',{name:nm,subject:$('ch-subject-input').value,status:'not-started'});closeModal('modal-chapter');const sn=await getDocs(col('chapters'));chaps={};sn.docs.forEach(d=>{const x=d.data();if(!chaps[x.subject])chaps[x.subject]=[];chaps[x.subject].push({id:d.id,...x})});renderChaps()};
 
-window.handleNoteImage=inp=>{const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{noteImg=e.target.result;$('note-img-preview').innerHTML=`<img src="${noteImg}" style="max-width:100%;max-height:120px;border-radius:8px;border:1px solid var(--w10);">`};r.readAsDataURL(f)};
-window.addNote=async()=>{const t=$('note-title-input').value.trim();if(!t)return;await fadd('notes',{title:t,subject:$('note-subject-input').value,chapter:$('note-chapter-input').value.trim(),summary:$('note-summary-input').value.trim(),questions:$('note-questions-input').value.trim(),image:noteImg||null,date:new Date().toISOString()});closeModal('modal-note');const sn=await getDocs(query(col('notes'),orderBy('date','desc')));notes=sn.docs.map(d=>({id:d.id,...d.data()}));renderNotes()};
+// ── PDF VIEWER ────────────────────────────────────────────────────────────
+window.openPDF=(dataUrl,name)=>{
+  $('pdf-bar-title').textContent=name||'PDF';
+  $('pdf-frame').src=dataUrl;
+  $('pdf-overlay').classList.add('open');
+};
+$('pdf-overlay').addEventListener('click',e=>{if(e.target===$('pdf-overlay'))$('pdf-overlay').classList.remove('open')});
+
+// ── NOTES ─────────────────────────────────────────────────────────────────
+window.handleNoteImage=inp=>{const f=inp.files[0];if(!f)return;notePDF=null;const r=new FileReader();r.onload=e=>{noteImg=e.target.result;$('note-img-preview').innerHTML=`<img src="${noteImg}" style="max-width:100%;max-height:120px;border-radius:8px;border:1px solid var(--w10);">`};r.readAsDataURL(f)};
+window.handleNotePDF=inp=>{
+  const f=inp.files[0];if(!f)return;noteImg=null;
+  const r=new FileReader();
+  r.onload=e=>{
+    notePDF={data:e.target.result,name:f.name};
+    $('note-img-preview').innerHTML=`<div class="pdf-thumb" onclick="openPDF('${e.target.result}','${f.name}')"><span class="pdf-thumb-icon">📄</span><span class="pdf-thumb-name">${f.name}</span><span style="font-size:11px;color:var(--z600);">點擊預覽</span></div>`;
+  };r.readAsDataURL(f);
+};
+window.addNote=async()=>{
+  const t=$('note-title-input').value.trim();if(!t)return;
+  await fadd('notes',{title:t,subject:$('note-subject-input').value,chapter:$('note-chapter-input').value.trim(),summary:$('note-summary-input').value.trim(),questions:$('note-questions-input').value.trim(),image:noteImg||null,pdf:notePDF||null,date:new Date().toISOString()});
+  closeModal('modal-note');const sn=await getDocs(query(col('notes'),orderBy('date','desc')));notes=sn.docs.map(d=>({id:d.id,...d.data()}));renderNotes();
+};
 function renderNotes(){
   const f=$('notes-filter').value,fl=f==='all'?notes:notes.filter(n=>n.subject===f);
   const g=$('notes-grid'),em=$('notes-empty');
   if(!fl.length){g.innerHTML='';em.style.display='';return}
   em.style.display='none';
-  g.innerHTML=fl.map(n=>`<div class="ncard" onclick="openNote('${n.id}')"><div class="nct">${n.title}</div><div class="ncm">${new Date(n.date).toLocaleDateString('zh-TW')}${n.chapter?' · '+n.chapter:''}</div><div class="fgap" style="margin-bottom:7px;"><span class="tag ${SUBJ[n.subject]?.c||''}">${SUBJ[n.subject]?.n}</span></div>${n.summary?`<div class="ncp">${n.summary.slice(0,75)}${n.summary.length>75?'...':''}</div>`:''}${n.image?`<img src="${n.image}" class="nth" alt="">`:''}</div>`).join('');
+  g.innerHTML=fl.map(n=>`<div class="ncard" onclick="openNote('${n.id}')"><div class="nct">${n.title}</div><div class="ncm">${new Date(n.date).toLocaleDateString('zh-TW')}${n.chapter?' · '+n.chapter:''}</div><div class="fgap" style="margin-bottom:7px;"><span class="tag ${SUBJ[n.subject]?.c||''}">${SUBJ[n.subject]?.n}</span>${n.pdf?'<span class="tag" style="color:var(--blue);border-color:rgba(96,165,250,.3);background:rgba(96,165,250,.07);">📄 PDF</span>':''}</div>${n.summary?`<div class="ncp">${n.summary.slice(0,75)}${n.summary.length>75?'...':''}</div>`:''}${n.image?`<img src="${n.image}" class="nth" alt="">`:''}</div>`).join('');
 }
 window.openNote=id=>{
   const n=notes.find(n=>n.id===id);if(!n)return;noteId=id;
   $('note-detail-title').textContent=n.title;$('note-detail-meta').textContent=new Date(n.date).toLocaleDateString('zh-TW')+(n.chapter?' · '+n.chapter:'');
   $('note-detail-tags').innerHTML=`<span class="tag ${SUBJ[n.subject]?.c||''}">${SUBJ[n.subject]?.n}</span>`;
-  const img=$('note-detail-img');if(n.image){img.src=n.image;img.style.display=''}else img.style.display='none';
+  const img=$('note-detail-img');
+  if(n.image){img.src=n.image;img.style.display=''}else img.style.display='none';
+  // PDF attachment
+  const pdfEl=document.getElementById('note-detail-pdf');
+  if(n.pdf){pdfEl.innerHTML=`<div class="pdf-thumb" onclick="openPDF('${n.pdf.data}','${n.pdf.name}')"><span class="pdf-thumb-icon">📄</span><span class="pdf-thumb-name">${n.pdf.name}</span><span style="font-size:11px;color:var(--z600);">點擊開啟</span></div>`}else{pdfEl.innerHTML=''}
   $('note-detail-summary').textContent=n.summary||'（無摘要）';
-  $('note-detail-questions').innerHTML=n.questions?`<div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--z600);margin-bottom:7px;">❓ 待解問題</div>`+n.questions.split('\n').filter(Boolean).map(q=>`<div style="padding:8px 12px;background:rgba(251,191,36,.05);border-left:2px solid rgba(251,191,36,.35);margin-bottom:6px;font-size:13px;border-radius:7px;color:var(--z400);">${q}</div>`).join(''):'';
+  $('note-detail-questions').innerHTML=n.questions?`<div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--z600);margin-bottom:7px;">❓ 待解問題</div>`+n.questions.split('
+').filter(Boolean).map(q=>`<div style="padding:8px 12px;background:rgba(251,191,36,.05);border-left:2px solid rgba(251,191,36,.35);margin-bottom:6px;font-size:13px;border-radius:7px;color:var(--z400);">${q}</div>`).join(''):'';
   $('notes-list-view').classList.add('hidden');$('note-detail-view').classList.add('open');
 };
 window.closeNoteDetail=()=>{$('note-detail-view').classList.remove('open');$('notes-list-view').classList.remove('hidden')};
 window.deleteCurrentNote=async()=>{if(!noteId||!confirm('確定刪除？'))return;await fdel('notes',noteId);const sn=await getDocs(query(col('notes'),orderBy('date','desc')));notes=sn.docs.map(d=>({id:d.id,...d.data()}));closeNoteDetail();renderNotes()};
 
+// ── WRONG Q ───────────────────────────────────────────────────────────────
 window.selectErrorType=t=>{wqEType=t;document.querySelectorAll('.ec').forEach(c=>{c.className='ec';if(c.dataset.type===t)c.classList.add('s-'+t.slice(0,2))});};
 window.selectStar=n=>{wqStars=n;const lb=['','簡單','普通','中等','困難','地獄'];document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('on',i<n));$('wq-star-label').textContent=lb[n]||'未選擇'};
 window.setReviewDate=d=>{const x=new Date();x.setDate(x.getDate()+d);$('wq-review-date-input').value=x.toISOString().slice(0,10)};
-window.handleWQImage=inp=>{const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{wqImg=e.target.result;$('wq-img-preview').innerHTML=`<img src="${wqImg}" style="max-width:100%;max-height:130px;border-radius:8px;border:1px solid var(--w10);">`};r.readAsDataURL(f)};
+window.handleWQImage=inp=>{const f=inp.files[0];if(!f)return;wqPDF=null;const r=new FileReader();r.onload=e=>{wqImg=e.target.result;$('wq-img-preview').innerHTML=`<img src="${wqImg}" style="max-width:100%;max-height:130px;border-radius:8px;border:1px solid var(--w10);">`};r.readAsDataURL(f)};
+window.handleWQPDF=inp=>{
+  const f=inp.files[0];if(!f)return;wqImg=null;
+  const r=new FileReader();
+  r.onload=e=>{
+    wqPDF={data:e.target.result,name:f.name};
+    $('wq-img-preview').innerHTML=`<div class="pdf-thumb" onclick="openPDF('${e.target.result}','${f.name}')"><span class="pdf-thumb-icon">📄</span><span class="pdf-thumb-name">${f.name}</span><span style="font-size:11px;color:var(--z600);">點擊預覽</span></div>`;
+  };r.readAsDataURL(f);
+};
 window.openLightbox=src=>{$('lightbox-img').src=src;$('lightbox').classList.add('open')};
-window.openAddWrongQ=()=>{wqEType='';wqStars=0;wqImg=null;document.querySelectorAll('.ec').forEach(c=>c.className='ec');document.querySelectorAll('.star').forEach(s=>s.classList.remove('on'));$('wq-img-preview').innerHTML='';['wq-question-input','wq-reason-input','wq-solution-input','wq-chapter-input','wq-review-date-input'].forEach(id=>$(id).value='');openModal('modal-wrongq')};
+window.openAddWrongQ=()=>{wqEType='';wqStars=0;wqImg=null;wqPDF=null;document.querySelectorAll('.ec').forEach(c=>c.className='ec');document.querySelectorAll('.star').forEach(s=>s.classList.remove('on'));$('wq-img-preview').innerHTML='';['wq-question-input','wq-reason-input','wq-solution-input','wq-chapter-input','wq-review-date-input'].forEach(id=>$(id).value='');openModal('modal-wrongq')};
 window.addWrongQ=async()=>{
   const q=$('wq-question-input').value.trim();if(!q){alert('請填入題目描述');return}
-  await fadd('wrongq',{subject:$('wq-subject-input').value,source:$('wq-source-input').value,chapter:$('wq-chapter-input').value.trim(),errorType:wqEType,difficulty:wqStars,question:q,image:wqImg||null,reason:$('wq-reason-input').value.trim(),solution:$('wq-solution-input').value.trim(),reviewDate:$('wq-review-date-input').value||null,mastered:false,date:new Date().toISOString()});
-  wqEType='';wqStars=0;wqImg=null;document.querySelectorAll('.ec').forEach(c=>c.className='ec');document.querySelectorAll('.star').forEach(s=>s.classList.remove('on'));$('wq-img-preview').innerHTML='';
+  await fadd('wrongq',{subject:$('wq-subject-input').value,source:$('wq-source-input').value,chapter:$('wq-chapter-input').value.trim(),errorType:wqEType,difficulty:wqStars,question:q,image:wqImg||null,pdf:wqPDF||null,reason:$('wq-reason-input').value.trim(),solution:$('wq-solution-input').value.trim(),reviewDate:$('wq-review-date-input').value||null,mastered:false,date:new Date().toISOString()});
+  wqEType='';wqStars=0;wqImg=null;wqPDF=null;document.querySelectorAll('.ec').forEach(c=>c.className='ec');document.querySelectorAll('.star').forEach(s=>s.classList.remove('on'));$('wq-img-preview').innerHTML='';
   ['wq-question-input','wq-reason-input','wq-solution-input','wq-chapter-input','wq-review-date-input'].forEach(id=>$(id).value='');
   closeModal('modal-wrongq');const sn=await getDocs(query(col('wrongq'),orderBy('date','desc')));wrongs=sn.docs.map(d=>({id:d.id,...d.data()}));renderWQ();updateStats();
 };
@@ -683,9 +854,8 @@ function renderWQStats(){
   const top=Object.entries(tc).sort((a,b)=>b[1]-a[1])[0];
   const now=new Date();now.setHours(0,0,0,0);
   const due=wrongs.filter(q=>{if(!q.reviewDate||q.mastered)return false;const rd=new Date(q.reviewDate);rd.setHours(0,0,0,0);return rd<=now}).length;
-  $('wq-stats').innerHTML=`<div class="wqs"><div class="wqsl">Total Wrong</div><div class="wqsv">${tot}</div></div><div class="wqs"><div class="wqsl">Mastery Rate</div><div class="wqsv" style="color:${acc>60?'var(--green)':acc>30?'var(--yellow)':'var(--red)'}">${acc}%</div></div><div class="wqs"><div class="wqsl">Due Today</div><div class="wqsv" style="color:${due>0?'var(--red)':'var(--green)'}">${due}</div></div><div class="wqs"><div class="wqsl">Top Error</div><div style="font-size:12px;margin-top:4px;color:var(--z500);">${top?ETYPES[top[0]]?.l||top[0]:'—'}</div></div>`;
+  $('wq-stats').innerHTML=`<div class="wqs"><div class="wqsl">Total Wrong</div><div class="wqsv">${tot}</div></div><div class="wqs"><div class="wqsl">Mastery Rate</div><div class="wqsv" style="color:${acc>60?'var(--green)':acc>30?'var(--yellow)':'var(--red)'}">${acc}%</div></div><div class="wqs"><div class="wqsl">Due Today</div><div class="wqsv" style="color:${due>0?'var(--red)':'var(--green)'}">${due}</div></div><div class="wqs"><div class="wqsl">Top Error</div><div style="font-size:13px;margin-top:4px;color:var(--z500);">${top?ETYPES[top[0]]?.l||top[0]:'—'}</div></div>`;
 }
-
 function renderWQ(){
   renderWQStats();
   const sf=$('wrongq-filter').value,tf=$('wrongq-type-filter').value,df=$('wrongq-difficulty-filter').value,stf=$('wrongq-status-filter').value;
@@ -701,19 +871,21 @@ function renderWQ(){
     const et=q.errorType?ETYPES[q.errorType]:null;
     const et_tag=et?`<span class="tag" style="color:${et.col};border-color:${et.col}38;background:${et.col}10;">${et.l}</span>`:'';
     const ch_tag=q.chapter?`<span class="tag" style="color:var(--z500);border-color:var(--w10);">${q.chapter}</span>`:'';
-    const strs=q.difficulty?`<span style="color:var(--yellow);font-size:11px;">${stars(q.difficulty)}</span>`:'';
-    return`<div class="wqc ${q.mastered?'mastered':''}"><div class="wqh"><span class="tag ${SUBJ[q.subject]?.c||''}">${SUBJ[q.subject]?.n}</span>${ch_tag}<span class="tag" style="color:var(--z500);border-color:var(--w10);">${q.source}</span>${et_tag}${strs}${revBadge(q.reviewDate)}<span class="tag ${q.mastered?'t-ok':'t-ng'}" style="margin-left:auto;">${q.mastered?'MASTERED':'PENDING'}</span><span style="font-family:var(--mono);font-size:9px;color:var(--z600);">${new Date(q.date).toLocaleDateString('zh-TW')}</span></div><div class="wqq">${q.question}</div>${q.image?`<img class="wqi" src="${q.image}" alt="" onclick="openLightbox('${q.image.replace(/'/g,"\\'")}')">`:''} ${q.reason?`<div class="wqreason">❌ 錯誤原因：${q.reason}</div>`:''}${q.solution?`<div class="wqsol">✅ 正確解法：${q.solution}</div>`:''}<div class="wqact"><button class="ihb ${q.mastered?'':'ihb-g'} ihb-sm" onclick="toggleWQ('${q.id}',${q.mastered})"><div class="ihb-b"></div><span class="ihb-t">${q.mastered?'↩ 重練':'✓ 已掌握'}</span><div class="ihb-hc">${q.mastered?'↩ 重練':'✓ 已掌握'} →</div></button><button class="ihb ihb-r ihb-sm" onclick="delWQ('${q.id}')"><div class="ihb-b"></div><span class="ihb-t">✕ 刪除</span><div class="ihb-hc">✕ 刪除 →</div></button></div></div>`;
+    const strs=q.difficulty?`<span style="color:var(--yellow);font-size:12px;">${stars(q.difficulty)}</span>`:'';
+    const pdfBtn=q.pdf?`<div class="pdf-thumb" onclick="openPDF('${q.pdf.data}','${q.pdf.name}')"><span class="pdf-thumb-icon">📄</span><span class="pdf-thumb-name">${q.pdf.name}</span><span style="font-size:11px;color:var(--z600);">點擊開啟</span></div>`:'';
+    return`<div class="wqc ${q.mastered?'mastered':''}"><div class="wqh"><span class="tag ${SUBJ[q.subject]?.c||''}">${SUBJ[q.subject]?.n}</span>${ch_tag}<span class="tag" style="color:var(--z500);border-color:var(--w10);">${q.source}</span>${et_tag}${strs}${revBadge(q.reviewDate)}<span class="tag ${q.mastered?'t-ok':'t-ng'}" style="margin-left:auto;">${q.mastered?'MASTERED':'PENDING'}</span><span style="font-family:var(--mono);font-size:9px;color:var(--z600);">${new Date(q.date).toLocaleDateString('zh-TW')}</span></div><div class="wqq">${q.question}</div>${q.image?`<img class="wqi" src="${q.image}" alt="" onclick="openLightbox('${q.image.replace(/'/g,"\'")}')">`:''} ${pdfBtn}${q.reason?`<div class="wqreason">❌ 錯誤原因：${q.reason}</div>`:''}${q.solution?`<div class="wqsol">✅ 正確解法：${q.solution}</div>`:''}<div class="wqact"><button class="ihb ${q.mastered?'':'ihb-g'} ihb-sm" onclick="toggleWQ('${q.id}',${q.mastered})"><div class="ihb-b"></div><span class="ihb-t">${q.mastered?'↩ 重練':'✓ 已掌握'}</span><div class="ihb-hc">${q.mastered?'↩ 重練':'✓ 已掌握'} →</div></button><button class="ihb ihb-r ihb-sm" onclick="delWQ('${q.id}')"><div class="ihb-b"></div><span class="ihb-t">✕ 刪除</span><div class="ihb-hc">✕ 刪除 →</div></button></div></div>`;
   }).join('');
 }
 window.toggleWQ=async(id,cur)=>{await fup('wrongq',id,{mastered:!cur});const sn=await getDocs(query(col('wrongq'),orderBy('date','desc')));wrongs=sn.docs.map(d=>({id:d.id,...d.data()}));renderWQ();updateStats()};
 window.delWQ=async id=>{if(!confirm('確定刪除這題？'))return;await fdel('wrongq',id);wrongs=wrongs.filter(q=>q.id!==id);renderWQ();updateStats()};
 
+// ── EXAMS ─────────────────────────────────────────────────────────────────
 window.addExam=async()=>{const nm=$('exam-name-input').value.trim(),dt=$('exam-date-input').value;if(!nm||!dt){alert('請填入名稱和日期');return}await fadd('exams',{name:nm,date:dt,scope:$('exam-scope-input').value.trim()});['exam-name-input','exam-date-input','exam-scope-input'].forEach(id=>$(id).value='');const sn=await getDocs(col('exams'));exams=sn.docs.map(d=>({id:d.id,...d.data()}));renderExams();updateStats()};
 function renderExams(){
   const now=new Date(),s=[...exams].sort((a,b)=>new Date(a.date)-new Date(b.date));
   const el=$('exam-list'),em=$('exam-empty');
   if(!s.length){el.innerHTML='';em.style.display='';return}em.style.display='none';
-  el.innerHTML=s.map(e=>{const d=Math.ceil((new Date(e.date)-now)/86400000),p=d<0;const col=p?'var(--z600)':d<=7?'var(--red)':d<=30?'var(--yellow)':'var(--green)';return`<div style="padding:13px 15px;background:var(--w5);border:1px solid var(--w8);border-radius:var(--r);margin-bottom:9px;"><div class="fbetween"><div><div style="font-size:14px;font-weight:500;color:#fff;margin-bottom:3px;">${e.name}</div><div style="font-family:var(--mono);font-size:9px;color:var(--z600);">${e.date}${e.scope?' · '+e.scope:''}</div></div><div style="text-align:right;"><div style="font-size:28px;font-weight:700;color:${col};letter-spacing:-1px;line-height:1;">${p?'DONE':d}</div><div style="font-family:var(--mono);font-size:9px;color:var(--z600);">${p?'':'days left'}</div></div></div><button class="ihb ihb-r ihb-sm" style="margin-top:9px;" onclick="delExam('${e.id}')"><div class="ihb-b"></div><span class="ihb-t">✕ 刪除</span><div class="ihb-hc">✕ 刪除 →</div></button></div>`}).join('');
+  el.innerHTML=s.map(e=>{const d=Math.ceil((new Date(e.date)-now)/86400000),p=d<0;const col=p?'var(--z600)':d<=7?'var(--red)':d<=30?'var(--yellow)':'var(--green)';return`<div style="padding:13px 15px;background:var(--w5);border:1px solid var(--w8);border-radius:var(--r);margin-bottom:9px;"><div class="fbetween"><div><div style="font-size:15px;font-weight:500;color:#fff;margin-bottom:3px;">${e.name}</div><div style="font-family:var(--mono);font-size:10px;color:var(--z600);">${e.date}${e.scope?' · '+e.scope:''}</div></div><div style="text-align:right;"><div style="font-size:28px;font-weight:700;color:${col};letter-spacing:-1px;line-height:1;">${p?'DONE':d}</div><div style="font-family:var(--mono);font-size:9px;color:var(--z600);">${p?'':'days left'}</div></div></div><button class="ihb ihb-r ihb-sm" style="margin-top:9px;" onclick="delExam('${e.id}')"><div class="ihb-b"></div><span class="ihb-t">✕ 刪除</span><div class="ihb-hc">✕ 刪除 →</div></button></div>`}).join('');
 }
 window.delExam=async id=>{await fdel('exams',id);exams=exams.filter(e=>e.id!==id);renderExams();updateStats()};
 
