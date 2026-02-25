@@ -815,8 +815,7 @@ window.openNote=id=>{
   const pdfEl=document.getElementById('note-detail-pdf');
   if(n.pdf){pdfEl.innerHTML=`<div class="pdf-thumb" onclick="openPDF('${n.pdf.data}','${n.pdf.name}')"><span class="pdf-thumb-icon">📄</span><span class="pdf-thumb-name">${n.pdf.name}</span><span style="font-size:11px;color:var(--z600);">點擊開啟</span></div>`}else{pdfEl.innerHTML=''}
   $('note-detail-summary').textContent=n.summary||'（無摘要）';
-  $('note-detail-questions').innerHTML=n.questions?`<div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--z600);margin-bottom:7px;">❓ 待解問題</div>`+n.questions.split('
-').filter(Boolean).map(q=>`<div style="padding:8px 12px;background:rgba(251,191,36,.05);border-left:2px solid rgba(251,191,36,.35);margin-bottom:6px;font-size:13px;border-radius:7px;color:var(--z400);">${q}</div>`).join(''):'';
+  $('note-detail-questions').innerHTML=n.questions?`<div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--z600);margin-bottom:7px;">❓ 待解問題</div>`+n.questions.split('\n').filter(Boolean).map(q=>`<div style="padding:8px 12px;background:rgba(251,191,36,.05);border-left:2px solid rgba(251,191,36,.35);margin-bottom:6px;font-size:13px;border-radius:7px;color:var(--z400);">${q}</div>`).join(''):'';
   $('notes-list-view').classList.add('hidden');$('note-detail-view').classList.add('open');
 };
 window.closeNoteDetail=()=>{$('note-detail-view').classList.remove('open');$('notes-list-view').classList.remove('hidden')};
