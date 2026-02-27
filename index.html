@@ -558,6 +558,8 @@ let todos=[],notes=[],wrongs=[],chaps={},exams=[],sess=[];
 let wqEType="",wqStars=0,wqImg=null,wqPdf=null;
 // pdfStore: key -> File object (for ObjectURL preview this session)
 const pdfStore=new Map();
+// imgStore: key -> base64 dataURL (for image preview this session)
+const imgStore=new Map();
 
 const $=id=>document.getElementById(id);
 function ss(s,l){$("sync-dot").className="sync-dot "+s;$("sync-label").textContent=l}
@@ -586,8 +588,18 @@ onAuthStateChanged(auth,async u=>{
 });
 
 // ── FIRESTORE ─────────────────────────────────────────────────────────────
-function uid(){return masterUID||cu.uid}
+function uid(){
+  const id=masterUID||(cu&&cu.uid);
+  if(!id){console.error("uid() is null! masterUID=",masterUID,"cu=",cu);throw new Error("UID 未就緒，請重新登入");}
+  return id;
+}
 function col(n){return collection(db,"users",uid(),"semesters",sem,n)}
+async function fadd(cn,d){
+  console.log("[fadd]",cn,JSON.stringify(d).slice(0,120));
+  ss("syncing","Saving...");
+  try{const r=await addDoc(col(cn),d);ss("synced","Synced ✓");return r.id}
+  catch(e){ss("error","Error");console.error("[fadd ERROR]",e);throw e;}
+}
 async function load(){
   const[t,n,w,c,e,s]=await Promise.all([
     getDocs(query(col("todos"),orderBy("day","desc"))),
@@ -607,9 +619,8 @@ function setupRT(){
   onSnapshot(col("wrongq"),s=>{wrongs=s.docs.map(d=>({id:d.id,...d.data()}));updateStats()});
   onSnapshot(col("chapters"),s=>{chaps={};s.docs.forEach(d=>{const x=d.data();if(!chaps[x.subject])chaps[x.subject]=[];chaps[x.subject].push({id:d.id,...x})});updateStats()});
 }
-async function fadd(cn,d){ss("syncing","Saving...");const r=await addDoc(col(cn),d);ss("synced","Synced \u2713");return r.id}
-async function fup(cn,id,d){ss("syncing","Saving...");await updateDoc(doc(db,"users",uid(),"semesters",sem,cn,id),d);ss("synced","Synced \u2713")}
-async function fdel(cn,id){ss("syncing","Deleting...");await deleteDoc(doc(db,"users",uid(),"semesters",sem,cn,id));ss("synced","Synced \u2713")}
+async function fup(cn,id,d){ss("syncing","Saving...");try{await updateDoc(doc(db,"users",uid(),"semesters",sem,cn,id),d);ss("synced","Synced \u2713")}catch(e){ss("error","Error");console.error("[fup ERR]",e.code,e.message);throw e;}}
+async function fdel(cn,id){ss("syncing","Deleting...");try{await deleteDoc(doc(db,"users",uid(),"semesters",sem,cn,id));ss("synced","Synced \u2713")}catch(e){ss("error","Error");console.error("[fdel ERR]",e.code,e.message);throw e;}}
 
 // ── SEMESTER ──────────────────────────────────────────────────────────────
 window.changeSem=async()=>{
@@ -771,7 +782,11 @@ function makePdfChip(key,name){
 window.handleNoteImage=inp=>{
   const f=inp.files[0];if(!f)return;notePdf=null;
   const r=new FileReader();
-  r.onload=e=>{noteImg=e.target.result;$("note-img-preview").innerHTML=`<img src="${noteImg}" style="max-width:100%;max-height:120px;border-radius:8px;border:1px solid var(--w10);">`};
+  r.onload=e=>{
+    noteImg={dataUrl:e.target.result,name:f.name,size:f.size};
+    imgStore.set("note_img_tmp",e.target.result);
+    $("note-img-preview").innerHTML=`<img src="${e.target.result}" style="max-width:100%;max-height:120px;border-radius:8px;border:1px solid var(--w10);">`;
+  };
   r.readAsDataURL(f);
 };
 window.handleNotePDF=inp=>{
@@ -784,11 +799,15 @@ window.handleNotePDF=inp=>{
 window.addNote=async()=>{
   const t=$("note-title-input").value.trim();if(!t)return;
   const pMeta=notePdf?{name:notePdf.name,size:notePdf.size}:null;
-  const nid=await fadd("notes",{title:t,subject:$("note-subject-input").value,chapter:$("note-chapter-input").value.trim(),summary:$("note-summary-input").value.trim(),questions:$("note-questions-input").value.trim(),image:noteImg||null,pdf:pMeta,date:new Date().toISOString()});
-  if(pdfStore.has("note_tmp"))pdfStore.set("nd_"+nid,pdfStore.get("note_tmp"));
-  noteImg=null;notePdf=null;
-  closeModal("modal-note");
-  const sn=await getDocs(query(col("notes"),orderBy("date","desc")));notes=sn.docs.map(d=>({id:d.id,...d.data()}));renderNotes();
+  const iMeta=noteImg?{name:noteImg.name,size:noteImg.size}:null;
+  try{
+    const nid=await fadd("notes",{title:t,subject:$("note-subject-input").value,chapter:$("note-chapter-input").value.trim(),summary:$("note-summary-input").value.trim(),questions:$("note-questions-input").value.trim(),image:iMeta,pdf:pMeta,date:new Date().toISOString()});
+    if(pdfStore.has("note_tmp"))pdfStore.set("nd_"+nid,pdfStore.get("note_tmp"));
+    if(imgStore.has("note_img_tmp"))imgStore.set("ni_"+nid,imgStore.get("note_img_tmp"));
+    noteImg=null;notePdf=null;
+    closeModal("modal-note");
+    const sn=await getDocs(query(col("notes"),orderBy("date","desc")));notes=sn.docs.map(d=>({id:d.id,...d.data()}));renderNotes();
+  }catch(err){console.error("[save ERR]",err);alert("儲存失敗："+err.message+"\n\nCode: "+(err.code||""));ss("error","Error")}
 };
 function renderNotes(){
   const f=$("notes-filter").value,fl=f==="all"?notes:notes.filter(n=>n.subject===f);
@@ -797,8 +816,8 @@ function renderNotes(){
   em.style.display="none";
   g.innerHTML=fl.map(n=>{
     const pT=n.pdf?`<span class="tag" style="color:var(--blue);border-color:rgba(96,165,250,.3);background:rgba(96,165,250,.07);">\ud83d\udcc4 PDF</span>`:"";
-    const pv=n.summary?`<div class="ncp">${n.summary.slice(0,75)}${n.summary.length>75?"...":""}</div>`:"";
-    const im=n.image?`<img src="${n.image}" class="nth" alt="">`:"";
+    const imgData=imgStore.get("ni_"+n.id);
+    const im=imgData?`<img src="${imgData}" class="nth" alt="">`:"";
     return`<div class="ncard" data-id="${n.id}"><div class="nct">${n.title}</div><div class="ncm">${new Date(n.date).toLocaleDateString("zh-TW")}${n.chapter?" \u00b7 "+n.chapter:""}</div><div class="fgap" style="margin-bottom:7px;"><span class="tag ${SUBJ[n.subject].c}">${SUBJ[n.subject].n}</span>${pT}</div>${pv}${im}</div>`;
   }).join("");
   $("notes-grid").querySelectorAll(".ncard").forEach(c=>c.addEventListener("click",()=>openNote(c.dataset.id)));
@@ -809,7 +828,10 @@ window.openNote=id=>{
   $("note-detail-meta").textContent=new Date(n.date).toLocaleDateString("zh-TW")+(n.chapter?" \u00b7 "+n.chapter:"");
   $("note-detail-tags").innerHTML=`<span class="tag ${SUBJ[n.subject].c}">${SUBJ[n.subject].n}</span>`;
   const img=$("note-detail-img");
-  if(n.image){img.src=n.image;img.style.display=""}else img.style.display="none";
+  const imgData=imgStore.get("ni_"+n.id);
+  if(imgData){img.src=imgData;img.style.display=""}
+  else if(n.image&&n.image.dataUrl){img.src=n.image.dataUrl;img.style.display=""}
+  else img.style.display="none";
   const pdfEl=$("note-detail-pdf");pdfEl.innerHTML="";
   if(n.pdf){pdfEl.appendChild(makePdfChip("nd_"+n.id,n.pdf.name))}
   $("note-detail-summary").textContent=n.summary||"(\u7121\u6458\u8981)";
@@ -832,7 +854,11 @@ window.setReviewDate=d=>{const x=new Date();x.setDate(x.getDate()+d);$("wq-revie
 window.handleWQImage=inp=>{
   const f=inp.files[0];if(!f)return;wqPdf=null;
   const r=new FileReader();
-  r.onload=e=>{wqImg=e.target.result;$("wq-img-preview").innerHTML=`<img src="${wqImg}" style="max-width:100%;max-height:130px;border-radius:8px;border:1px solid var(--w10);">`};
+  r.onload=e=>{
+    wqImg={name:f.name,size:f.size};
+    imgStore.set("wq_img_tmp",e.target.result);
+    $("wq-img-preview").innerHTML=`<img src="${e.target.result}" style="max-width:100%;max-height:130px;border-radius:8px;border:1px solid var(--w10);">`;
+  };
   r.readAsDataURL(f);
 };
 window.handleWQPDF=inp=>{
@@ -854,16 +880,20 @@ window.openAddWrongQ=()=>{
 window.addWrongQ=async()=>{
   const q=$("wq-question-input").value.trim();if(!q){alert("\u8acb\u586b\u5165\u984c\u76ee\u63cf\u8ff0");return}
   const pMeta=wqPdf?{name:wqPdf.name,size:wqPdf.size}:null;
-  const wid=await fadd("wrongq",{subject:$("wq-subject-input").value,source:$("wq-source-input").value,chapter:$("wq-chapter-input").value.trim(),errorType:wqEType,difficulty:wqStars,question:q,image:wqImg||null,pdf:pMeta,reason:$("wq-reason-input").value.trim(),solution:$("wq-solution-input").value.trim(),reviewDate:$("wq-review-date-input").value||null,mastered:false,date:new Date().toISOString()});
-  if(pdfStore.has("wq_tmp"))pdfStore.set("wq_"+wid,pdfStore.get("wq_tmp"));
-  wqEType="";wqStars=0;wqImg=null;wqPdf=null;
-  document.querySelectorAll(".ec").forEach(c=>c.className="ec");
-  document.querySelectorAll(".star").forEach(s=>s.classList.remove("on"));
-  $("wq-img-preview").innerHTML="";
-  ["wq-question-input","wq-reason-input","wq-solution-input","wq-chapter-input","wq-review-date-input"].forEach(id=>$(id).value="");
-  closeModal("modal-wrongq");
-  const sn=await getDocs(query(col("wrongq"),orderBy("date","desc")));wrongs=sn.docs.map(d=>({id:d.id,...d.data()}));
-  renderWQ();updateStats();
+  const iMeta=wqImg?{name:wqImg.name,size:wqImg.size}:null;
+  try{
+    const wid=await fadd("wrongq",{subject:$("wq-subject-input").value,source:$("wq-source-input").value,chapter:$("wq-chapter-input").value.trim(),errorType:wqEType,difficulty:wqStars,question:q,image:iMeta,pdf:pMeta,reason:$("wq-reason-input").value.trim(),solution:$("wq-solution-input").value.trim(),reviewDate:$("wq-review-date-input").value||null,mastered:false,date:new Date().toISOString()});
+    if(pdfStore.has("wq_tmp"))pdfStore.set("wq_"+wid,pdfStore.get("wq_tmp"));
+    if(imgStore.has("wq_img_tmp"))imgStore.set("wi_"+wid,imgStore.get("wq_img_tmp"));
+    wqEType="";wqStars=0;wqImg=null;wqPdf=null;
+    document.querySelectorAll(".ec").forEach(c=>c.className="ec");
+    document.querySelectorAll(".star").forEach(s=>s.classList.remove("on"));
+    $("wq-img-preview").innerHTML="";
+    ["wq-question-input","wq-reason-input","wq-solution-input","wq-chapter-input","wq-review-date-input"].forEach(id=>$(id).value="");
+    closeModal("modal-wrongq");
+    const sn=await getDocs(query(col("wrongq"),orderBy("date","desc")));wrongs=sn.docs.map(d=>({id:d.id,...d.data()}));
+    renderWQ();updateStats();
+  }catch(err){console.error("[save ERR]",err);alert("儲存失敗："+err.message+"\n\nCode: "+(err.code||""));ss("error","Error")}
 };
 
 function revBadge(d){
@@ -907,7 +937,14 @@ function renderWQ(){
     div.className="wqc "+(q.mastered?"mastered":"");
     div.innerHTML=`<div class="wqh"><span class="tag ${SUBJ[q.subject].c}">${SUBJ[q.subject].n}</span>${chT}<span class="tag" style="color:var(--z500);border-color:var(--w10);">${q.source}</span>${etT}${stH}${revBadge(q.reviewDate)}<span class="tag ${q.mastered?"t-ok":"t-ng"}" style="margin-left:auto;">${q.mastered?"MASTERED":"PENDING"}</span><span style="font-family:var(--mono);font-size:9px;color:var(--z600);">${new Date(q.date).toLocaleDateString("zh-TW")}</span></div><div class="wqq">${q.question}</div>${rH}${sH}<div class="wqact"><button class="ihb ${q.mastered?"":"ihb-g"} ihb-sm" data-id="${q.id}" data-cur="${q.mastered}"><div class="ihb-b"></div><span class="ihb-t">${q.mastered?"\u21a9 \u91cd\u7df4":"\u2713 \u5df2\u638c\u63e1"}</span><div class="ihb-hc">${q.mastered?"\u21a9 \u91cd\u7df4":"\u2713 \u5df2\u638c\u63e1"} \u2192</div></button><button class="ihb ihb-r ihb-sm del-wq" data-id="${q.id}"><div class="ihb-b"></div><span class="ihb-t">\u00d7 \u522a\u9664</span><div class="ihb-hc">\u00d7 \u522a\u9664 \u2192</div></button></div>`;
     // image
-    if(q.image){const img=document.createElement("img");img.className="wqi";img.src=q.image;img.alt="";img.addEventListener("click",()=>openLightbox(q.image));div.querySelector(".wqq").after(img)}
+    if(q.image){
+      const img=document.createElement("img");img.className="wqi";img.alt="";
+      const imgData=imgStore.get("wi_"+q.id);
+      if(imgData)img.src=imgData;
+      else img.style.display="none";
+      img.addEventListener("click",()=>{if(img.src)openLightbox(img.src)});
+      div.querySelector(".wqq").after(img);
+    }
     // pdf chip
     if(q.pdf){const chip=makePdfChip("wq_"+q.id,q.pdf.name);div.querySelector(".wqq").after(chip)}
     div.querySelector(".ihb:not(.del-wq)").addEventListener("click",()=>toggleWQ(q.id,q.mastered));
